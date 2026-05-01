@@ -28,14 +28,6 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 
 <div id="setup-screen" class="screen active">
   <h1>🗺️ Carmen Sandiego: Faerûn</h1>
-  <div class="card">
-    <div class="card-title">Configuração da API Gemini</div>
-    <input type="password" id="api-key-input" placeholder="Cole sua API Key aqui">
-    <div style="margin-top:10px;font-size:12px;color:#999;display:flex;align-items:center;gap:8px">
-      <input type="checkbox" id="remember-key" style="width:auto">
-      <label for="remember-key">Lembrar a chave neste navegador</label>
-    </div>
-  </div>
   <button class="btn primary" style="width:100%" onclick="startGame()">▶ Iniciar Missão</button>
 </div>
 
@@ -525,10 +517,8 @@ let G = {
 function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
 function startGame() {
-  G.apiKey = document.getElementById('api-key-input').value.trim();
-  if (document.getElementById('remember-key').checked) localStorage.setItem('gemini_api_key', G.apiKey);
   G.criminal = rand(CRIMINALS);
-  G.trail = [...CITIES].sort(() => Math.random() - 0.5).slice(0, 5);
+  G.trail = [...CITIES].sort(() => Math.random() - 0.5).slice(0, 6);
   G.trail.forEach(city => { G.venuesPerCity[city.id] = [...VENUES].sort(() => Math.random() - 0.5).slice(0, 3); });
   G.currentCityId = G.trail[0].id;
   G.playerPos = 0; G.currentDay = 1; G.currentMinutes = 8*60;
@@ -537,6 +527,10 @@ function startGame() {
   document.getElementById('game-screen').classList.add('active');
   renderGameScreen();
 }
+
+// ============================================================
+// LÓGICA DE INVESTIGAÇÃO (OFFLINE)
+// ============================================================
 
 async function investigateVenue(cityId, venueId) {
   if (G.isRequesting) return;
@@ -551,16 +545,18 @@ async function investigateVenue(cityId, venueId) {
     const venue = VENUES.find(v => v.id === venueId);
     const nextCity = G.trail[cityIdx + 1];
 
-    G.visitedVenues[key] = "<span class='loading-pulse'>Consultando oráculos...</span>";
+    G.visitedVenues[key] = "<span class='loading-pulse'>Consultando testemunhas...</span>";
     renderVenues();
 
+    // Simulação de tempo de resposta para manter a imersão
+    await new Promise(resolve => setTimeout(resolve, 800));
+
     if (cityIdx === G.trail.length - 1) {
-      G.visitedVenues[key] = "O suspeito está por perto!"; 
+      G.visitedVenues[key] = "O suspeito foi visto por aqui há poucos minutos!"; 
       if (Math.random() > 0.6) { foundCriminal(); return; }
     } else {
       if (!G.usedCuriosities[cityId]) G.usedCuriosities[cityId] = [];
       
-      // Lookup direto por tema conforme sugestão sênior
       const temaCandidatos = venue.temas
         .map(t => ({ tema: t, info: nextCity.curiosidades[t] }))
         .filter(c => c.info && !G.usedCuriosities[cityId].includes(c.info));
@@ -569,7 +565,6 @@ async function investigateVenue(cityId, venueId) {
       if (temaCandidatos.length > 0) {
         fato = rand(temaCandidatos);
       } else {
-        // Fallback: Busca qualquer info disponível que não seja null
         const todosDisponiveis = Object.entries(nextCity.curiosidades)
           .filter(([tema, info]) => info !== null && !G.usedCuriosities[cityId].includes(info))
           .map(([tema, info]) => ({ tema, info }));
@@ -579,8 +574,8 @@ async function investigateVenue(cityId, venueId) {
       
       G.usedCuriosities[cityId].push(fato.info);
       
-      const incluirC = Math.random() < 0.3;
-      const text = await generateNPCDialogue(venue, fato.info, fato.tema, incluirC);
+      const incluirC = Math.random() < 0.4; // 40% de chance de vir pista física
+      const text = generateLocalDialogue(venue, fato.info, incluirC);
       G.visitedVenues[key] = text;
       G.clues.push(`[${venue.name}] ${text}`);
     }
@@ -590,49 +585,30 @@ async function investigateVenue(cityId, venueId) {
   }
 }
 
-async function generateNPCDialogue(venue, fato, tema, incluirC) {
-  // Fallback variado baseado no local
-  const fallbacks = {
-      'Taverna': `(O taverneiro limpa o balcão) Aquele sujeito? Sim, ele esteve aqui perguntando sobre a história de ${fato}.`,
-      'Biblioteca': `(O bibliotecário ajeita os óculos) Encontrei um registro de um visitante interessado em informações sobre ${fato}.`,
-      'default': `(Um ${venue.cargo} olha para você) Vi um viajante interessado no relato de que: "${fato}".`
+function generateLocalDialogue(venue, fato, incluirC) {
+  const introPistaFisica = incluirC ? ` Vi uma pessoa de cabelo ${G.criminal.aparencia.cabelo} que ` : " Um viajante ";
+  
+  const templates = {
+    'Taverna': [
+      `(O taverneiro limpa o balcão) ${introPistaFisica} esteve aqui e não parava de perguntar sobre ${fato}.`,
+      `(O taverneiro aponta para uma mesa vazia) Aquele sujeito de quem você falou? Ele passou a noite pesquisando sobre ${fato}.`
+    ],
+    'Biblioteca': [
+      `(O bibliotecário ajeita os óculos) ${introPistaFisica} requisitou pergaminhos raros que descreviam: "${fato}".`,
+      `(O bibliotecário consulta um registro) Tivemos um visitante interessado na história de ${fato}.`
+    ],
+    'Caravanas': [
+      `(O mestre de carga confere uma lista) ${introPistaFisica} comprou mantimentos para uma viagem, mencionando algo sobre ${fato}.`,
+      `(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre ${fato}.`
+    ],
+    'default': [
+      `(O ${venue.cargo} olha para você) ${introPistaFisica} demonstrou um interesse incomum em: "${fato}".`,
+      `(O ${venue.cargo} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que ${fato}.`
+    ]
   };
-  const fallback = fallbacks[venue.name] || fallbacks.default;
-  
-  if (!G.apiKey) return fallback;
 
-  // GEMINI 2.5 FLASH
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${G.apiKey}`;
-  const infoC = incluirC ? `O suspeito tem cabelo ${G.criminal.aparencia.cabelo}.` : "Não mencione traços físicos.";
-  
-  const prompt = `Persona: Você é obrigatoriamente o ${venue.cargo} deste(a) ${venue.name}. Não use "talvez". Assuma o cargo com autoridade.
-  Contexto: O suspeito passou por aqui e perguntou sobre: "${fato}" (tema: ${tema}). 
-  ${infoC}
-  REGRAS: 
-  1. Comece com uma breve ação em parênteses que ajude a definir seu cargo no local.
-  2. Seja direto. Use construções como "Ele perguntou sobre..." ou "Demonstrou interesse em...". Nunca use "Saber se...".
-  3. Proibido usar direções ou pontos cardeais. 
-  4. Máximo 2 frases de diálogo direto.`;
-
-  try {
-    const resp = await fetch(url, { 
-      method: 'POST', 
-      headers: {'Content-Type': 'application/json'}, 
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) 
-    });
-    
-    if (!resp.ok) {
-        const err = await resp.json();
-        console.error("[API ERROR]", err);
-        return fallback;
-    }
-
-    const data = await resp.json();
-    const resultText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    return resultText ? resultText.replace(/"/g, "").trim() : fallback;
-  } catch(e) { 
-    return fallback; 
-  }
+  const opcoes = templates[venue.id] || templates.default;
+  return rand(opcoes);
 }
 
 function travelTo(cityId) {
@@ -713,11 +689,6 @@ function endGame(r) {
   document.getElementById('result-title').textContent = r === 'won' ? "Capturado!" : "Escapou!";
   document.getElementById('result-icon').textContent = r === 'won' ? "🏆" : "💀";
 }
-
-window.onload = () => {
-    const k = localStorage.getItem('gemini_api_key');
-    if (k) document.getElementById('api-key-input').value = k;
-};
 </script>
 </body>
 </html>
