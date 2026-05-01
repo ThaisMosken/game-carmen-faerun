@@ -536,10 +536,16 @@ const CITIES = [
 ];
 
 const CRIMINALS = [
-  {id:'sylara',name:'Sylara Vex',gender:'F',aparencia:{cabelo:'ruivo',traço:'tatuagem'},gostos:['xadrez','carruagem']},
-  {id:'torvin',name:'Torvin Mão-de-Ferro',gender:'M',aparencia:{cabelo:'preto',traço:'cicatriz'},gostos:['apostas','cerveja']},
-  {id:'elara',name:'Elara Sombra-Prateada',gender:'F',aparencia:{cabelo:'prateado',traço:'orelhas pontudas'},gostos:['música','vinhos']},
-  {id:'braggart',name:'Braggart Pé-Pesado',gender:'M',aparencia:{cabelo:'laranja',traço:'nariz achatado'},gostos:['fumo','tortas']}
+  {id:'marcin_gesedano', name:'Marcin Gesedano', gender:'F', aparencia:{cabelo:'castanho', traço:'belas jóias'}, hobby:'cartas', veiculo:'em uma carruagem', comida:'comida tiferina'},
+  {id:'coral_meery', name:'Coral Meery', gender:'F', aparencia:{cabelo:'castanho', traço:'belas jóias'}, hobby:'dados', veiculo:'em uma carruagem', comida:'comida apimentada'},
+  {id:'anniken_zonledre', name:'Anniken Zonledre', gender:'F', aparencia:{cabelo:'loiro', traço:'uma tatuagem'}, hobby:'cartas', veiculo:'em uma carruagem', comida:'frutos do mar'},
+  {id:'taylana_gaddahyal', name:'Taylana Gaddahyal', gender:'F', aparencia:{cabelo:'ruivo', traço:'um anel impressionante'}, hobby:'cartas', veiculo:'dirigindo uma biga', comida:'comida tiferina'},
+  {id:'kelden_blur', name:'Kelden Blur', gender:'M', aparencia:{cabelo:'ruivo', traço:'uma tatuagem'}, hobby:'dados', veiculo:'em uma carruagem', comida:'frutos do mar'},
+  {id:'garlon_scryat', name:'Garlon Scryat', gender:'M', aparencia:{cabelo:'ruivo', traço:'um anel impressionante'}, hobby:'xadrez', veiculo:'em uma carruagem', comida:'comida tiferina'},
+  {id:'chuck_brinn', name:'Chuck Brinn', gender:'M', aparencia:{cabelo:'preto', traço:'bigode'}, hobby:'dados', veiculo:'dirigindo uma máquina infernal', comida:'comida élfica'},
+  {id:'deaf_tidbes', name:'Deaf Tidbes', gender:'M', aparencia:{cabelo:'preto', traço:'um alfinete de gravata'}, hobby:'xadrez', veiculo:'em uma carruagem', comida:'comida élfica'},
+  {id:'hovio_richithor', name:'Hovio Richithor', gender:'M', aparencia:{cabelo:'loiro', traço:'uma tatuagem'}, hobby:'xadrez', veiculo:'em uma carruagem', comida:'frutos do mar'},
+  {id:'romani_brookebeth_kadio', name:'Romani Brookebeth Kadio', gender:'F', aparencia:{cabelo:'castanho', traço:'uma tatuagem'}, hobby:'dados', veiculo:'dirigindo uma máquina infernal', comida:'frutos do mar'}
 ];
 
 const VENUES = [
@@ -551,8 +557,8 @@ const VENUES = [
   {id:'patio_carrocas', name:'Pátio de Carroças', icon:'🐪', temas:['Economia','Geografia'], cargo: 'Mestre de Carga'},
   {id:'patio_treinamento', name:'Pátio de Treinamento', icon:'⚔️', temas:['Defesa','Raças/Espécies'], cargo: 'Mestre d\'Armas'},
   {id:'museu', name:'Museu', icon:'🏛️', temas:['História','Magia','Geografia'], cargo: 'Curador'},
-  {id:'santuario', name:'Santuário dos Deuses Antigos', icon:'🕯️', temas:['Religião','História','Magia'], cargo: 'Sacerdote'}
-  {id:'taverna', name:'Taverna', icon:'🍺', temas:['Crime','Política'], cargo: 'Taverneiro'}
+  {id:'santuario', name:'Santuário dos Deuses Antigos', icon:'🕯️', temas:['Religião','História','Magia'], cargo: 'Sacerdote'},
+  {id:'taverna', name:'Taverna', icon:'🍺', temas:['Crime','Política'], cargo: 'Taverneiro'},
   {id:'torre_alta_magia', name:'Torre de Alta Magia', icon:'🔮', temas:['Magia','História','Política'], cargo: 'Arcanista'},
 ];
 
@@ -596,7 +602,6 @@ async function investigateVenue(cityId, venueId) {
     G.visitedVenues[key] = "<span class='loading-pulse'>Consultando testemunhas...</span>";
     renderVenues();
 
-    // Simulação de tempo de resposta para manter a imersão
     await new Promise(resolve => setTimeout(resolve, 800));
 
     if (cityIdx === G.trail.length - 1) {
@@ -634,7 +639,16 @@ async function investigateVenue(cityId, venueId) {
 }
 
 function generateLocalDialogue(venue, fato, incluirC) {
-  const introPistaFisica = incluirC ? ` Vi uma pessoa de cabelo ${G.criminal.aparencia.cabelo} que ` : " Um viajante ";
+
+  const descricoes = [
+    `Vi uma pessoa de cabelo ${G.criminal.aparencia.cabelo} que`,
+    `Vi alguém com ${G.criminal.aparencia.traço} que`,
+    `Havia por aqui um viajante que costumava jogar ${G.criminal.hobby} e que`,
+    `Alguém assim chegou ${G.criminal.veiculo} e`,
+    `Uma pessoa assim estava comentando sobre gostar de ${G.criminal.comida} e`
+  ];
+
+  const introPistaFisica = incluirC ? rand(descricoes) + " " : " Um viajante ";
   
   const templates = {
     "biblioteca": [
@@ -659,36 +673,36 @@ function generateLocalDialogue(venue, fato, incluirC) {
     ],
     "oficina_gemas": [
       "(O mestre joalheiro analisa uma pedra) ${introPistaFisica} trouxe uma joia para avaliar, alegando precisar de fundos para pesquisar sobre ${fato}.",
-      "(O mestre joalheiro guarda as ferramentas) Um cliente com essas características esteve aqui procurando por minérios típicos de ${fato}."
+      `(O mestre joalheiro guarda as ferramentas) Um cliente com essas características esteve aqui procurando por minérios típicos de ${fato}.`
     ],
     "patio_carrocas": [
-      "(O mestre de carga confere uma lista) ${introPistaFisica} comprou mantimentos para uma viagem, mencionando algo sobre ${fato}.",
-      "(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre ${fato}."
+      `(O mestre de carga confere uma lista) ${introPistaFisica} comprou mantimentos para uma viagem, mencionando algo sobre ${fato}.`,
+      `(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre ${fato}.`
     ],
     "patio_treinamento": [
-      "(O mestre d'armas golpeia o boneco) ${introPistaFisica} observou os treinos e comentou que precisaria de aço forte para enfrentar ${fato}.",
-      "(O mestre d'armas limpa o suor) Alguém perguntou se nossas lâminas seriam eficazes contra o que se encontra em ${fato}."
+      `(O mestre d'armas golpeia o boneco) ${introPistaFisica} observou os treinos e comentou que precisaria de aço forte para enfrentar ${fato}.`,
+      `(O mestre d'armas limpa o suor) Alguém perguntou se nossas lâminas seriam eficazes contra o que se encontra em ${fato}.`
     ],
     "santuario": [
-      "(O sacerdote acende uma vela) ${introPistaFisica} fez uma oferta aos deuses pedindo proteção em sua busca por ${fato}.",
-      "(O sacerdote fecha o livro de preces) Tivemos um fiel angustiado que buscava orientação divina sobre os perigos de ${fato}."
+      `(O sacerdote acende uma vela) ${introPistaFisica} fez uma oferta aos deuses pedindo proteção em sua busca por ${fato}.`,
+      `(O sacerdote fecha o livro de preces) Tivemos um fiel angustiado que buscava orientação divina sobre os perigos de ${fato}.`
     ],
     "taverna": [
-      "(O taverneiro limpa o balcão) ${introPistaFisica} esteve aqui e não parava de perguntar sobre ${fato}.",
-      "(O taverneiro aponta para uma mesa vazia) Aquele sujeito de quem você falou? Ele passou a noite pesquisando sobre ${fato}."
+      `(O taverneiro limpa o balcão) ${introPistaFisica} esteve aqui e não parava de perguntar sobre ${fato}.`,
+      `(O taverneiro aponta para uma mesa vazia) Aquele sujeito de quem você falou? Ele passou a noite pesquisando sobre ${fato}.`
     ],
     "torre_alta_magia": [
-      "(O arcanista consulta uma esfera) ${introPistaFisica} tentou comprar componentes para um feitiço de localização voltado para ${fato}.",
-      "(O arcanista ajusta as vestes) Detectamos resíduos mágicos de alguém que pesquisava obsessivamente as propriedades de ${fato}."
+      `(O arcanista consulta uma esfera) ${introPistaFisica} tentou comprar componentes para um feitiço de localização voltado para ${fato}.`,
+      `(O arcanista ajusta as vestes) Detectamos resíduos mágicos de alguém que pesquisava obsessivamente as propriedades de ${fato}.`
     ],
     "default": [
-      "(O ${venue.cargo} olha para você) ${introPistaFisica} demonstrou um interesse incomum em: \"${fato}\".",
-      "(O ${venue.cargo} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que ${fato}."
+      `(O ${venue.cargo} olha para você) ${introPistaFisica} demonstrou um interesse incomum em: \"${fato}\".`,
+      `(O ${venue.cargo} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que ${fato}.`
     ]
   };
 
   const opcoes = templates[venue.id] || templates.default;
-  return rand(opcoes);
+  return rand(opcoes).replace('${introPistaFisica}', introPistaFisica).replace('${fato}', fato);
 }
 
 function travelTo(cityId) {
