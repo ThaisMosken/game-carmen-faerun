@@ -611,7 +611,7 @@ function generateLocalDialogue(venue, fato, incluirC) {
 
 function travelTo(cityId) {
   if (G.isRequesting) return;
-  if (!advanceTime(240)) return;
+  if (!advanceTime(600)) return;
   if (G.history.length > 1 && cityId === G.history[G.history.length - 2]) {
     G.history.pop();
   } else {
@@ -660,19 +660,26 @@ function renderVenues() {
 function renderTravel() {
   const currentId = G.currentCityId;
   const options = new Set();
+  const trailIds = G.trail.map(c => c.id);
 
   if (G.history.length > 1) {
     options.add(G.history[G.history.length - 2]);
   }
 
+  let nextCorrectId = null;
   if (G.playerPos !== -1 && G.playerPos < G.trail.length - 1) {
-    options.add(G.trail[G.playerPos + 1].id);
+    nextCorrectId = G.trail[G.playerPos + 1].id;
+    options.add(nextCorrectId);
   }
 
-  const allCityIds = CITIES.map(c => c.id).filter(id => id !== currentId);
-  const shuffled = allCityIds.sort(() => Math.random() - 0.5);
+  const randomCandidates = CITIES.filter(c => 
+    c.id !== currentId && 
+    !trailIds.includes(c.id)
+  ).map(c => c.id);
 
-  for (let id of shuffled) {
+  const shuffledErrors = randomCandidates.sort(() => Math.random() - 0.5);
+
+  for (let id of shuffledErrors) {
     if (options.size >= 4) break;
     options.add(id);
   }
@@ -685,8 +692,19 @@ function renderTravel() {
 
 function advanceTime(m) { 
   G.currentMinutes += m; 
-  if (G.currentMinutes > 23*60) { G.currentDay++; G.currentMinutes = 8*60; }
-  if (G.currentDay > G.maxDays) { endGame('timeout'); return false; }
+
+  while (G.currentMinutes > 23 * 60) {
+    const overflow = G.currentMinutes - (23 * 60);
+    
+    G.currentDay++;
+    
+    G.currentMinutes = (8 * 60) + overflow;
+  }
+
+  if (G.currentDay > G.maxDays) { 
+    endGame('timeout'); 
+    return false; 
+  }
   return true;
 }
 
