@@ -47,12 +47,15 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 
   <div class="tabs">
     <div class="tab active" id="tab-investigate" onclick="switchTab('investigate', this)">🔍 Investigar</div>
-    <div class="tab" id="tab-travel" onclick="switchTab('travel', this)">🧭 Viajar</div>
+    <div class="tab" id="tab-travel" onclick="switchTab('travel', this)">🌀 Teleportar</div>
     <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📋 Notas</div>
   </div>
 
   <div id="panel-investigate"><div id="venues-list"></div></div>
-  <div id="panel-travel" style="display:none"><div id="travel-list"></div></div>
+  <div id="panel-travel" style="display:none">
+    <div id="travel-instructions" style="margin-bottom:12px; font-size:12px; color:#aaa; line-height:1.4"></div>
+    <div id="travel-list"></div>
+  </div>
   <div id="panel-notes" style="display:none"><div class="card" id="clues-collected"></div></div>
 
   <div style="margin-top:16px;border:1px dashed #b91c1c;border-radius:8px;background:rgba(185,28,28,0.05)">
@@ -85,6 +88,9 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 // ============================================================
 // DADOS DAS CIDADES E CRIMINOSOS
 // ============================================================
+
+const TRAVELLING_TIME_COST = 10;
+
 const CITIES = [
   {
     id: "neverwinter",
@@ -611,7 +617,7 @@ function generateLocalDialogue(venue, fato, incluirC) {
 
 function travelTo(cityId) {
   if (G.isRequesting) return;
-  if (!advanceTime(480)) return;
+  if (!advanceTime(TRAVELLING_TIME_COST * 60)) return;
   if (G.history.length > 1 && cityId === G.history[G.history.length - 2]) {
     G.history.pop();
   } else {
@@ -659,6 +665,8 @@ function renderVenues() {
 
 function renderTravel() {
   const currentId = G.currentCityId;
+  const instructionsEl = document.getElementById('travel-instructions');
+  instructionsEl.innerHTML = `A viagem de teleporte demora <strong>${TRAVELLING_TIME_COST} horas</strong>.<br>Lembre-se que se for para o caminho errado, você poderá voltar para a cidade de onde partiu e retomar os rastros do suspeito.<br>Escolha a cidade para onde deseja se teleportar.`;
   const options = new Set();
   const trailIds = G.trail.map(c => c.id);
 
