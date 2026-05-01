@@ -94,26 +94,408 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 // DADOS DAS CIDADES E CRIMINOSOS
 // ============================================================
 const CITIES = [
-  {id: "waterdeep", name: "Waterdeep", curiosidades: [{tema: "Tipo de Localidade", info: "Metrópole (Cidade das Esplendores)"}, {tema: "Raças/Espécies", info: "Majoritariamente humanos, anões, elfos, halflings, gnomos."}, {tema: "Tipo de Governo", info: "Oligarquia conduzida pelos Lordes Mascarados."}, {tema: "Facções Predominantes", info: "Aliança dos Lordes, Harpistas, Bregan D'aerthe"}, {tema: "Defesa", info: "As Estátuas Ambulantes e a Cavalaria de Grifos que patrulha os céus."}]},
-  {id: "neverwinter", name: "Neverwinter", curiosidades: [{tema: "Tipo de Localidade", info: "Cidade Grande (Metrópole)"}, {tema: "Raças/Espécies", info: "Majoritariamente humanos, meio-elfos, anões e elfos."}, {tema: "Tipo de Governo", info: "Protetorado militar (Lorde Protetor)."}, {tema: "Geografia", info: "O Rio Neverwinter é aquecido por elementais de fogo, impedindo o congelamento."}, {tema: "Economia", info: "Famosa pela alta qualidade de seus artesãos e relojoeiros."}]},
-  {id: "silverymoon", name: "Silverymoon", curiosidades: [{tema: "Magia", info: "Protegida pelo Mythal de Silverymoon, uma poderosa barreira mágica."}, {tema: "Defesa", info: "A Ponte da Lua (Moonbridge), que pode ser desativada para impedir invasões."}, {tema: "Cultura", info: "Joia do Norte, o maior centro de aprendizado e magia."}]},
-  {id: "luskan", name: "Luskan", curiosidades: [{tema: "Crime", info: "Refúgio para piratas governado pela Irmandade Arcana."}, {tema: "Defesa", info: "Cinco navios de guerra comandados pelos Altos Capitães."}, {tema: "Geografia", info: "A Hosttower of the Arcane, sede dos magos."}]},
-  {id: "citadel_adbar", name: "Citadel Adbar", curiosidades: [{tema: "Defesa", info: "A Guarda de Ferro, elite montada em hipogrifos."}, {tema: "Economia", info: "Maior centro de fundição e forja de Mithral do Norte."}, {tema: "Infraestrutura", info: "Chaminés de forjas visíveis a quilômetros."}]},
-  {id: "citadel_felbarr", name: "Citadel Felbarr", curiosidades: [{tema: "Defesa", info: "Os Portões do Martelo, que exigem dezenas de anões para abrir."}, {tema: "História", info: "Retomada após 300 anos de ocupação orc."}]},
-  {id: "mithral_hall", name: "Mithral Hall", curiosidades: [{tema: "Geografia", info: "Única fonte conhecida de Mithral puro em todo o Norte."}, {tema: "História", info: "Lar ancestral do Clã Battlehammer, reconquistado das sombras."}]},
-  {id: "phandalin", name: "Phandalin", curiosidades: [{tema: "Geografia", info: "Vila mineradora próxima à lendária Caverna Eco das Ondas."}, {tema: "Crime", info: "Local onde a gangue Redbrand costumava extorquir colonos."}]},
-  {id: "bryn_shander", name: "Bryn Shander", curiosidades: [{tema: "Geografia", info: "Fortaleza no topo de uma colina, isolada das nevascas."}, {tema: "Economia", info: "Principal mercado de marfim entalhado de truta Knucklehead."}]},
-  {id: "longsaddle", name: "Longsaddle", curiosidades: [{tema: "Magia", info: "Mansão Ivy, sede da família Harpell e sua magia caótica."}, {tema: "Economia", info: "Centro renomado para a criação de cavalos de sela resistentes."}]},
-  {id: "mirabar", name: "Mirabar", curiosidades: [{tema: "Defesa", info: "O Machado de Mirabar, exército de humanos e anões."}, {tema: "Política", info: "Divisão de poder entre o Conselho de anões e o Marquês humano."}]},
-  {id: "triboar", name: "Triboar", curiosidades: [{tema: "Infraestrutura", info: "Cruzamento vital entre a Long Road e Evermoor Way."}, {tema: "Religião", info: "Bosque de Gwaeron, sagrado para patrulheiros e rastreadores."}]},
-  {id: "yartar", name: "Yartar", curiosidades: [{tema: "Crime", info: "Sociedade da Mão de Ouro, guilda que controla o jogo ilegal."}, {tema: "Infraestrutura", info: "Sistema de eclusas que permite navegação fluvial constante."}]},
-  {id: "sundabar", name: "Sundabar", curiosidades: [{tema: "Defesa", info: "Cercada por três anéis concêntricos de muralhas de granito negro."}, {tema: "Geografia", info: "Forjas que utilizam o calor natural de cavernas vulcânicas."}]},
-  {id: "daggerford", name: "Daggerford", curiosidades: [{tema: "História", info: "Vila fundada no vau onde um garoto defendeu sua família com uma adaga."}, {tema: "Cultura", info: "Taverna Happy Cow, famosa por cerveja e queijo curado."}]},
-  {id: "goldenfields", name: "Goldenfields", curiosidades: [{tema: "Defesa", info: "Muralhas protegidas por criaturas da natureza despertas."}, {tema: "Infraestrutura", info: "Complexo agrícola que abastece grandes metrópoles do Sul."}]},
-  {id: "newfort", name: "Newfort", curiosidades: [{tema: "História", info: "Fundada por soldados aposentados em busca de sossego."}]},
-  {id: "loudwater", name: "Loudwater", curiosidades: [{tema: "Geografia", info: "Cidade fluvial com quedas d'água e pontes de madeira."}]},
-  {id: "everlund", name: "Everlund", curiosidades: [{tema: "Política", info: "Governo diplomático focado na aliança entre as raças do Norte."}]},
-  {id: "gauntlgrym", name: "Gauntlgrym", curiosidades: [{tema: "Magia", info: "Grande Forja ancestral movida por um primordial aprisionado."}]}
+  {
+    id: "neverwinter",
+    name: "Neverwinter",
+    curiosidades: {
+      "Tipo de Localidade": "Cidade Grande (Metrópole)",
+      "Raças/Espécies": "Majoritariamente humanos, meio-elfos, anões e elfos.",
+      "Tipo de Governo": "Protetorado militar (Lorde Protetor).",
+      "Geografia": "O Rio Neverwinter é aquecido por elementais de fogo, impedindo o congelamento.",
+      "Economia": "Famosa pela alta qualidade de seus artesãos e relojoeiros.",
+      "Facções": null,
+      "Defesa": null,
+      "Magia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "silverymoon",
+    name: "Silverymoon",
+    curiosidades: {
+      "Magia": "Protegida pelo Mythal de Silverymoon, uma poderosa barreira mágica.",
+      "Defesa": "A Ponte da Lua (Moonbridge), que pode ser desativada para impedir invasões.",
+      "Cultura": "Joia do Norte, o maior centro de aprendizado e magia.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Economia": null,
+      "Geografia": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "luskan",
+    name: "Luskan",
+    curiosidades: {
+      "Crime": "Refúgio para piratas governado pela Irmandade Arcana.",
+      "Defesa": "Cinco navios de guerra comandados pelos Altos Capitães.",
+      "Geografia": "A Hosttower of the Arcane, sede dos magos.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Economia": null,
+      "Magia": null,
+      "Cultura": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "citadel_adbar",
+    name: "Citadel Adbar",
+    curiosidades: {
+      "Defesa": "A Guarda de Ferro, elite montada em hipogrifos.",
+      "Economia": "Maior centro de fundição e forja de Mithral do Norte.",
+      "Infraestrutura": "Chaminés de forjas visíveis a quilômetros.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Magia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "citadel_felbarr",
+    name: "Citadel Felbarr",
+    curiosidades: {
+      "Defesa": "Os Portões do Martelo, que exigem dezenas de anões para abrir.",
+      "História": "Retomada após 300 anos de ocupação orc.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Economia": null,
+      "Magia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "mithral_hall",
+    name: "Mithral Hall",
+    curiosidades: {
+      "Geografia": "Única fonte conhecida de Mithral puro em todo o Norte.",
+      "História": "Lar ancestral do Clã Battlehammer, reconquistado das sombras.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Magia": null,
+      "Cultura": null,
+      "Crime": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "phandalin",
+    name: "Phandalin",
+    curiosidades: {
+      "Geografia": "Vila mineradora próxima à lendária Caverna Eco das Ondas.",
+      "Crime": "Local onde a gangue Redbrand costumava extorquir colonos.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Magia": null,
+      "Cultura": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "bryn_shander",
+    name: "Bryn Shander",
+    curiosidades: {
+      "Geografia": "Fortaleza no topo de uma colina, isolada das nevascas.",
+      "Economia": "Principal mercado de marfim entalhado de truta Knucklehead.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Magia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "longsaddle",
+    name: "Longsaddle",
+    curiosidades: {
+      "Magia": "Mansão Ivy, sede da família Harpell e sua magia caótica.",
+      "Economia": "Centro renomado para a criação de cavalos de sela resistentes.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "mirabar",
+    name: "Mirabar",
+    curiosidades: {
+      "Defesa": "O Machado de Mirabar, exército de humanos e anões.",
+      "Política": "Divisão de poder entre o Conselho de anões e o Marquês humano.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Economia": null,
+      "Magia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "triboar",
+    name: "Triboar",
+    curiosidades: {
+      "Infraestrutura": "Cruzamento vital entre a Long Road e Evermoor Way.",
+      "Religião": "Bosque de Gwaeron, sagrado para patrulheiros e rastreadores.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Magia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Política": null
+    }
+  },
+  {
+    id: "yartar",
+    name: "Yartar",
+    curiosidades: {
+      "Crime": "Sociedade da Mão de Ouro, guilda que controla o jogo ilegal.",
+      "Infraestrutura": "Sistema de eclusas que permite navegação fluvial constante.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Magia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "História": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "sundabar",
+    name: "Sundabar",
+    curiosidades: {
+      "Defesa": "Cercada por três anéis concêntricos de muralhas de granito negro.",
+      "Geografia": "Forjas que utilizam o calor natural de cavernas vulcânicas.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Economia": null,
+      "Magia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "daggerford",
+    name: "Daggerford",
+    curiosidades: {
+      "História": "Vila fundada no vau onde um garoto defendeu sua família com uma adaga.",
+      "Cultura": "Taverna Happy Cow, famosa por cerveja e queijo curado.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Magia": null,
+      "Geografia": null,
+      "Crime": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "goldenfields",
+    name: "Goldenfields",
+    curiosidades: {
+      "Defesa": "Muralhas protegidas por criaturas da natureza despertas.",
+      "Infraestrutura": "Complexo agrícola que abastece grandes metrópoles do Sul.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Economia": null,
+      "Magia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "newfort",
+    name: "Newfort",
+    curiosidades: {
+      "História": "Fundada por soldados aposentados em busca de sossego.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Magia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "loudwater",
+    name: "Loudwater",
+    curiosidades: {
+      "Geografia": "Cidade fluvial com quedas d'água e pontes de madeira.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Magia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "everlund",
+    name: "Everlund",
+    curiosidades: {
+      "Política": "Governo diplomático focado na aliança entre as raças do Norte.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Magia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "gauntlgrym",
+    name: "Gauntlgrym",
+    curiosidades: {
+      "Magia": "Grande Forja ancestral movida por um primordial aprisionado.",
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Facções": null,
+      "Defesa": null,
+      "Economia": null,
+      "Geografia": null,
+      "Cultura": null,
+      "Crime": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    id: "waterdeep",
+    name: "Waterdeep",
+    curiosidades: {
+      "Tipo de Localidade": "Metrópole (Cidade das Esplendores)",
+      "Raças/Espécies": "Majoritariamente humanos, com populações significativas de anões, elfos, halflings, gnomos, meio-elfos e meio-orcs.",
+      "Tipo de Governo": "Oligarquia (conduzida pelos Lordes Mascarados e pelo Lorde Aberto).",
+      "Aspectos Geográficos": "Litoral (Costa da Espada), Clima temperado com invernos rigorosos.",
+      "Comércio": "Praticamente tudo (Centro comercial global)",
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": "A cidade possui as Estátuas Ambulantes de Waterdeep, oito colossos de pedra que podem ser ativados pelo Lorde Aberto para defender a metrópole, além da Cavalaria de Grifos que patrulha os céus.",
+      "Economia": "O sistema de guildas é central para a economia local; quase todas as profissões lícitas exigem afiliação obrigatória a uma guilda específica para serem exercidas.",
+      "Facções": "Aliança dos Lordes, Harpistas, Bregan D'aerthe",
+      "Geografia": "Abaixo da cidade e acessível pela taverna Bocejo do Portal (Yawning Portal), localiza-se Montanha Profunda (Undermountain), a maior megamasmorra de Faerûn.",
+      "História": null,
+      "Infraestrutura": null,
+      "Magia": "Ahghairon, o primeiro Lorde Aberto, lançou um feitiço eterno chamado Campo de Proteção contra Dragões (Dragonward), que impede dragões de entrarem na cidade.",
+      "Política": "A cidade é regida pelo Código Legal, um conjunto estrito de leis que prevê punições severas para crimes como o uso não autorizado de magia ou agressão a oficiais.",
+      "Religião": null
+    }
+  }
 ];
 
 const CRIMINALS = [
@@ -167,6 +549,8 @@ async function investigateVenue(cityId, venueId) {
 
     const cityIdx = G.trail.findIndex(c => c.id === cityId);
     const venue = VENUES.find(v => v.id === venueId);
+    const nextCity = G.trail[cityIdx + 1];
+
     G.visitedVenues[key] = "<span class='loading-pulse'>Consultando oráculos...</span>";
     renderVenues();
 
@@ -174,14 +558,26 @@ async function investigateVenue(cityId, venueId) {
       G.visitedVenues[key] = "O suspeito está por perto!"; 
       if (Math.random() > 0.6) { foundCriminal(); return; }
     } else {
-      const nextCity = G.trail[cityIdx + 1];
       if (!G.usedCuriosities[cityId]) G.usedCuriosities[cityId] = [];
       
-      const available = nextCity.curiosidades.filter(c => !G.usedCuriosities[cityId].includes(c.info));
-      const matching = available.filter(c => venue.temas.includes(c.tema));
-      const fato = matching.length > 0 ? rand(matching) : (available.length > 0 ? rand(available) : rand(nextCity.curiosidades));
+      // Lookup direto por tema conforme sugestão sênior
+      const temaCandidatos = venue.temas
+        .map(t => ({ tema: t, info: nextCity.curiosidades[t] }))
+        .filter(c => c.info && !G.usedCuriosities[cityId].includes(c.info));
+
+      let fato;
+      if (temaCandidatos.length > 0) {
+        fato = rand(temaCandidatos);
+      } else {
+        // Fallback: Busca qualquer info disponível que não seja null
+        const todosDisponiveis = Object.entries(nextCity.curiosidades)
+          .filter(([tema, info]) => info !== null && !G.usedCuriosities[cityId].includes(info))
+          .map(([tema, info]) => ({ tema, info }));
+        
+        fato = todosDisponiveis.length > 0 ? rand(todosDisponiveis) : { tema: "Geral", info: "Visto na região recentemente." };
+      }
       
-      G.usedCuriosities[cityId].push(fato.info); // Reserva a pista IMEDIATAMENTE
+      G.usedCuriosities[cityId].push(fato.info);
       
       const incluirC = Math.random() < 0.3;
       const text = await generateNPCDialogue(venue, fato.info, fato.tema, incluirC);
