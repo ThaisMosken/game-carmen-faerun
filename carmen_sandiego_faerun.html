@@ -48,7 +48,7 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
   <div class="tabs">
     <div class="tab active" id="tab-investigate" onclick="switchTab('investigate', this)">🔍 Investigar</div>
     <div class="tab" id="tab-travel" onclick="switchTab('travel', this)">🌀 Teleportar</div>
-    <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📋 Notas</div>
+    <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📜 Compêndio da Busca</div>
   </div>
 
   <div id="panel-investigate"><div id="venues-list"></div></div>
@@ -731,7 +731,7 @@ function switchTab(t, el) {
   ['investigate','travel','notes'].forEach(p => document.getElementById('panel-'+p).style.display = p === t ? 'block' : 'none');
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
   if (el) el.classList.add('active');
-  if (t === 'notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br>') || "Sem pistas.";
+  if (t === 'notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br>') || "Sem pistas por enquanto.";
 }
 
 function openWarrantModal() {
