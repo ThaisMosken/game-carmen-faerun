@@ -510,7 +510,7 @@ const VENUES = [
 let G = {
   apiKey: '', criminal: null, trail: [], playerPos: 0, currentCityId: '',
   currentDay: 1, maxDays: 4, currentMinutes: 8*60,
-  venuesPerCity: {}, visitedVenues: {}, warrant: null, clues: [], usedCuriosities: {},
+  venuesPerCity: {}, visitedVenues: {}, warrant: null, clues: [], usedCuriosities: {}, history: [],
   isRequesting: false 
 };
 
@@ -523,14 +523,12 @@ function startGame() {
   G.currentCityId = G.trail[0].id;
   G.playerPos = 0; G.currentDay = 1; G.currentMinutes = 8*60;
   G.visitedVenues = {}; G.clues = []; G.usedCuriosities = {};
+  G.currentCityId = G.trail[0].id;
+  G.history = [G.currentCityId];
   document.getElementById('setup-screen').classList.remove('active');
   document.getElementById('game-screen').classList.add('active');
   renderGameScreen();
 }
-
-// ============================================================
-// LÓGICA DE INVESTIGAÇÃO (OFFLINE)
-// ============================================================
 
 async function investigateVenue(cityId, venueId) {
   if (G.isRequesting) return;
@@ -614,9 +612,18 @@ function generateLocalDialogue(venue, fato, incluirC) {
 function travelTo(cityId) {
   if (G.isRequesting) return;
   if (!advanceTime(240)) return;
-  G.playerPos = G.trail.findIndex(c => c.id === cityId);
+  if (G.history.length > 1 && cityId === G.history[G.history.length - 2]) {
+    G.history.pop();
+  } else {
+    G.history.push(cityId);
+  }
   G.currentCityId = cityId;
-  renderGameScreen(); switchTab('investigate', document.getElementById('tab-investigate'));
+  G.playerPos = G.trail.findIndex(c => c.id === cityId);
+  if (!G.venuesPerCity[cityId]) {
+    G.venuesPerCity[cityId] = [...VENUES].sort(() => Math.random() - 0.5).slice(0, 3);
+  }
+  renderGameScreen(); 
+  switchTab('investigate', document.getElementById('tab-investigate'));
 }
 
 function renderGameScreen() {
@@ -634,7 +641,7 @@ function renderGameScreen() {
 }
 
 function renderVenues() {
-  const id = G.trail[G.playerPos].id;
+  const id = G.currentCityId;
   const list = document.getElementById('venues-list');
   list.innerHTML = (G.venuesPerCity[id] || []).map(v => {
     const visited = G.visitedVenues[`${id}_${v.id}`];
@@ -651,10 +658,29 @@ function renderVenues() {
 }
 
 function renderTravel() {
-  const current = G.trail[G.playerPos].id;
-  document.getElementById('travel-list').innerHTML = CITIES.filter(c => c.id !== current).sort(() => Math.random() - 0.5).slice(0, 4).map(c => `
-    <div class="city-option" style="background:#252525; padding:10px; border-radius:8px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${c.id}')">🏙️ ${c.name}</div>
-  `).join('');
+  const currentId = G.currentCityId;
+  const options = new Set();
+
+  if (G.history.length > 1) {
+    options.add(G.history[G.history.length - 2]);
+  }
+
+  if (G.playerPos !== -1 && G.playerPos < G.trail.length - 1) {
+    options.add(G.trail[G.playerPos + 1].id);
+  }
+
+  const allCityIds = CITIES.map(c => c.id).filter(id => id !== currentId);
+  const shuffled = allCityIds.sort(() => Math.random() - 0.5);
+
+  for (let id of shuffled) {
+    if (options.size >= 4) break;
+    options.add(id);
+  }
+
+  document.getElementById('travel-list').innerHTML = Array.from(options).map(id => {
+    const city = CITIES.find(c => c.id === id);
+    return `<div class="city-option" style="background:#252525; padding:10px; border-radius:8px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${city.id}')">🏙️ ${city.name}</div>`;
+  }).join('');
 }
 
 function advanceTime(m) { 
