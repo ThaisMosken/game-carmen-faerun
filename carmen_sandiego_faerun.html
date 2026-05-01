@@ -89,7 +89,8 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 // DADOS DAS CIDADES E CRIMINOSOS
 // ============================================================
 
-const TRAVELLING_TIME_COST = 10;
+const HOURS_COST_INVESTIGATING = 2;
+const HOURS_COST_TRAVELLING = 10;
 
 const CITIES = [
   {
@@ -544,7 +545,7 @@ async function investigateVenue(cityId, venueId) {
 
   G.isRequesting = true;
   try {
-    if (!advanceTime(120)) return;
+    if (!advanceTime(HOURS_COST_INVESTIGATING * 60)) return;
 
     const cityIdx = G.trail.findIndex(c => c.id === cityId);
     const venue = VENUES.find(v => v.id === venueId);
@@ -582,7 +583,7 @@ async function investigateVenue(cityId, venueId) {
       const incluirC = Math.random() < 0.4; // 40% de chance de vir pista física
       const text = generateLocalDialogue(venue, fato.info, incluirC);
       G.visitedVenues[key] = text;
-      G.clues.push(`[${venue.name}] ${text}`);
+      G.clues.push(`<strong>[${venue.name}]</strong> ${text}`);
     }
   } finally {
     G.isRequesting = false;
@@ -618,17 +619,27 @@ function generateLocalDialogue(venue, fato, incluirC) {
 
 function travelTo(cityId) {
   if (G.isRequesting) return;
-  if (!advanceTime(TRAVELLING_TIME_COST * 60)) return;
+
+  const fromCity = CITIES.find(c => c.id === G.currentCityId);
+  const toCity = CITIES.find(c => c.id === cityId);
+
+  if (!advanceTime(HOURS_COST_TRAVELLING * 60)) return;
+
+  G.clues.push(`<strong>[Teleporte]</strong> De ${fromCity.name} para ${toCity.name} (Dia ${G.currentDay})`);
+
   if (G.history.length > 1 && cityId === G.history[G.history.length - 2]) {
     G.history.pop();
   } else {
     G.history.push(cityId);
   }
+
   G.currentCityId = cityId;
   G.playerPos = G.trail.findIndex(c => c.id === cityId);
+
   if (!G.venuesPerCity[cityId]) {
     G.venuesPerCity[cityId] = [...VENUES].sort(() => Math.random() - 0.5).slice(0, 3);
   }
+
   renderGameScreen(); 
   switchTab('investigate', document.getElementById('tab-investigate'));
 }
@@ -668,7 +679,7 @@ function renderTravel() {
   const currentId = G.currentCityId;
   const instructionsEl = document.getElementById('travel-instructions');
   
-  instructionsEl.innerHTML = `A viagem de teleporte demora <strong>${TRAVELLING_TIME_COST} horas</strong>.<br>Lembre-se que se for para o caminho errado, você poderá voltar para a cidade de onde partiu e retomar os rastros do suspeito.<br>Escolha a cidade para onde deseja se teleportar.`;
+  instructionsEl.innerHTML = `A viagem de teleporte demora <strong>${HOURS_COST_TRAVELLING} horas</strong>.<br>Lembre-se que se for para o caminho errado, você poderá voltar para a cidade de onde partiu e retomar os rastros do suspeito.<br>Escolha a cidade para onde deseja se teleportar.`;
   
   const options = new Set();
   const trailIds = G.trail.map(c => c.id);
