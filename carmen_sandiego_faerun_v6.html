@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carmen Sandiego: Faerûn Edition v7</title>
+<style>
+/* Estilos mantidos conforme v6 */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:#121212;color:#e0e0e0;font-size:14px;line-height:1.5}
+.screen{display:none;padding:16px;flex-direction:column;gap:12px;max-width:600px;margin:0 auto}
+.screen.active{display:flex}
+h1{font-size:22px;font-weight:600;color:#fff;text-align:center;margin-bottom:10px}
+.card{background:#1e1e1e;border:1px solid #333;border-radius:12px;padding:14px}
+.btn{background:#333;border:1px solid #444;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;color:#fff}
+.btn.primary{background:#2563eb;color:#fff;border-color:transparent}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;background:#2a2a2a;color:#aaa;border:1px solid #444}
+.tag.success{background:#16a34a;color:#fff}
+.npc-bubble{background:#252525;border:1px solid #333;border-radius:12px 12px 12px 2px;padding:12px;font-size:13px;font-style:italic;color:#ccc;margin-top:8px}
+.clue-item{padding:12px;border:1px solid #333;border-radius:8px;background:#1e1e1e;margin-bottom:8px}
+.tabs{display:flex;gap:8px;margin-bottom:12px;border-bottom:1px solid #333;padding-bottom:8px}
+.tab{padding:6px 12px;cursor:pointer;border-radius:6px;color:#999}
+.tab.active{background:#2563eb;color:#fff}
+input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-radius:8px;width:100%}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:#1e1e1e;padding:20px;border-radius:16px;width:90%;max-width:400px}
+</style>
+</head>
+<body>
+
+<div id="setup-screen" class="screen active">
+  <h1>🗺️ Carmen Sandiego: Faerûn</h1>
+  <div class="card">
+    <div class="card-title">Configuração da API Gemini</div>
+    <input type="password" id="api-key-input" placeholder="Cole sua API Key aqui">
+    <div style="margin-top:10px;font-size:12px;color:#999;display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="remember-key" style="width:auto">
+      <label for="remember-key">Lembrar a chave neste navegador</label>
+    </div>
+  </div>
+  <button class="btn primary" style="width:100%" onclick="startGame()">▶ Iniciar Missão</button>
+</div>
+
+<div id="game-screen" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div><h2 id="current-city-name">—</h2><div id="city-tags"></div></div>
+    <div style="text-align:right">
+      <div id="time-display" style="font-size:12px;color:#aaa"></div>
+      <div style="background:#333;border-radius:6px;height:8px;width:100px;overflow:hidden"><div id="time-fill" style="height:100%;background:#16a34a"></div></div>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <div style="font-size:12px;color:#777">Mandado de Prisão</div>
+    <div id="warrant-display" style="font-weight:600;color:#eab308;font-size:16px">Nenhum</div>
+    <button class="btn" style="margin-top:8px" onclick="openWarrantModal()">Emitir Mandado</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('investigate')">🔍 Investigar</div>
+    <div class="tab" onclick="switchTab('travel')">🧭 Viajar</div>
+    <div class="tab" onclick="switchTab('notes')">📋 Notas</div>
+  </div>
+
+  <div id="panel-investigate"><div id="venues-list"></div></div>
+  <div id="panel-travel" style="display:none"><div id="travel-list"></div></div>
+  <div id="panel-notes" style="display:none"><div class="card" id="clues-collected"></div></div>
+
+  <!-- PAINEL DO MESTRE -->
+  <div style="margin-top:16px;border:1px dashed #b91c1c;border-radius:8px;background:rgba(185,28,28,0.05)">
+    <div onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="padding:8px;cursor:pointer;color:#ef4444;font-size:11px;font-weight:bold">🛡️ PAINEL DO MESTRE ▼</div>
+    <div style="display:none;padding:10px;font-size:12px;color:#aaa">
+      <div>Criminoso: <strong id="dm-criminal" style="color:#ef4444"></strong></div>
+      <div>Trilha: <span id="dm-trail"></span></div>
+      <div>Alvo Atual: <strong id="dm-next" style="color:#22c55e"></strong></div>
+    </div>
+  </div>
+</div>
+
+<div id="result-screen" class="screen" style="text-align:center">
+  <div id="result-icon" style="font-size:64px"></div>
+  <h1 id="result-title"></h1>
+  <div class="card" id="result-details" style="margin:20px 0;text-align:left"></div>
+  <button class="btn primary" style="width:100%" onclick="location.reload()">Nova Partida</button>
+</div>
+
+<div id="warrant-modal" class="modal-overlay" style="display:none">
+  <div class="modal">
+    <h3>Emitir Mandado</h3>
+    <div id="warrant-options" style="margin:15px 0;max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:8px"></div>
+    <button class="btn" style="width:100%" onclick="closeWarrantModal()">Fechar</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DADOS E TEMAS (BASEADO NA SUA TABELA)[cite: 1]
+// ============================================================
+const VENUES = [
+  {id:'biblioteca', name:'Biblioteca', icon:'📚', temas:['Tipo de Governo','Principais Religiões','Aspectos Geográficos','Cultura','Defesa','Geografia','História','Infraestrutura','Magia','Política','Religião']},
+  {id:'centro_cultural', name:'Centro Cultural', icon:'🎭', temas:['Raças/Espécies','Tipo de Governo','Principais Religiões','Facções Predominantes','Demografia','Cultura','História']},
+  {id:'estalagem', name:'Estalagem', icon:'🛌', temas:['Raças/Espécies','Tipo de Governo','Principais Religiões','Demografia','Política','Religião']},
+  {id:'estaleiro', name:'Estaleiro', icon:'🏗️', temas:['Tipo de Localidade','Comércio','Economia']},
+  {id:'museu', name:'Museu', icon:'🏛️', temas:['Tipo de Governo','Principais Religiões','Aspectos Geográficos','Cultura','Geografia','História','Magia','Política','Religião']},
+  {id:'caravanas', name:'Organizador de Caravanas', icon:'🐪', temas:['Raças/Espécies','Comércio','Demografia','Aspectos Geográficos','Geografia','Economia']},
+  {id:'taverna', name:'Taverna', icon:'🍺', temas:['Tipo de Localidade','Tipo de Governo','Principais Religiões','Facções Predominantes','Crime','Política','Religião']}
+];
+
+const CITIES = [
+  {id:'waterdeep',name:'Waterdeep',region:'Costa das Espadas',curiosidades:['Estátuas Ambulantes','Cavalaria de Grifos']},
+  {id:'neverwinter',name:'Neverwinter',region:'Costa das Espadas',curiosidades:['Fontes Termais','Rio Neverwinter']},
+  {id:'baldursgate',name:'Baldur\'s Gate',region:'Costa das Espadas',curiosidades:['Flaming Fist','Cidade Alta e Baixa']},
+  {id:'silverymoon',name:'Silverymoon',region:'Norte',curiosidades:['Moonbridge','Academia de Magia']},
+  {id:'luskan',name:'Luskan',region:'Norte',curiosidades:['Capitães dos Barcos','Torre dos Magos']}
+];
+
+const CRIMINALS = [
+  {id:'sylara',name:'Sylara Vex',gender:'F',aparencia:{cabelo:'ruivo',traço:'tatuagem'},gostos:['xadrez','carruagem']},
+  {id:'torvin',name:'Torvin Mão-de-Ferro',gender:'M',aparencia:{cabelo:'preto',traço:'cicatriz'},gostos:['apostas','cerveja']}
+];
+
+let G = { apiKey:'', criminal:null, trail:[], playerPos:0, currentDay:1, maxDays:4, currentMinutes:8*60, venuesPerCity:{}, visitedVenues:{}, warrant:null, log:[], clues:[] };
+
+window.onload = () => {
+  const savedKey = localStorage.getItem('gemini_api_key');
+  if (savedKey) { document.getElementById('api-key-input').value = savedKey; document.getElementById('remember-key').checked = true; }
+};
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function startGame() {
+  const keyInput = document.getElementById('api-key-input').value.trim();
+  if (document.getElementById('remember-key').checked) localStorage.setItem('gemini_api_key', keyInput);
+  else localStorage.removeItem('gemini_api_key');
+
+  G.apiKey = keyInput;
+  G.criminal = rand(CRIMINALS);
+  G.trail = [...CITIES].sort(() => Math.random() - 0.5).slice(0, 5);
+  G.trail.forEach(city => { G.venuesPerCity[city.id] = [...VENUES].sort(() => Math.random() - 0.5).slice(0, 3); });
+
+  document.getElementById('setup-screen').classList.remove('active');
+  document.getElementById('game-screen').classList.add('active');
+  renderGameScreen();
+}
+
+async function investigateVenue(cityId, venueId) {
+  if (!advanceTime(120)) return;
+  const key = `${cityId}_${venueId}`;
+  const cityIdx = G.trail.findIndex(c => c.id === cityId);
+  const venue = VENUES.find(v => v.id === venueId);
+
+  // LOGICA DE CAPTURA NA CIDADE FINAL[cite: 1]
+  if (cityIdx === G.trail.length - 1) {
+    const visitedCount = Object.keys(G.visitedVenues).filter(k => k.startsWith(cityId + '_')).length;
+    if (Math.random() < [0.4, 0.8, 1.0][Math.min(visitedCount, 2)]) { foundCriminal(); return; }
+    G.visitedVenues[key] = "Ele está por perto!";
+  } 
+  // LOGICA DE PISTAS TEMÁTICAS[cite: 1]
+  else if (cityIdx >= 0 && cityIdx < G.trail.length - 1) {
+    G.visitedVenues[key] = "...";
+    renderVenues();
+    
+    // 100% Destino, 30% Criminoso[cite: 1]
+    const nextCity = G.trail[cityIdx + 1];
+    const temaSorteado = rand(venue.temas);
+    const darPistaCriminoso = Math.random() < 0.3;
+    
+    const text = await generateNPCDialogue(venue, nextCity, temaSorteado, darPistaCriminoso);
+    G.visitedVenues[key] = text;
+    G.clues.push(`[${venue.name}] ${text}`);
+  } else {
+    G.visitedVenues[key] = "Nada por aqui.";
+  }
+  renderGameScreen();
+}
+
+async function generateNPCDialogue(venue, nextCity, tema, incluirCriminoso) {
+  if (!G.apiKey) return "Ele fugiu para o " + nextCity.region;
+  
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${G.apiKey}`;
+  
+  // Prompt Seletivo: enviamos APENAS o necessário para evitar redundância[cite: 1]
+  let infoCriminoso = incluirCriminoso ? `O suspeito tem cabelo ${G.criminal.aparencia.cabelo} e gosta de ${G.criminal.gostos[0]}.` : "Não mencione nada sobre a aparência física dele.";
+  
+  const prompt = `Aja como um NPC no local: ${venue.name}.
+  Um suspeito passou por aqui e fugiu para uma cidade que tem estas características de ${tema}: "${nextCity.curiosidades[0]}".
+  ${infoCriminoso}
+  Tarefa: Escreva uma fala curta de NPC. Use o tema ${tema} para dar a pista do destino. Não diga o nome da cidade de destino diretamente.`;
+
+  try {
+    const resp = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+    const data = await resp.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text.replace(/"/g, "").trim();
+  } catch(e) { return "Ele mencionou algo sobre " + tema + " em direção ao " + nextCity.region; }
+}
+
+function switchVenue(cityId, oldVenueId) {
+  const current = G.venuesPerCity[cityId];
+  const options = VENUES.filter(v => !current.map(cv => cv.id).includes(v.id));
+  if (options.length > 0) {
+    current[current.findIndex(v => v.id === oldVenueId)] = rand(options);
+    renderVenues();
+  }
+}
+
+function travelTo(cityId) {
+  if (!advanceTime(240)) return;
+  G.playerPos = G.trail.findIndex(c => c.id === cityId);
+  G.currentCityId = cityId;
+  renderGameScreen();
+}
+
+function renderGameScreen() {
+  const city = G.playerPos >= 0 ? G.trail[G.playerPos] : CITIES.find(c => c.id === G.currentCityId);
+  document.getElementById('current-city-name').textContent = city ? city.name : "Perdido";
+  document.getElementById('time-display').textContent = `Dia ${G.currentDay} - ${Math.floor(G.currentMinutes/60)}:00`;
+  document.getElementById('time-fill').style.width = `${(1 - (G.currentDay/G.maxDays)) * 100}%`;
+  renderVenues();
+  renderTravel();
+  if (G.criminal) {
+    document.getElementById('dm-criminal').textContent = G.criminal.name;
+    document.getElementById('dm-trail').textContent = G.trail.map(c => c.name).join(' → ');
+    document.getElementById('dm-next').textContent = G.trail[G.playerPos + 1]?.name || "Final";
+  }
+}
+
+function renderVenues() {
+  const id = G.playerPos >= 0 ? G.trail[G.playerPos].id : G.currentCityId;
+  const list = document.getElementById('venues-list');
+  list.innerHTML = (G.venuesPerCity[id] || []).map(v => {
+    const visited = G.visitedVenues[`${id}_${v.id}`];
+    return `<div class="clue-item">
+      <div style="display:flex;justify-content:space-between">
+        <div onclick="${visited ? '' : `investigateVenue('${id}','${v.id}')`}" style="cursor:pointer">${v.icon} ${v.name}</div>
+        ${!visited ? `<button class="btn" style="font-size:10px" onclick="switchVenue('${id}','${v.id}')">🔄</button>` : '✅'}
+      </div>
+      ${visited ? `<div class="npc-bubble">${visited}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function renderTravel() {
+  const current = G.playerPos >= 0 ? G.trail[G.playerPos].id : G.currentCityId;
+  document.getElementById('travel-list').innerHTML = CITIES.filter(c => c.id !== current).sort(() => Math.random() - 0.5).slice(0, 4).map(c => `
+    <div class="city-option" onclick="travelTo('${c.id}')">🏙️ ${c.name}</div>`).join('');
+}
+
+function advanceTime(m) { G.currentMinutes += m; if (G.currentMinutes > 23*60) { G.currentDay++; G.currentMinutes = 8*60; if (G.currentDay > G.maxDays) { endGame('timeout'); return false; } } return true; }
+function switchTab(t) { 
+  document.getElementById('panel-investigate').style.display = t==='investigate'?'block':'none';
+  document.getElementById('panel-travel').style.display = t==='travel'?'block':'none';
+  document.getElementById('panel-notes').style.display = t==='notes'?'block':'none';
+  if(t==='notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br>') || "Sem pistas.";
+}
+function openWarrantModal() { document.getElementById('warrant-options').innerHTML = CRIMINALS.map(c => `<div class="city-option" onclick="issueWarrant('${c.id}')">👤 ${c.name}</div>`).join(''); document.getElementById('warrant-modal').style.display = 'flex'; }
+function issueWarrant(id) { G.warrant = id; document.getElementById('warrant-display').textContent = CRIMINALS.find(c => c.id === id).name; document.getElementById('warrant-modal').style.display = 'none'; }
+function foundCriminal() { if (G.warrant === G.criminal.id) endGame('won'); else endGame('wrong_warrant'); }
+function endGame(r) { document.getElementById('game-screen').classList.remove('active'); document.getElementById('result-screen').classList.add('active'); document.getElementById('result-title').textContent = r==='won'?"Capturado!":"Escapou!"; document.getElementById('result-icon').textContent = r==='won'?"🏆":"💀"; }
+</script>
+</body>
+</html>
