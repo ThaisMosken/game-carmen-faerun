@@ -611,7 +611,7 @@ function generateLocalDialogue(venue, fato, incluirC) {
 
 function travelTo(cityId) {
   if (G.isRequesting) return;
-  if (!advanceTime(600)) return;
+  if (!advanceTime(480)) return;
   if (G.history.length > 1 && cityId === G.history[G.history.length - 2]) {
     G.history.pop();
   } else {
@@ -680,9 +680,11 @@ function renderTravel() {
   const shuffledErrors = randomCandidates.sort(() => Math.random() - 0.5);
 
   for (let id of shuffledErrors) {
-    if (options.size >= 4) break;
+    if (options.size >= 5) break;
     options.add(id);
   }
+
+  const finalOptions = Array.from(options).sort(() => Math.random() - 0.5);
 
   document.getElementById('travel-list').innerHTML = Array.from(options).map(id => {
     const city = CITIES.find(c => c.id === id);
@@ -694,10 +696,8 @@ function advanceTime(m) {
   G.currentMinutes += m; 
 
   while (G.currentMinutes > 23 * 60) {
-    const overflow = G.currentMinutes - (23 * 60);
-    
-    G.currentDay++;
-    
+    const overflow = G.currentMinutes - (23 * 60);    
+    G.currentDay++;    
     G.currentMinutes = (8 * 60) + overflow;
   }
 
