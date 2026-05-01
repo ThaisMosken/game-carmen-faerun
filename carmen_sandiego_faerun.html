@@ -94,383 +94,399 @@ const HOURS_COST_TRAVELLING = 10;
 
 const CITIES = [
   {
-    id: "neverwinter",
-    name: "Neverwinter",
-    curiosidades: {
+    "id": "bryn_shander",
+    "name": "Bryn Shander",
+    "curiosidades": {
+      "Tipo de Localidade": "Vila / Cidade Pequena",
+      "Raças/Espécies": "Majoritariamente humanos; minorias de anões (escudo), halflings, gnomos e elfos.",
+      "Tipo de Governo": "Democracia Representativa (Liderada por um Orador eleito).",
+      "Aspectos Geográficos": "Planalto em Icewind Dale, clima de tundra ártica.",
+      "Comércio": "Marfim de Truta-Cabeça-de-Nós, peles",
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": "É o único assentamento da região cercado por uma muralha de madeira e pedra de 30 pés de altura, projetada para resistir a ataques de gigantes, orcs e às intensas tempestades de neve.",
+      "Economia": "Atua como o centro comercial do Vale do Vento Gelado, onde o marfim de truta cabeça-de-ferro (scrimshaw) é trocado por mercadorias essenciais vindas do sul através da Trilha de Dez-Cidades.",
+      "Facções": "Dez-Cidades",
+      "Geografia": "É a única das Dez-Vilas que não está situada às margens de um dos três lagos da região (Maer Dualdon, Lac Dinneshere ou Águas Vermelhas), localizando-se no topo de uma colina desolada.",
+      "História": "Em 1351 CV, a cidade foi o palco de um cerco massivo liderado pelo mago Akar Kessell; a vitória defensiva consolidou Bryn Shander como a capital administrativa de fato do Vale.",
+      "Infraestrutura": "Os edifícios são construídos com telhados extremamente inclinados para evitar o acúmulo excessivo de neve, que poderia colapsar as estruturas durante o inverno eterno.",
+      "Magia": null,
+      "Política": null,
+      "Religião": "Abriga a Casa do Amanhã, um templo dedicado a Amaunator (frequentemente cultuado sob o aspecto de Lathander), que possui uma janela circular de vidro amarelo para captar a rara luz solar da região."
+    }
+  },
+  {
+    "id": "citadel_adbar",
+    "name": "Citadel Adbar",
+    "curiosidades": {
+      "Tipo de Localidade": "Fortaleza Anã / Cidade Subterrânea",
+      "Raças/Espécies": "Majoritariamente Anões do Escudo (Shield Dwarves); pequenas populações de humanos e gnomos das rochas.",
+      "Tipo de Governo": "Monarquia Hereditária (Casa Adbar).",
+      "Aspectos Geográficos": "Fortaleza montanhosa subterrânea nas Montanhas de Gelo/Montanhas Rauvin.",
+      "Comércio": "Ferro, minérios, armas e armaduras",
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": "A cidadela serve como uma fortaleza de contenção contra o Subterrâneo (Underdark), monitorando passagens profundas para evitar incursões de drow e orcs.",
+      "Economia": "É famosa em toda Faerûn por suas forjas incessantes, sendo a principal exportadora de aço temperado e armas de qualidade magistral para o Norte e as Fronteiras Prateadas.",
+      "Facções": "Ex-Aliança dos Lordes",
+      "Geografia": null,
+      "História": "Citadel Adbar é um dos poucos remanescentes do antigo império de Delzoun que nunca foi conquistado ou abandonado, mantendo uma linhagem de reis contínua por mais de um milênio.",
+      "Infraestrutura": "A cidadela possui quilômetros de túneis e níveis subterrâneos que podem abrigar dezenas de milhares de anões, além de extensos canais de ventilação que levam ar fresco para as profundezas. As torres visíveis na superfície são apenas a \"ponta do iceberg\"; a maioria das janelas e aberturas externas são fendas de tiro projetadas para defesa pesada contra cercos.",
+      "Magia": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    "id": "citadel_felbarr",
+    "name": "Citadel Felbarr",
+    "curiosidades": {
+      "Tipo de Localidade": "Fortaleza Anã / Cidade Subterrânea",
+      "Raças/Espécies": "Majoritariamente Anões do Escudo (Shield Dwarves); pequenas minorias de humanos e gnomos.",
+      "Tipo de Governo": "Monarquia Hereditária (Casa Warcrown).",
+      "Aspectos Geográficos": "Montanhas ao norte de Sundabar, clima alpino extremo.",
+      "Comércio": "Mineração de ferro, metais trabalhados",
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": "A força militar da cidade é famosa por suas unidades de infantaria pesada, mas também mantém uma aliança histórica com cavaleiros de hipogrifos que patrulham os picos das Montanhas de Gelo.",
+      "Economia": "É um dos principais centros de mineração de ouro e pedras preciosas do Norte, possuindo uma conexão comercial vital com Silverymoon através da Estrada da Lua.",
+      "Facções": "Ex-Aliança dos Lordes",
+      "Geografia": "Diferente de outras fortalezas, Felbarr possui extensas fazendas de superfície fortificadas e pastagens nos vales circundantes para sustentar sua população durante cercos prolongados.",
+      "História": "A fortaleza foi perdida para os orcs por mais de 300 anos, período em que foi renomeada como \"Cidadela das Muitas Flechas\" (Citadel of Many Arrows), antes de ser retomada pelos anões em 1367 CV.",
+      "Infraestrutura": "A entrada principal é conhecida como Martelo e Torquês (Hammer and Tongs), composta por dois portões maciços flanqueados por torres de vigia que simbolizam as ferramentas de Moradin.",
+      "Magia": null,
+      "Política": null,
+      "Religião": "O Salão dos Reis é o coração espiritual da cidadela, abrigando estátuas maciças de monarcas passados e altares dedicados ao Panteão Anão (Morndinsamman)."
+    }
+  },
+  {
+    "id": "daggerford",
+    "name": "Daggerford",
+    "curiosidades": {
+      "Tipo de Localidade": "Cidade Pequena / Vila Fortificada",
+      "Raças/Espécies": "Majoritariamente humanos; populações significativas de halflings e gnomos, além de minorias de elfos e anões.",
+      "Tipo de Governo": "Monarquia (Ducado sob a liderança de um Duque ou Duquesa).",
+      "Aspectos Geográficos": "Planícies férteis às margens do Rio Delimbiyr.",
+      "Comércio": "Gado, produtos agrícolas, couro",
+      "Crime": null,
+      "Cultura": "A sociedade local é regida por um sistema de guildas de artesãos que operam de forma similar às de Waterdeep, mas com uma abordagem mais tradicional e focada na subsistência da comunidade.",
+      "Defesa": "A cidade mantém uma milícia obrigatória, onde quase todos os cidadãos aptos devem treinar e servir periodicamente para garantir a defesa das muralhas e das fazendas circundantes.",
+      "Economia": null,
+      "Facções": "Aliança dos Lordes",
+      "Geografia": "Localiza-se estrategicamente na margem norte do Rio Delimbiyr, servindo como o principal ponto de parada e reabastecimento na Estrada do Comércio (Trade Way) entre Waterdeep e Baldur's Gate.",
+      "História": "O nome da cidade deriva de uma lenda sobre um garoto que defendeu um vau (ford) contra um bando de homens-lagarto utilizando apenas uma adaga (dagger).",
+      "Infraestrutura": "O Castelo do Duque foi construído sobre uma colina que, segundo rumores locais, abriga as ruínas soterradas de um antigo castelo do império élfico de Illefarn.",
+      "Magia": null,
+      "Política": "Apesar de seu tamanho reduzido em comparação com metrópoles vizinhas, Daggerford é um membro influente da Aliança dos Lordes e se orgulha de sua independência política.",
+      "Religião": null
+    }
+  },
+  {
+    "id": "everlund",
+    "name": "Everlund",
+    "curiosidades": {
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Aspectos Geográficos": null,
+      "Comércio": null,
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": null,
+      "Economia": null,
+      "Facções": null,
+      "Geografia": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Magia": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    "id": "gauntlgrym",
+    "name": "Gauntlgrym",
+    "curiosidades": {
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Aspectos Geográficos": null,
+      "Comércio": null,
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": null,
+      "Economia": null,
+      "Facções": null,
+      "Geografia": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Magia": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    "id": "goldenfields",
+    "name": "Goldenfields",
+    "curiosidades": {
+      "Tipo de Localidade": "Abadia Fortificada / Complexo Agrícola",
+      "Raças/Espécies": "Majoritariamente humanos; populações de halflings e criaturas despertas (plantas e animais).",
+      "Tipo de Governo": "Teocracia (Liderada pelo Abade de Chauntea).",
+      "Aspectos Geográficos": null,
+      "Comércio": null,
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": "A defesa do local conta com a ajuda de \"Lifferlas\", um ancestral batedor (treant) que reside dentro das muralhas e auxilia os clérigos e druidas na proteção das plantações.",
+      "Economia": "A produção agrícola é tão vasta que Goldenfields é capaz de sustentar quase sozinha a demanda por cereais, frutas e vegetais de diversas cidades vizinhas durante crises ou invernos rigorosos.",
+      "Facções": null,
+      "Geografia": null,
+      "História": "A abadia foi fundada pelo arquimago Tolgar Anuvien, que utilizou sua magia para fertilizar o solo e construir as defesas originais antes de doar as terras para a igreja de Chauntea.",
+      "Infraestrutura": "O complexo ocupa uma área de aproximadamente 30 milhas quadradas, toda cercada por uma muralha de pedra de 20 pés de altura, tornando-a uma das maiores áreas muradas de Faerûn.",
+      "Magia": null,
+      "Política": null,
+      "Religião": "A cidade é um templo vivo dedicado a Chauntea, a Grande Mãe, funcionando como o principal celeiro e centro de produção de alimentos para Waterdeep e o Norte."
+    }
+  },
+  {
+    "id": "longsaddle",
+    "name": "Longsaddle",
+    "curiosidades": {
+      "Tipo de Localidade": "Vila / Cidade Pequena",
+      "Raças/Espécies": "Majoritariamente humanos; minorias de halflings, anões e elfos.",
+      "Tipo de Governo": "Informal / Magocracia (Liderada pela família Harpell).",
+      "Aspectos Geográficos": "Planície no Vale de Dessarin, clima de pradaria.",
+      "Comércio": "Gado, cavalos, serviços mágicos",
+      "Crime": null,
+      "Cultura": "A taverna local \"O Gambá Groggy\" (The Groggy Dog) é o centro social da vila, onde os viajantes são instruídos a ignorar quaisquer fenômenos estranhos que ocorram dentro ou fora do estabelecimento.",
+      "Defesa": null,
+      "Economia": "Apesar da fama mágica, a subsistência da cidade provém da pecuária; os habitantes são especialistas na criação de gado e cavalos de alta linhagem, o que deu origem ao nome da localidade.",
+      "Facções": "Família Harpell (aliada aos Harpistas)",
+      "Geografia": "Localizada estrategicamente na Trilha Longa (Long Road), a vila serve como um dos principais pontos de descanso e reabastecimento para caravanas que viajam entre Mirabar e Waterdeep.",
+      "História": null,
+      "Infraestrutura": "O marco mais famoso é a Mansão da Ivy (Ivy Mansion), uma residência mágica que sofre constantes mutações arquitetônicas, possuindo torres que flutuam e escadarias que levam a dimensões paralelas.",
+      "Magia": null,
+      "Política": "A vila é o lar dos Harpell, uma linhagem de magos conhecidos em toda Faerûn por sua extrema excentricidade e por realizarem experimentos mágicos cujos resultados são frequentemente imprevisíveis. Devido ao excesso de magia residual na área, não é raro encontrar animais de fazenda em Longsaddle com características anômalas, como galinhas que brilham no escuro ou cavalos excepcionalmente inteligentes.",
+      "Religião": null
+    }
+  },
+  {
+    "id": "loudwater",
+    "name": "Loudwater",
+    "curiosidades": {
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Aspectos Geográficos": null,
+      "Comércio": null,
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": null,
+      "Economia": null,
+      "Facções": null,
+      "Geografia": null,
+      "História": null,
+      "Infraestrutura": null,
+      "Magia": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    "id": "luskan",
+    "name": "Luskan",
+    "curiosidades": {
+      "Tipo de Localidade": "Cidade Grande (Cidade das Velas)",
+      "Raças/Espécies": "Majoritariamente humanos; minorias de meio-orcs, orcs, anões e elfos.",
+      "Tipo de Governo": "Oligarquia (controlada por cinco Altos Capitães e pela Irmandade Arcana).",
+      "Aspectos Geográficos": "Foz do Rio Mirar, águas gélidas e clima severo de inverno.",
+      "Comércio": "Pirataria, mercenários, peixe, comércio ilegal",
+      "Crime": "A organização mercenária drow Bregan D'aerthe, liderada por Jarlaxle Baenre, já exerceu controle quase absoluto sobre a cidade através de manipulações nos bastidores.",
+      "Cultura": "A cidade é notória por ser um porto seguro para piratas e corsários, sendo frequentemente considerada um ninho de ilegalidade em comparação com as cidades vizinhas da Aliança dos Lordes.",
+      "Defesa": "Luskan mantém uma rivalidade histórica e amarga com Neverwinter, resultando em frequentes escaramuças navais e tentativas de sabotagem econômica.",
+      "Economia": null,
+      "Facções": "Irmandade Arcana, Ship Rethnor",
+      "Geografia": "Luskan é dividida pelo Rio Mirar em duas partes, a Margem Norte e a Margem Sul, ligadas pelas pontes Travessia do Porto, Vão de Dalath e Vão de Montante.",
+      "História": null,
+      "Infraestrutura": null,
+      "Magia": "A cidade abriga a Torre de Hóstia Arcana (Hosttower of the Arcane), uma estrutura mágica que se assemelha a uma gigantesca árvore de pedra com torres que funcionam como \"galhos\".",
+      "Política": "O poder político é dividido entre cinco facções conhecidas como \"Navios\" (Ships): Kurth, Baram, Suljack, Rethnor e Taerl, cada uma liderada por um Alto Capitão.",
+      "Religião": null
+    }
+  },
+  {
+    "id": "mirabar",
+    "name": "Mirabar",
+    "curiosidades": {
+      "Tipo de Localidade": "Metrópole / Cidade-Estado Fortificada",
+      "Raças/Espécies": "Humanos e Anões do Escudo (Shield Dwarves).",
+      "Tipo de Governo": "Oligarquia (conduzida pelo Conselho das Pedras Cintilantes e pelo Marquês de Mirabar).",
+      "Aspectos Geográficos": "Cidade mineira fortificada no Norte, fria e ventosa.",
+      "Comércio": "Metais, gemas lapidadas, pedras raras",
+      "Crime": null,
+      "Cultura": "Embora humanos e anões vivam em harmonia produtiva, o Conselho das Pedras Cintilantes (composto por anões) toma as decisões sobre a mineração, enquanto o Marquês (humano) cuida da administração e diplomacia externa.",
+      "Defesa": "A defesa da cidade é garantida pelo \"Machado de Mirabar\" (Axe of Mirabar), um exército profissional de elite composto por regimentos de infantaria humana e unidades de choque anãs.",
+      "Economia": "É considerada a principal autoridade mineira do Norte, exportando metais brutos, pedras preciosas e produtos de metalurgia fina para quase todas as grandes cidades da Costa da Espada.",
+      "Facções": "Aliança dos Lordes",
+      "Geografia": "Mirabar é uma cidade dual: enquanto os humanos residem majoritariamente na superfície, os anões vivem e trabalham em uma vasta rede de cavernas e oficinas localizadas diretamente abaixo do nível do solo.",
+      "História": null,
+      "Infraestrutura": "As muralhas e edifícios de superfície são construídos com pedras maciças e reforços de ferro, projetados para suportar tanto os invernos rigorosos quanto os frequentes ataques de orcs das montanhas próximas.",
+      "Magia": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    "id": "mithral_hall",
+    "name": "Mithral Hall",
+    "curiosidades": {
+      "Tipo de Localidade": "Fortaleza Anã / Mina",
+      "Raças/Espécies": "Majoritariamente Anões do Escudo (Shield Dwarves); pequenas populações de humanos e gnomos das profundezas (svirfneblin).",
+      "Tipo de Governo": "Monarquia (Rei ou Rainha sob a Montanha).",
+      "Aspectos Geográficos": "Complexo subterrâneo na Espinha do Mundo.",
+      "Comércio": "Mithral, minérios preciosos",
+      "Crime": null,
+      "Cultura": "A cidade é o coração político do reino de Clan Battlehammer.",
+      "Defesa": "Abriga a infame \"Brigada Quebra-Tripas\" (Gutbuster Brigade), uma unidade de anões frenéticos que utilizam armaduras cobertas de espinhos para atacar inimigos através de \"abraços\" mortais.",
+      "Economia": "É a fonte mais famosa de mithral do Norte; o mineral é tão abundante em suas veias naturais que algumas chegam a ter a espessura de um braço humano.",
+      "Facções": "Aliança dos Lordes",
+      "Geografia": "Localizada sob o Pico de Quatro Pontas (Fourthpeak Mountain), a cidade utiliza a vila de superfície Settlestone como uma fachada comercial e primeira linha de defesa.",
+      "História": "A fortaleza foi dominada por séculos pelo dragão das sombras Shimmergloom e um clã de duergars, sendo retomada por Bruenor Battlehammer e seus companheiros após uma busca lendária.",
+      "Infraestrutura": "Os níveis mais inferiores da fortaleza, conhecidos como as Minas Inferiores, abrem-se diretamente para o Subterrâneo (Underdark), exigindo vigilância constante contra invasões.",
+      "Magia": null,
+      "Política": null,
+      "Religião": null
+    }
+  },
+  {
+    "id": "neverwinter",
+    "name": "Neverwinter",
+    "curiosidades": {
       "Tipo de Localidade": "Cidade Grande (Metrópole)",
       "Raças/Espécies": "Majoritariamente humanos, meio-elfos, anões e elfos.",
-      "Tipo de Governo": "Protetorado militar (Lorde Protetor).",
-      "Geografia": "O Rio Neverwinter é aquecido por elementais de fogo, impedindo o congelamento.",
-      "Economia": "Famosa pela alta qualidade de seus artesãos e relojoeiros.",
-      "Facções": null,
+      "Tipo de Governo": "Protetorado militar / Autocracia (Lorde Protetor).",
+      "Aspectos Geográficos": "Rio Neverwinter (quente por atividade vulcânica), clima ameno.",
+      "Comércio": "Joias, vidro soprado, precisão mecânica",
+      "Crime": null,
+      "Cultura": null,
       "Defesa": null,
+      "Economia": "Historicamente, a metrópole é chamada de \"Cidade das Mãos Hábeis\" em reconhecimento à alta qualidade de seus artesãos e à precisão de seus relojoeiros e jardineiros.",
+      "Facções": "Aliança dos Lordes",
+      "Geografia": "O Rio Neverwinter é aquecido por elementais de fogo vindos do Monte Hotenow, o que mantém as águas do porto sempre líquidas e o clima da cidade ameno, mesmo no inverno.",
+      "História": "Em 1451 CV, a cidade foi quase totalmente destruída por uma erupção catastrófica do Monte Hotenow, desencadeada por manipulações de Thay, resultando em um abismo que dividiu a cidade por décadas.",
+      "Infraestrutura": "Neverwinter é famosa por suas três pontes principais — o Golfinho, o Wyvern Alado e o Dragão Adormecido — que sobreviveram ao cataclismo e são marcos da engenharia local.",
       "Magia": null,
-      "Cultura": null,
+      "Política": "Dagult Neverember, após ser deposto como Lorde Aberto de Waterdeep, concentrou seus esforços e riqueza na reconstrução de Neverwinter para consolidar seu título de Lorde Protetor.",
+      "Religião": null
+    }
+  },
+  {
+    "id": "newfort",
+    "name": "Newfort",
+    "curiosidades": {
+      "Tipo de Localidade": null,
+      "Raças/Espécies": null,
+      "Tipo de Governo": null,
+      "Aspectos Geográficos": null,
+      "Comércio": null,
       "Crime": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "silverymoon",
-    name: "Silverymoon",
-    curiosidades: {
-      "Magia": "Protegida pelo Mythal de Silverymoon, uma poderosa barreira mágica.",
-      "Defesa": "A Ponte da Lua (Moonbridge), que pode ser desativada para impedir invasões.",
-      "Cultura": "Joia do Norte, o maior centro de aprendizado e magia.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Economia": null,
-      "Geografia": null,
-      "Crime": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "luskan",
-    name: "Luskan",
-    curiosidades: {
-      "Crime": "Refúgio para piratas governado pela Irmandade Arcana.",
-      "Defesa": "Cinco navios de guerra comandados pelos Altos Capitães.",
-      "Geografia": "A Hosttower of the Arcane, sede dos magos.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Economia": null,
-      "Magia": null,
       "Cultura": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "citadel_adbar",
-    name: "Citadel Adbar",
-    curiosidades: {
-      "Defesa": "A Guarda de Ferro, elite montada em hipogrifos.",
-      "Economia": "Maior centro de fundição e forja de Mithral do Norte.",
-      "Infraestrutura": "Chaminés de forjas visíveis a quilômetros.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Magia": null,
-      "Geografia": null,
-      "Cultura": null,
-      "Crime": null,
-      "História": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "citadel_felbarr",
-    name: "Citadel Felbarr",
-    curiosidades: {
-      "Defesa": "Os Portões do Martelo, que exigem dezenas de anões para abrir.",
-      "História": "Retomada após 300 anos de ocupação orc.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Economia": null,
-      "Magia": null,
-      "Geografia": null,
-      "Cultura": null,
-      "Crime": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "mithral_hall",
-    name: "Mithral Hall",
-    curiosidades: {
-      "Geografia": "Única fonte conhecida de Mithral puro em todo o Norte.",
-      "História": "Lar ancestral do Clã Battlehammer, reconquistado das sombras.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
       "Defesa": null,
       "Economia": null,
-      "Magia": null,
-      "Cultura": null,
-      "Crime": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "phandalin",
-    name: "Phandalin",
-    curiosidades: {
-      "Geografia": "Vila mineradora próxima à lendária Caverna Eco das Ondas.",
-      "Crime": "Local onde a gangue Redbrand costumava extorquir colonos.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
       "Facções": null,
-      "Defesa": null,
-      "Economia": null,
-      "Magia": null,
-      "Cultura": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "bryn_shander",
-    name: "Bryn Shander",
-    curiosidades: {
-      "Geografia": "Fortaleza no topo de uma colina, isolada das nevascas.",
-      "Economia": "Principal mercado de marfim entalhado de truta Knucklehead.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
-      "Magia": null,
-      "Cultura": null,
-      "Crime": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "longsaddle",
-    name: "Longsaddle",
-    curiosidades: {
-      "Magia": "Mansão Ivy, sede da família Harpell e sua magia caótica.",
-      "Economia": "Centro renomado para a criação de cavalos de sela resistentes.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
       "Geografia": null,
-      "Cultura": null,
-      "Crime": null,
       "História": null,
       "Infraestrutura": null,
+      "Magia": null,
       "Política": null,
       "Religião": null
     }
   },
   {
-    id: "mirabar",
-    name: "Mirabar",
-    curiosidades: {
-      "Defesa": "O Machado de Mirabar, exército de humanos e anões.",
-      "Política": "Divisão de poder entre o Conselho de anões e o Marquês humano.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Economia": null,
-      "Magia": null,
-      "Geografia": null,
-      "Cultura": null,
+    "id": "phandalin",
+    "name": "Phandalin",
+    "curiosidades": {
+      "Tipo de Localidade": "Vila de Fronteira / Pequena Cidade",
+      "Raças/Espécies": "Majoritariamente humanos, com minorias de anões, gnomos e halflings.",
+      "Tipo de Governo": "Mestre da Cidade (Townmaster) eleito anualmente.",
+      "Aspectos Geográficos": "Vila na fronteira, sopé das Montanhas da Espada.",
+      "Comércio": "Mineração (ouro, prata, platina), peles, agricultura",
       "Crime": null,
+      "Cultura": null,
+      "Defesa": "Phandalin não possui muralhas defensivas, o que a torna vulnerável a ameaças das Montanhas da Espada, como o dragão de gelo Cryovain ou as incursões de orcs liderados por cultistas.",
+      "Economia": "A economia local é baseada na prospecção mineral, sendo a descoberta da Forja de Magia na Caverna do Eco das Ondas o principal motor de crescimento e conflito recente na região.",
+      "Facções": "Harpistas, Ordem da Manopla",
+      "Geografia": null,
+      "História": "A vila foi um centro próspero de agricultura e mineração até ser devastada em 951 CV por orcs do clã Urshad, permanecendo abandonada por séculos até ser recolonizada há poucos anos.",
+      "Infraestrutura": "A Mansão Tresendar, outrora uma residência nobre imponente, situa-se em ruínas sobre uma colina, escondendo um complexo subterrâneo que serviu de base para a gangue das Marcas Rubras (Redbrands).",
+      "Magia": null,
+      "Política": "Devido à ausência de uma força militar robusta, a vila é frequentemente alvo de influência de facções externas, como o Zhentarim e a Aliança dos Lordes, que competem pelo controle comercial.",
+      "Religião": "O Santuário da Sorte é a única estrutura religiosa formal da vila; ele foi construído com pedras locais e é dedicado a Tymora, a deusa da boa fortuna, padroeira dos mineradores."
+    }
+  },
+  {
+    "id": "silverymoon",
+    "name": "Silverymoon",
+    "curiosidades": {
+      "Tipo de Localidade": "Cidade Grande (Metrópole)",
+      "Raças/Espécies": "Humanos, elfos (especialmente da lua, do sol e silvestres), meio-elfos, anões, gnomos e halflings.",
+      "Tipo de Governo": "Magocracia (liderada por um Alto Mago eleito).",
+      "Aspectos Geográficos": "Região de Luruar, cercada por florestas e rios de águas prateadas.",
+      "Comércio": "Itens mágicos, arte, educação e música",
+      "Crime": null,
+      "Cultura": "Abriga o Conclave, uma instituição que reúne diversas escolas de magia e música, consolidando a cidade como o principal centro acadêmico e cultural do Norte de Faerûn.",
+      "Defesa": "A cidade é protegida por um Mythal, um campo de magia antiga que impede feitiços de teletransporte, fogo e necromancia dentro de seus limites, além de conferir regeneração aos habitantes.",
+      "Economia": null,
+      "Facções": "Harpistas, Aliança dos Lordes",
+      "Geografia": "O Rio Rauvin divide a cidade em duas partes: a Cidade Velha, ao norte, onde fica o Palácio Elevado, e a Cidade Nova, ao sul, onde se localiza a maioria das universidades.",
       "História": null,
+      "Infraestrutura": "A Ponte da Lua (Moonbridge) é uma estrutura de força mágica invisível que atravessa o Rio Rauvin, tornando-se visível e sólida apenas sob o luar ou por comando.",
+      "Magia": null,
+      "Política": "Silverymoon foi a capital de Luruar (a Liga das Fronteiras Prateadas), uma confederação de cidades e vilas unidas para defesa contra as hordas de orcs das montanhas.",
+      "Religião": "A cidade é dedicada à preservação do conhecimento e das artes, sendo considerada sagrada por clérigos de Mystra, Oghma, Deneir e Milil."
+    }
+  },
+  {
+    "id": "sundabar",
+    "name": "Sundabar",
+    "curiosidades": {
+      "Tipo de Localidade": "Cidade Grande (Antiga Metrópole Fortificada, agora parte em ruínas)",
+      "Raças/Espécies": "Humanos e Anões do Escudo (Shield Dwarves).",
+      "Tipo de Governo": "Magistratura Eletiva (Liderada pelo Mestre Governante).",
+      "Aspectos Geográficos": "Próximo às Montanhas Rauvin, clima de montanha.",
+      "Comércio": "Madeira, metalurgia, produtos de couro",
+      "Crime": null,
+      "Cultura": "Sundabar é dividida em duas áreas distintas: a cidade de superfície, onde reside a maioria dos humanos, e a \"Cidade Baixa\" ou subsolo, ocupada predominantemente por anões.",
+      "Defesa": "Sua força de defesa, o Shieldsar, é reconhecida como uma das infantarias mais disciplinadas do Norte, composta por regimentos especializados tanto para combate em campo aberto quanto em túneis.",
+      "Economia": "A cidade é célebre pelo \"Fogo Eterno\" (Everfire), uma fenda mágica/vulcânica nas profundezas que fornece calor ininterrupto para as forjas, permitindo a produção de metalurgia de nível superior.",
+      "Facções": "Aliança dos Lordes",
+      "Geografia": null,
+      "História": "A metrópole foi erguida sobre as fundações de Sundbarr, um antigo posto avançado do império anão de Delzoun, servindo como um dos últimos bastiões de resistência após a queda desse reino.",
+      "Infraestrutura": "O design defensivo conta com duas muralhas circulares maciças; o espaço entre elas, chamado de \"Terraço\", serve como zona de morte para invasores e área de treinamento militar.",
+      "Magia": null,
+      "Política": "Embora tenha sido um pilar da confederação de Luruar (Fronteiras Prateadas), a cidade foi severamente sitiada e quase destruída por hordas de orcs durante a Guerra das Muitas Flechas.",
+      "Religião": null
+    }
+  },
+  {
+    "id": "triboar",
+    "name": "Triboar",
+    "curiosidades": {
+      "Tipo de Localidade": "Vila / Cidade Pequena",
+      "Raças/Espécies": "Majoritariamente humanos; populações significativas de halflings, anões e elfos devido ao fluxo comercial.",
+      "Tipo de Governo": "Lorde Protetor (eleito pelos cidadãos para mandatos de tempo indeterminado).",
+      "Aspectos Geográficos": "Cruzamento de estradas (Caminho Longo), clima temperado.",
+      "Comércio": "Cavalos, caravanas, suprimentos de estrada",
+      "Crime": null,
+      "Cultura": null,
+      "Defesa": "A segurança é mantida pelos \"Doze\" (The Twelve), uma unidade de cavalaria composta por doze milicianos selecionados que patrulham os arredores da cidade em turnos rotativos.",
+      "Economia": "A cidade é o principal polo de comércio de cavalos do Norte, sendo famosa também pela fabricação de carroças de alta resistência conhecidas como \"Viajantes de Triboar\".",
+      "Facções": "Aliança dos Lordes",
+      "Geografia": "É considerada o maior entroncamento comercial do Vale do Dessarin, localizada no cruzamento exato entre a Trilha Longa (Long Road) e o Caminho de Evermoor (Evermoor Way).",
+      "História": "O nome da cidade é uma homenagem a um herói viajante, que, segundo a lenda, caçou três javalis gigantes em um único dia no local onde a cidade foi construída.",
       "Infraestrutura": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "triboar",
-    name: "Triboar",
-    curiosidades: {
-      "Infraestrutura": "Cruzamento vital entre a Long Road e Evermoor Way.",
-      "Religião": "Bosque de Gwaeron, sagrado para patrulheiros e rastreadores.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
-      "Economia": null,
       "Magia": null,
-      "Geografia": null,
-      "Cultura": null,
-      "Crime": null,
-      "História": null,
-      "Política": null
-    }
-  },
-  {
-    id: "yartar",
-    name: "Yartar",
-    curiosidades: {
-      "Crime": "Sociedade da Mão de Ouro, guilda que controla o jogo ilegal.",
-      "Infraestrutura": "Sistema de eclusas que permite navegação fluvial constante.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
-      "Economia": null,
-      "Magia": null,
-      "Geografia": null,
-      "Cultura": null,
-      "História": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "sundabar",
-    name: "Sundabar",
-    curiosidades: {
-      "Defesa": "Cercada por três anéis concêntricos de muralhas de granito negro.",
-      "Geografia": "Forjas que utilizam o calor natural de cavernas vulcânicas.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Economia": null,
-      "Magia": null,
-      "Cultura": null,
-      "Crime": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "daggerford",
-    name: "Daggerford",
-    curiosidades: {
-      "História": "Vila fundada no vau onde um garoto defendeu sua família com uma adaga.",
-      "Cultura": "Taverna Happy Cow, famosa por cerveja e queijo curado.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
-      "Economia": null,
-      "Magia": null,
-      "Geografia": null,
-      "Crime": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "goldenfields",
-    name: "Goldenfields",
-    curiosidades: {
-      "Defesa": "Muralhas protegidas por criaturas da natureza despertas.",
-      "Infraestrutura": "Complexo agrícola que abastece grandes metrópoles do Sul.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Economia": null,
-      "Magia": null,
-      "Geografia": null,
-      "Cultura": null,
-      "Crime": null,
-      "História": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "newfort",
-    name: "Newfort",
-    curiosidades: {
-      "História": "Fundada por soldados aposentados em busca de sossego.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
-      "Economia": null,
-      "Magia": null,
-      "Geografia": null,
-      "Cultura": null,
-      "Crime": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "loudwater",
-    name: "Loudwater",
-    curiosidades: {
-      "Geografia": "Cidade fluvial com quedas d'água e pontes de madeira.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
-      "Economia": null,
-      "Magia": null,
-      "Cultura": null,
-      "Crime": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "everlund",
-    name: "Everlund",
-    curiosidades: {
-      "Política": "Governo diplomático focado na aliança entre as raças do Norte.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
-      "Economia": null,
-      "Magia": null,
-      "Geografia": null,
-      "Cultura": null,
-      "Crime": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Religião": null
-    }
-  },
-  {
-    id: "gauntlgrym",
-    name: "Gauntlgrym",
-    curiosidades: {
-      "Magia": "Grande Forja ancestral movida por um primordial aprisionado.",
-      "Tipo de Localidade": null,
-      "Raças/Espécies": null,
-      "Tipo de Governo": null,
-      "Facções": null,
-      "Defesa": null,
-      "Economia": null,
-      "Geografia": null,
-      "Cultura": null,
-      "Crime": null,
-      "História": null,
-      "Infraestrutura": null,
-      "Política": null,
-      "Religião": null
+      "Política": "Como membro da Aliança dos Lordes, Triboar serve como uma linha de defesa vital contra as incursões de orcs vindas das Montanhas de Gelos e ataques de gigantes vindos do deserto.",
+      "Religião": "Abriga um bosque sagrado chamado Repouso de Gwaeron, onde se acredita que o deus dos rastreadores dorme; é um local onde magias de teletransporte e vidência frequentemente falham."
     }
   },
   {
@@ -494,6 +510,28 @@ const CITIES = [
       "Política": "A cidade é regida pelo Código Legal, um conjunto estrito de leis que prevê punições severas para crimes como o uso não autorizado de magia ou agressão a oficiais.",
       "Religião": null
     }
+  },
+  {
+    "id": "yartar",
+    "name": "Yartar",
+    "curiosidades": {
+      "Tipo de Localidade": "Cidade Pequena/Média",
+      "Raças/Espécies": "Majoritariamente humanos; minorias de halflings, gnomos, anões e meio-elfos.",
+      "Tipo de Governo": "Baronia das Águas (Waterbaron), cargo eletivo vitalício.",
+      "Aspectos Geográficos": "Localizada na junção dos rios Surbrin e Dessarin.",
+      "Comércio": "Barcaças, peixes de rio, grãos",
+      "Crime": "A cidade abriga uma guilda de ladinas composta exclusivamente por mulheres, conhecida como \"A Mão de Yartar\", que exerce influência considerável no submundo e no comércio local.",
+      "Cultura": "Durante o festival de Encontro de Escudos (Shieldmeet), a cidade é palco de grandes feiras e jogos, sendo tradicionalmente o período em que a população pode desafiar ou reconfirmar a liderança do Barão das Águas.",
+      "Defesa": "A segurança urbana é mantida pelos Escudos de Yartar, uma guarda montada bem equipada que protege os portões e as docas, além de patrulhar as rotas comerciais próximas.",
+      "Economia": "A cidade é famosa por seus estaleiros especializados na construção de barcaças gigantescas de fundo chato, projetadas para transportar grandes volumes de carga pelos rios rasos da região.",
+      "Facções": "Aliança dos Lordes",
+      "Geografia": "Localiza-se estrategicamente na confluência dos rios Surbrin e Dessarin, funcionando como o principal entreposto comercial fluvial para mercadorias vindas de Silverymoon e do Norte profundo.",
+      "História": null,
+      "Infraestrutura": null,
+      "Magia": null,
+      "Política": "Yartar é um dos principais centros de operação da Sociedade do Kraken, uma rede secreta de espionagem e manipulação política que utiliza a cidade para monitorar o Vale do Dessarin.",
+      "Religião": null
+    }
   }
 ];
 
@@ -510,7 +548,7 @@ const VENUES = [
   {id:'estalagem', name:'Estalagem', icon:'🛌', temas:['Raças/Espécies','Política'], cargo: 'Hospedeiro'},
   {id:'estaleiro', name:'Estaleiro', icon:'🏗️', temas:['Tipo de Localidade','Comércio','Economia'], cargo: 'Mestre do Cais'},
   {id:'museu', name:'Museu', icon:'🏛️', temas:['História','Magia','Geografia'], cargo: 'Curador'},
-  {id:'caravanas', name:'Organizador de Caravanas', icon:'🐪', temas:['Economia','Geografia'], cargo: 'Mestre de Carga'},
+  {id:'caravanas', name:'Pátio de Carroças', icon:'🐪', temas:['Economia','Geografia'], cargo: 'Mestre de Carga'},
   {id:'taverna', name:'Taverna', icon:'🍺', temas:['Crime','Política'], cargo: 'Taverneiro'}
 ];
 
