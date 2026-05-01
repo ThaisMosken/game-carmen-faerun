@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carmen Sandiego: Faerûn Edition v7</title>
+<title>Carmen Sandiego: Faerûn Edition v15</title>
 <style>
-/* Estilos mantidos conforme v6 */
+/* Estilos visuais mantidos[cite: 3] */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:sans-serif;background:#121212;color:#e0e0e0;font-size:14px;line-height:1.5}
 .screen{display:none;padding:16px;flex-direction:column;gap:12px;max-width:600px;margin:0 auto}
@@ -14,16 +14,14 @@ h1{font-size:22px;font-weight:600;color:#fff;text-align:center;margin-bottom:10p
 .card{background:#1e1e1e;border:1px solid #333;border-radius:12px;padding:14px}
 .btn{background:#333;border:1px solid #444;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;color:#fff}
 .btn.primary{background:#2563eb;color:#fff;border-color:transparent}
-.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;background:#2a2a2a;color:#aaa;border:1px solid #444}
-.tag.success{background:#16a34a;color:#fff}
 .npc-bubble{background:#252525;border:1px solid #333;border-radius:12px 12px 12px 2px;padding:12px;font-size:13px;font-style:italic;color:#ccc;margin-top:8px}
 .clue-item{padding:12px;border:1px solid #333;border-radius:8px;background:#1e1e1e;margin-bottom:8px}
 .tabs{display:flex;gap:8px;margin-bottom:12px;border-bottom:1px solid #333;padding-bottom:8px}
 .tab{padding:6px 12px;cursor:pointer;border-radius:6px;color:#999}
 .tab.active{background:#2563eb;color:#fff}
 input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-radius:8px;width:100%}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:100}
-.modal{background:#1e1e1e;padding:20px;border-radius:16px;width:90%;max-width:400px}
+.loading-pulse{animation:pulse 1.5s infinite; color: #777;}
+@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 </style>
 </head>
 <body>
@@ -51,28 +49,27 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
   </div>
 
   <div class="card" style="text-align:center">
-    <div style="font-size:12px;color:#777">Mandado de Prisão</div>
-    <div id="warrant-display" style="font-weight:600;color:#eab308;font-size:16px">Nenhum</div>
-    <button class="btn" style="margin-top:8px" onclick="openWarrantModal()">Emitir Mandado</button>
+    <div id="warrant-display" style="font-weight:600;color:#eab308;font-size:16px;margin-bottom:8px">Nenhum Mandado</div>
+    <button class="btn" onclick="openWarrantModal()">Emitir Mandado</button>
   </div>
 
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('investigate')">🔍 Investigar</div>
-    <div class="tab" onclick="switchTab('travel')">🧭 Viajar</div>
-    <div class="tab" onclick="switchTab('notes')">📋 Notas</div>
+    <div class="tab active" id="tab-investigate" onclick="switchTab('investigate', this)">🔍 Investigar</div>
+    <div class="tab" id="tab-travel" onclick="switchTab('travel', this)">🧭 Viajar</div>
+    <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📋 Notas</div>
   </div>
 
   <div id="panel-investigate"><div id="venues-list"></div></div>
   <div id="panel-travel" style="display:none"><div id="travel-list"></div></div>
   <div id="panel-notes" style="display:none"><div class="card" id="clues-collected"></div></div>
 
-  <!-- PAINEL DO MESTRE -->
   <div style="margin-top:16px;border:1px dashed #b91c1c;border-radius:8px;background:rgba(185,28,28,0.05)">
     <div onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="padding:8px;cursor:pointer;color:#ef4444;font-size:11px;font-weight:bold">🛡️ PAINEL DO MESTRE ▼</div>
-    <div style="display:none;padding:10px;font-size:12px;color:#aaa">
-      <div>Criminoso: <strong id="dm-criminal" style="color:#ef4444"></strong></div>
-      <div>Trilha: <span id="dm-trail"></span></div>
-      <div>Alvo Atual: <strong id="dm-next" style="color:#22c55e"></strong></div>
+    <div style="display:none;padding:12px;font-size:12px;color:#aaa">
+      <div style="margin-bottom:4px">Criminoso: <strong id="dm-criminal" style="color:#ef4444">—</strong></div>
+      <div style="margin-bottom:4px">Trilha completa: <span id="dm-trail" style="color:#eee">—</span></div>
+      <div style="margin-bottom:4px">Próxima cidade correta: <strong id="dm-next" style="color:#22c55e">—</strong></div>
+      <div>Cidade final: <strong id="dm-final" style="color:#ef4444">—</strong></div>
     </div>
   </div>
 </div>
@@ -84,155 +81,191 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
   <button class="btn primary" style="width:100%" onclick="location.reload()">Nova Partida</button>
 </div>
 
-<div id="warrant-modal" class="modal-overlay" style="display:none">
-  <div class="modal">
+<div id="warrant-modal" class="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:100; align-items:center; justify-content:center;">
+  <div class="modal" style="background:#1e1e1e; padding:20px; border-radius:16px; width:90%; max-width:400px;">
     <h3>Emitir Mandado</h3>
-    <div id="warrant-options" style="margin:15px 0;max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:8px"></div>
+    <div id="warrant-options" style="margin:15px 0;max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:8px"></div>
     <button class="btn" style="width:100%" onclick="closeWarrantModal()">Fechar</button>
   </div>
 </div>
 
 <script>
 // ============================================================
-// DADOS E TEMAS (BASEADO NA SUA TABELA)[cite: 1]
+// DADOS DAS CIDADES[cite: 3]
 // ============================================================
-const VENUES = [
-  {id:'biblioteca', name:'Biblioteca', icon:'📚', temas:['Tipo de Governo','Principais Religiões','Aspectos Geográficos','Cultura','Defesa','Geografia','História','Infraestrutura','Magia','Política','Religião']},
-  {id:'centro_cultural', name:'Centro Cultural', icon:'🎭', temas:['Raças/Espécies','Tipo de Governo','Principais Religiões','Facções Predominantes','Demografia','Cultura','História']},
-  {id:'estalagem', name:'Estalagem', icon:'🛌', temas:['Raças/Espécies','Tipo de Governo','Principais Religiões','Demografia','Política','Religião']},
-  {id:'estaleiro', name:'Estaleiro', icon:'🏗️', temas:['Tipo de Localidade','Comércio','Economia']},
-  {id:'museu', name:'Museu', icon:'🏛️', temas:['Tipo de Governo','Principais Religiões','Aspectos Geográficos','Cultura','Geografia','História','Magia','Política','Religião']},
-  {id:'caravanas', name:'Organizador de Caravanas', icon:'🐪', temas:['Raças/Espécies','Comércio','Demografia','Aspectos Geográficos','Geografia','Economia']},
-  {id:'taverna', name:'Taverna', icon:'🍺', temas:['Tipo de Localidade','Tipo de Governo','Principais Religiões','Facções Predominantes','Crime','Política','Religião']}
-];
-
 const CITIES = [
-  {id:'waterdeep',name:'Waterdeep',region:'Costa das Espadas',curiosidades:['Estátuas Ambulantes','Cavalaria de Grifos']},
-  {id:'neverwinter',name:'Neverwinter',region:'Costa das Espadas',curiosidades:['Fontes Termais','Rio Neverwinter']},
-  {id:'baldursgate',name:'Baldur\'s Gate',region:'Costa das Espadas',curiosidades:['Flaming Fist','Cidade Alta e Baixa']},
-  {id:'silverymoon',name:'Silverymoon',region:'Norte',curiosidades:['Moonbridge','Academia de Magia']},
-  {id:'luskan',name:'Luskan',region:'Norte',curiosidades:['Capitães dos Barcos','Torre dos Magos']}
+  {id: "waterdeep", name: "Waterdeep", curiosidades: [{tema: "Tipo de Localidade", info: "Metrópole (Cidade das Esplendores)"}, {tema: "Raças/Espécies", info: "Majoritariamente humanos, anões, elfos, halflings, gnomos."}, {tema: "Tipo de Governo", info: "Oligarquia conduzida pelos Lordes Mascarados."}, {tema: "Facções Predominantes", info: "Aliança dos Lordes, Harpistas, Bregan D'aerthe"}, {tema: "Defesa", info: "As Estátuas Ambulantes e a Cavalaria de Grifos que patrulha os céus."}]},
+  {id: "neverwinter", name: "Neverwinter", curiosidades: [{tema: "Tipo de Localidade", info: "Cidade Grande (Metrópole)"}, {tema: "Raças/Espécies", info: "Majoritariamente humanos, meio-elfos, anões e elfos."}, {tema: "Tipo de Governo", info: "Protetorado militar (Lorde Protetor)."}, {tema: "Geografia", info: "O Rio Neverwinter é aquecido por elementais de fogo, impedindo o congelamento."}, {tema: "Economia", info: "Famosa pela alta qualidade de seus artesãos e relojoeiros."}]},
+  {id: "silverymoon", name: "Silverymoon", curiosidades: [{tema: "Magia", info: "Protegida pelo Mythal de Silverymoon, uma poderosa barreira mágica."}, {tema: "Defesa", info: "A Ponte da Lua (Moonbridge), que pode ser desativada para impedir invasões."}, {tema: "Cultura", info: "Joia do Norte, o maior centro de aprendizado e magia."}]},
+  {id: "luskan", name: "Luskan", curiosidades: [{tema: "Crime", info: "Refúgio para piratas governado pela Irmandade Arcana."}, {tema: "Defesa", info: "Cinco navios de guerra comandados pelos Altos Capitães."}, {tema: "Geografia", info: "A Hosttower of the Arcane, sede dos magos."}]},
+  {id: "citadel_adbar", name: "Citadel Adbar", curiosidades: [{tema: "Defesa", info: "A Guarda de Ferro, elite montada em hipogrifos."}, {tema: "Economia", info: "Maior centro de fundição e forja de Mithral do Norte."}, {tema: "Infraestrutura", info: "Chaminés de forjas visíveis a quilômetros."}]},
+  {id: "citadel_felbarr", name: "Citadel Felbarr", curiosidades: [{tema: "Defesa", info: "Os Portões do Martelo, que exigem dezenas de anões para abrir."}, {tema: "História", info: "Retomada após 300 anos de ocupação orc."}]},
+  {id: "mithral_hall", name: "Mithral Hall", curiosidades: [{tema: "Geografia", info: "Única fonte conhecida de Mithral puro em todo o Norte."}, {tema: "História", info: "Retomada por Bruenor Battlehammer e Drizzt Do'Urden."}]},
+  {id: "phandalin", name: "Phandalin", curiosidades: [{tema: "Geografia", info: "Próxima à Caverna Eco das Ondas e à Forja das Magias."}, {tema: "Crime", info: "Antiga base da gangue dos Redbrands."}]},
+  {id: "bryn_shander", name: "Bryn Shander", curiosidades: [{tema: "Geografia", info: "Cidade em topo de colina fortificada sem beira de lago."}, {tema: "Economia", info: "Principal centro comercial de marfim de truta Knucklehead."}]},
+  {id: "longsaddle", name: "Longsaddle", curiosidades: [{tema: "Magia", info: "Mansão Ivy, sede da família Harpell e sua magia caótica."}, {tema: "Economia", info: "Centro renomado para criação de cavalos de sela."}]},
+  {id: "mirabar", name: "Mirabar", curiosidades: [{tema: "Defesa", info: "O Machado de Mirabar, exército de humanos e anões."}, {tema: "Política", info: "Equilíbrio entre o Conselho de anões e o Marquês humano."}]},
+  {id: "triboar", name: "Triboar", curiosidades: [{tema: "Infraestrutura", info: "Cruzamento vital da Long Road com o Evermoor Way."}, {tema: "Religião", info: "Bosque de Gwaeron, sagrado para patrulheiros e rastreadores."}]},
+  {id: "yartar", name: "Yartar", curiosidades: [{tema: "Crime", info: "Sede da Sociedade da Mão de Ouro, guilda de ladinos e jogo ilegal."}, {tema: "Infraestrutura", info: "Sistema de eclusas para navegação entre rios."}]},
+  {id: "sundabar", name: "Sundabar", curiosidades: [{tema: "Defesa", info: "Três anéis concêntricos de muralhas de granito negro."}, {tema: "Geografia", info: "Forjas industriais aquecidas pelo calor natural da terra."}]},
+  {id: "daggerford", name: "Daggerford", curiosidades: [{tema: "História", info: "Fundada onde um garoto defendeu sua família usando uma adaga (dagger)."}, {tema: "Cultura", info: "Taverna Happy Cow, famosa por cerveja artesanal e queijo."}]},
+  {id: "goldenfields", name: "Goldenfields", curiosidades: [{tema: "Defesa", info: "Protegida por muralhas e criaturas da natureza despertas."}, {tema: "Infraestrutura", info: "Celeiro do Norte, abastece Waterdeep e Neverwinter."}]},
+  {id: "newfort", name: "Newfort", curiosidades: [{tema: "História", info: "Fundada por mercenários em busca de paz."}]},
+  {id: "loudwater", name: "Loudwater", curiosidades: [{tema: "Geografia", info: "Confluência de rios com pontes de madeira elaboradas."}]},
+  {id: "everlund", name: "Everlund", curiosidades: [{tema: "Política", info: "Governo focado em diplomacia entre humanos, elfos e anões."}]},
+  {id: "gauntlgrym", name: "Gauntlgrym", curiosidades: [{tema: "Magia", info: "Grande Forja aquecida por um primordial de fogo aprisionado."}]}
 ];
 
 const CRIMINALS = [
   {id:'sylara',name:'Sylara Vex',gender:'F',aparencia:{cabelo:'ruivo',traço:'tatuagem'},gostos:['xadrez','carruagem']},
-  {id:'torvin',name:'Torvin Mão-de-Ferro',gender:'M',aparencia:{cabelo:'preto',traço:'cicatriz'},gostos:['apostas','cerveja']}
+  {id:'torvin',name:'Torvin Mão-de-Ferro',gender:'M',aparencia:{cabelo:'preto',traço:'cicatriz'},gostos:['apostas','cerveja']},
+  {id:'elara',name:'Elara Sombra-Prateada',gender:'F',aparencia:{cabelo:'prateado',traço:'orelhas pontudas'},gostos:['música','vinhos']},
+  {id:'braggart',name:'Braggart Pé-Pesado',gender:'M',aparencia:{cabelo:'laranja',traço:'nariz achatado'},gostos:['fumo','tortas']}
 ];
 
-let G = { apiKey:'', criminal:null, trail:[], playerPos:0, currentDay:1, maxDays:4, currentMinutes:8*60, venuesPerCity:{}, visitedVenues:{}, warrant:null, log:[], clues:[] };
+const VENUES = [
+  {id:'biblioteca', name:'Biblioteca', icon:'📚', temas:['Política','Geografia','História','Magia','Infraestrutura']},
+  {id:'centro_cultural', name:'Centro Cultural', icon:'🎭', temas:['Raças/Espécies','Cultura','História']},
+  {id:'estalagem', name:'Estalagem', icon:'🛌', temas:['Raças/Espécies','Política']},
+  {id:'estaleiro', name:'Estaleiro', icon:'🏗️', temas:['Tipo de Localidade','Comércio','Economia']},
+  {id:'museu', name:'Museu', icon:'🏛️', temas:['História','Magia','Geografia']},
+  {id:'caravanas', name:'Organizador de Caravanas', icon:'🐪', temas:['Economia','Geografia']},
+  {id:'taverna', name:'Taverna', icon:'🍺', temas:['Crime','Política']}
+];
 
-window.onload = () => {
-  const savedKey = localStorage.getItem('gemini_api_key');
-  if (savedKey) { document.getElementById('api-key-input').value = savedKey; document.getElementById('remember-key').checked = true; }
+let G = {
+  apiKey: '', criminal: null, trail: [], playerPos: 0, currentCityId: '',
+  currentDay: 1, maxDays: 4, currentMinutes: 8*60,
+  venuesPerCity: {}, visitedVenues: {}, warrant: null, clues: [], usedCuriosities: {},
+  isRequesting: false // Lock de requisição[cite: 3]
 };
 
-function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
 function startGame() {
-  const keyInput = document.getElementById('api-key-input').value.trim();
-  if (document.getElementById('remember-key').checked) localStorage.setItem('gemini_api_key', keyInput);
-  else localStorage.removeItem('gemini_api_key');
-
-  G.apiKey = keyInput;
+  G.apiKey = document.getElementById('api-key-input').value.trim();
+  if (document.getElementById('remember-key').checked) localStorage.setItem('gemini_api_key', G.apiKey);
   G.criminal = rand(CRIMINALS);
   G.trail = [...CITIES].sort(() => Math.random() - 0.5).slice(0, 5);
   G.trail.forEach(city => { G.venuesPerCity[city.id] = [...VENUES].sort(() => Math.random() - 0.5).slice(0, 3); });
-
+  G.currentCityId = G.trail[0].id;
+  G.playerPos = 0; G.currentDay = 1; G.currentMinutes = 8*60;
+  G.visitedVenues = {}; G.clues = []; G.usedCuriosities = {};
   document.getElementById('setup-screen').classList.remove('active');
   document.getElementById('game-screen').classList.add('active');
   renderGameScreen();
 }
 
 async function investigateVenue(cityId, venueId) {
-  if (!advanceTime(120)) return;
+  if (G.isRequesting) return; // Bloqueia se já houver uma requisição[cite: 3]
+  
   const key = `${cityId}_${venueId}`;
+  if (G.visitedVenues[key]) return;
+
+  G.isRequesting = true; // Ativa lock[cite: 3]
+  if (!advanceTime(120)) { G.isRequesting = false; return; }
+
   const cityIdx = G.trail.findIndex(c => c.id === cityId);
   const venue = VENUES.find(v => v.id === venueId);
 
-  // LOGICA DE CAPTURA NA CIDADE FINAL[cite: 1]
+  // Exibe estado de carregamento[cite: 3]
+  G.visitedVenues[key] = "<span class='loading-pulse'>Consultando oráculos...</span>";
+  renderVenues();
+
   if (cityIdx === G.trail.length - 1) {
-    const visitedCount = Object.keys(G.visitedVenues).filter(k => k.startsWith(cityId + '_')).length;
-    if (Math.random() < [0.4, 0.8, 1.0][Math.min(visitedCount, 2)]) { foundCriminal(); return; }
-    G.visitedVenues[key] = "Ele está por perto!";
-  } 
-  // LOGICA DE PISTAS TEMÁTICAS[cite: 1]
-  else if (cityIdx >= 0 && cityIdx < G.trail.length - 1) {
-    G.visitedVenues[key] = "...";
-    renderVenues();
-    
-    // 100% Destino, 30% Criminoso[cite: 1]
+    G.visitedVenues[key] = "O suspeito está por perto!"; 
+    if (Math.random() > 0.6) { foundCriminal(); G.isRequesting = false; return; }
+  } else {
     const nextCity = G.trail[cityIdx + 1];
-    const temaSorteado = rand(venue.temas);
-    const darPistaCriminoso = Math.random() < 0.3;
+    if (!G.usedCuriosities[cityId]) G.usedCuriosities[cityId] = [];
     
-    const text = await generateNPCDialogue(venue, nextCity, temaSorteado, darPistaCriminoso);
+    const available = nextCity.curiosidades.filter(c => !G.usedCuriosities[cityId].includes(c.info));
+    const matching = available.filter(c => venue.temas.includes(c.tema));
+    const fato = matching.length > 0 ? rand(matching) : (available.length > 0 ? rand(available) : rand(nextCity.curiosidades));
+    
+    G.usedCuriosities[cityId].push(fato.info);
+    const incluirC = Math.random() < 0.3;
+    const text = await generateNPCDialogue(venue, fato.info, fato.tema, incluirC);
     G.visitedVenues[key] = text;
     G.clues.push(`[${venue.name}] ${text}`);
-  } else {
-    G.visitedVenues[key] = "Nada por aqui.";
   }
+  
+  G.isRequesting = false; // Libera lock[cite: 3]
   renderGameScreen();
 }
 
-async function generateNPCDialogue(venue, nextCity, tema, incluirCriminoso) {
-  if (!G.apiKey) return "Ele fugiu para o " + nextCity.region;
+async function generateNPCDialogue(venue, fato, tema, incluirC) {
+  // Fallback aprimorado[cite: 3]
+  const fallback = `Ouvi dizer que alguém passou por aqui demonstrando um interesse incomum em saber se ${fato}. Era alguém curioso sobre ${tema}.`;
   
+  if (!G.apiKey) return fallback;
+
+  // GEMINI 2.5 FLASH[cite: 3]
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${G.apiKey}`;
+  const infoC = incluirC ? `O suspeito tem cabelo ${G.criminal.aparencia.cabelo}.` : "Não mencione traços físicos.";
   
-  // Prompt Seletivo: enviamos APENAS o necessário para evitar redundância[cite: 1]
-  let infoCriminoso = incluirCriminoso ? `O suspeito tem cabelo ${G.criminal.aparencia.cabelo} e gosta de ${G.criminal.gostos[0]}.` : "Não mencione nada sobre a aparência física dele.";
-  
-  const prompt = `Aja como um NPC no local: ${venue.name}.
-  Um suspeito passou por aqui e fugiu para uma cidade que tem estas características de ${tema}: "${nextCity.curiosidades[0]}".
-  ${infoCriminoso}
-  Tarefa: Escreva uma fala curta de NPC. Use o tema ${tema} para dar a pista do destino. Não diga o nome da cidade de destino diretamente.`;
+  const prompt = `Aja como um NPC no local: ${venue.name}. 
+  O suspeito passou por aqui e demonstrou interesse ou perguntou sobre: "${fato}" (relacionado ao tema ${tema}). 
+  ${infoC}
+  REGRAS: 
+  1. Use o fato estritamente. 
+  2. NUNCA use pontos cardeais ou direções. 
+  3. Relate que ele "perguntou sobre" ou "demonstrou interesse em". 
+  4. Use falas curtas e imersivas de RPG (máx 2 frases).`;
 
   try {
-    const resp = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-    const data = await resp.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text.replace(/"/g, "").trim();
-  } catch(e) { return "Ele mencionou algo sobre " + tema + " em direção ao " + nextCity.region; }
-}
+    const resp = await fetch(url, { 
+      method: 'POST', 
+      headers: {'Content-Type': 'application/json'}, 
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) 
+    });
+    
+    if (!resp.ok) {
+        const err = await resp.json();
+        console.error("[DEBUG] Erro API Gemini 2.5:", err);
+        return fallback;
+    }
 
-function switchVenue(cityId, oldVenueId) {
-  const current = G.venuesPerCity[cityId];
-  const options = VENUES.filter(v => !current.map(cv => cv.id).includes(v.id));
-  if (options.length > 0) {
-    current[current.findIndex(v => v.id === oldVenueId)] = rand(options);
-    renderVenues();
+    const data = await resp.json();
+    const resultText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    return resultText ? resultText.replace(/"/g, "").trim() : fallback;
+  } catch(e) { 
+    console.error("[DEBUG] Falha de rede/fetch:", e);
+    return fallback; 
   }
 }
 
 function travelTo(cityId) {
+  if (G.isRequesting) return;
   if (!advanceTime(240)) return;
   G.playerPos = G.trail.findIndex(c => c.id === cityId);
   G.currentCityId = cityId;
-  renderGameScreen();
+  renderGameScreen(); switchTab('investigate', document.getElementById('tab-investigate'));
 }
 
 function renderGameScreen() {
-  const city = G.playerPos >= 0 ? G.trail[G.playerPos] : CITIES.find(c => c.id === G.currentCityId);
-  document.getElementById('current-city-name').textContent = city ? city.name : "Perdido";
+  const city = G.trail[G.playerPos] || CITIES.find(c => c.id === G.currentCityId);
+  document.getElementById('current-city-name').textContent = city.name;
   document.getElementById('time-display').textContent = `Dia ${G.currentDay} - ${Math.floor(G.currentMinutes/60)}:00`;
   document.getElementById('time-fill').style.width = `${(1 - (G.currentDay/G.maxDays)) * 100}%`;
-  renderVenues();
-  renderTravel();
+  renderVenues(); renderTravel();
   if (G.criminal) {
     document.getElementById('dm-criminal').textContent = G.criminal.name;
     document.getElementById('dm-trail').textContent = G.trail.map(c => c.name).join(' → ');
     document.getElementById('dm-next').textContent = G.trail[G.playerPos + 1]?.name || "Final";
+    document.getElementById('dm-final').textContent = G.trail[G.trail.length - 1].name;
   }
 }
 
 function renderVenues() {
-  const id = G.playerPos >= 0 ? G.trail[G.playerPos].id : G.currentCityId;
+  const id = G.trail[G.playerPos].id;
   const list = document.getElementById('venues-list');
   list.innerHTML = (G.venuesPerCity[id] || []).map(v => {
     const visited = G.visitedVenues[`${id}_${v.id}`];
     return `<div class="clue-item">
-      <div style="display:flex;justify-content:space-between">
-        <div onclick="${visited ? '' : `investigateVenue('${id}','${v.id}')`}" style="cursor:pointer">${v.icon} ${v.name}</div>
-        ${!visited ? `<button class="btn" style="font-size:10px" onclick="switchVenue('${id}','${v.id}')">🔄</button>` : '✅'}
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div onclick="${visited || G.isRequesting ? '' : `investigateVenue('${id}','${v.id}')`}" style="cursor:pointer; ${G.isRequesting && !visited ? 'opacity:0.5; cursor:wait;' : ''}">
+          ${v.icon} <strong>${v.name}</strong>
+        </div>
+        ${visited && !visited.includes('pulse') ? '✅' : ''}
       </div>
       ${visited ? `<div class="npc-bubble">${visited}</div>` : ''}
     </div>`;
@@ -240,22 +273,51 @@ function renderVenues() {
 }
 
 function renderTravel() {
-  const current = G.playerPos >= 0 ? G.trail[G.playerPos].id : G.currentCityId;
+  const current = G.trail[G.playerPos].id;
   document.getElementById('travel-list').innerHTML = CITIES.filter(c => c.id !== current).sort(() => Math.random() - 0.5).slice(0, 4).map(c => `
-    <div class="city-option" onclick="travelTo('${c.id}')">🏙️ ${c.name}</div>`).join('');
+    <div class="city-option" style="background:#252525; padding:10px; border-radius:8px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${c.id}')">🏙️ ${c.name}</div>
+  `).join('');
 }
 
-function advanceTime(m) { G.currentMinutes += m; if (G.currentMinutes > 23*60) { G.currentDay++; G.currentMinutes = 8*60; if (G.currentDay > G.maxDays) { endGame('timeout'); return false; } } return true; }
-function switchTab(t) { 
-  document.getElementById('panel-investigate').style.display = t==='investigate'?'block':'none';
-  document.getElementById('panel-travel').style.display = t==='travel'?'block':'none';
-  document.getElementById('panel-notes').style.display = t==='notes'?'block':'none';
-  if(t==='notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br>') || "Sem pistas.";
+function advanceTime(m) { 
+  G.currentMinutes += m; 
+  if (G.currentMinutes > 23*60) { G.currentDay++; G.currentMinutes = 8*60; }
+  if (G.currentDay > G.maxDays) { endGame('timeout'); return false; }
+  return true;
 }
-function openWarrantModal() { document.getElementById('warrant-options').innerHTML = CRIMINALS.map(c => `<div class="city-option" onclick="issueWarrant('${c.id}')">👤 ${c.name}</div>`).join(''); document.getElementById('warrant-modal').style.display = 'flex'; }
-function issueWarrant(id) { G.warrant = id; document.getElementById('warrant-display').textContent = CRIMINALS.find(c => c.id === id).name; document.getElementById('warrant-modal').style.display = 'none'; }
+
+function switchTab(t, el) {
+  ['investigate','travel','notes'].forEach(p => document.getElementById('panel-'+p).style.display = p === t ? 'block' : 'none');
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (t === 'notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br>') || "Sem pistas.";
+}
+
+function openWarrantModal() {
+  document.getElementById('warrant-options').innerHTML = CRIMINALS.map(c => `<div class="city-option" style="padding:8px; background:#333; border-radius:4px; cursor:pointer" onclick="issueWarrant('${c.id}')">👤 ${c.name}</div>`).join('');
+  document.getElementById('warrant-modal').style.display = 'flex';
+}
+function closeWarrantModal() { document.getElementById('warrant-modal').style.display = 'none'; }
+function issueWarrant(id) { 
+  G.warrant = id; 
+  document.getElementById('warrant-display').textContent = CRIMINALS.find(c => c.id === id).name; 
+  closeWarrantModal(); 
+}
 function foundCriminal() { if (G.warrant === G.criminal.id) endGame('won'); else endGame('wrong_warrant'); }
-function endGame(r) { document.getElementById('game-screen').classList.remove('active'); document.getElementById('result-screen').classList.add('active'); document.getElementById('result-title').textContent = r==='won'?"Capturado!":"Escapou!"; document.getElementById('result-icon').textContent = r==='won'?"🏆":"💀"; }
+
+function endGame(r) {
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('result-screen').classList.add('active');
+  document.getElementById('result-title').textContent = r === 'won' ? "Capturado!" : "Escapou!";
+  document.getElementById('result-icon').textContent = r === 'won' ? "🏆" : "💀";
+}
+
+window.onload = () => {
+    const k = localStorage.getItem('gemini_api_key');
+    if (k) document.getElementById('api-key-input').value = k;
+};
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 </script>
 </body>
 </html>
