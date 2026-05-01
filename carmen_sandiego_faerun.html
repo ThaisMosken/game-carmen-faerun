@@ -544,12 +544,16 @@ const CRIMINALS = [
 
 const VENUES = [
   {id:'biblioteca', name:'Biblioteca', icon:'📚', temas:['Política','Geografia','História','Magia','Infraestrutura'], cargo: 'Bibliotecário'},
-  {id:'centro_cultural', name:'Centro Cultural', icon:'🎭', temas:['Raças/Espécies','Cultura','História'], cargo: 'Guia Cultural'},
-  {id:'estalagem', name:'Estalagem', icon:'🛌', temas:['Raças/Espécies','Política'], cargo: 'Hospedeiro'},
+  {id:'centro_cultural', name:'Centro Cultural', icon:'🎭', temas:['Raças/Espécies','Cultura','História'], cargo: 'Guia Local'},
+  {id:'estalagem', name:'Estalagem', icon:'🛌', temas:['Raças/Espécies','Política'], cargo: 'Estalajadeiro'},
   {id:'estaleiro', name:'Estaleiro', icon:'🏗️', temas:['Tipo de Localidade','Comércio','Economia'], cargo: 'Mestre do Cais'},
+  {id:'oficina_gemas', name:'Oficina de Gemas', icon:'💎', temas:['Economia','Geografia'], cargo: 'Mestre Joalheiro'},
+  {id:'patio_carrocas', name:'Pátio de Carroças', icon:'🐪', temas:['Economia','Geografia'], cargo: 'Mestre de Carga'},
+  {id:'patio_treinamento', name:'Pátio de Treinamento', icon:'⚔️', temas:['Defesa','Raças/Espécies'], cargo: 'Mestre d\'Armas'},
   {id:'museu', name:'Museu', icon:'🏛️', temas:['História','Magia','Geografia'], cargo: 'Curador'},
-  {id:'caravanas', name:'Pátio de Carroças', icon:'🐪', temas:['Economia','Geografia'], cargo: 'Mestre de Carga'},
+  {id:'santuario', name:'Santuário dos Deuses Antigos', icon:'🕯️', temas:['Religião','História','Magia'], cargo: 'Sacerdote'}
   {id:'taverna', name:'Taverna', icon:'🍺', temas:['Crime','Política'], cargo: 'Taverneiro'}
+  {id:'torre_alta_magia', name:'Torre de Alta Magia', icon:'🔮', temas:['Magia','História','Política'], cargo: 'Arcanista'},
 ];
 
 let G = {
@@ -641,7 +645,7 @@ function generateLocalDialogue(venue, fato, incluirC) {
       `(O bibliotecário ajeita os óculos) ${introPistaFisica} requisitou pergaminhos raros que descreviam: "${fato}".`,
       `(O bibliotecário consulta um registro) Tivemos um visitante interessado na história de ${fato}.`
     ],
-    'Caravanas': [
+    'Pátio de Carroças': [
       `(O mestre de carga confere uma lista) ${introPistaFisica} comprou mantimentos para uma viagem, mencionando algo sobre ${fato}.`,
       `(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre ${fato}.`
     ],
