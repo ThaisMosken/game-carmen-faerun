@@ -637,21 +637,53 @@ function generateLocalDialogue(venue, fato, incluirC) {
   const introPistaFisica = incluirC ? ` Vi uma pessoa de cabelo ${G.criminal.aparencia.cabelo} que ` : " Um viajante ";
   
   const templates = {
-    'Taverna': [
-      `(O taverneiro limpa o balcão) ${introPistaFisica} esteve aqui e não parava de perguntar sobre ${fato}.`,
-      `(O taverneiro aponta para uma mesa vazia) Aquele sujeito de quem você falou? Ele passou a noite pesquisando sobre ${fato}.`
+    "biblioteca": [
+      "(O bibliotecário ajeita os óculos) ${introPistaFisica} requisitou pergaminhos raros que descreviam \"${fato}\".",
+      "(O bibliotecário consulta um registro) Tivemos um visitante interessado na história de ${fato}."
     ],
-    'Biblioteca': [
-      `(O bibliotecário ajeita os óculos) ${introPistaFisica} requisitou pergaminhos raros que descreviam: "${fato}".`,
-      `(O bibliotecário consulta um registro) Tivemos um visitante interessado na história de ${fato}.`
+    "centro_cultural": [
+      "(O guia local aponta para um mural) ${introPistaFisica} passou um longo tempo estudando a representação de ${fato}.",
+      "(O guia local consulta um folheto) Tivemos um visitante procurando por apresentações sobre ${fato}."
     ],
-    'Pátio de Carroças': [
-      `(O mestre de carga confere uma lista) ${introPistaFisica} comprou mantimentos para uma viagem, mencionando algo sobre ${fato}.`,
-      `(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre ${fato}.`
+    "estalagem": [
+      "(O estalajadeiro entrega uma chave) ${introPistaFisica} alugou um quarto, mas passou a noite escrevendo sobre ${fato}.",
+      "(O estalajadeiro limpa uma caneca) Alguém com essa descrição saiu cedo, resmungando algo relacionado a ${fato}."
     ],
-    'default': [
-      `(O ${venue.cargo} olha para você) ${introPistaFisica} demonstrou um interesse incomum em: "${fato}".`,
-      `(O ${venue.cargo} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que ${fato}.`
+    "estaleiro": [
+      "(O mestre do cais observa as amarras) ${introPistaFisica} tentou fretar um barco e não parava de conferir mapas de ${fato}.",
+      "(O mestre do cais aponta para a água) O sujeito partiu no último barco após fazer perguntas sobre ${fato}."
+    ],
+    "museu": [
+      "(O curador ajeita uma vitrine) ${introPistaFisica} demonstrou um interesse acadêmico incomum na exposição sobre ${fato}.",
+      "(O curador consulta o catálogo) Lembro-me de um visitante que passou horas examinando artefatos vindos de ${fato}."
+    ],
+    "oficina_gemas": [
+      "(O mestre joalheiro analisa uma pedra) ${introPistaFisica} trouxe uma joia para avaliar, alegando precisar de fundos para pesquisar sobre ${fato}.",
+      "(O mestre joalheiro guarda as ferramentas) Um cliente com essas características esteve aqui procurando por minérios típicos de ${fato}."
+    ],
+    "patio_carrocas": [
+      "(O mestre de carga confere uma lista) ${introPistaFisica} comprou mantimentos para uma viagem, mencionando algo sobre ${fato}.",
+      "(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre ${fato}."
+    ],
+    "patio_treinamento": [
+      "(O mestre d'armas golpeia o boneco) ${introPistaFisica} observou os treinos e comentou que precisaria de aço forte para enfrentar ${fato}.",
+      "(O mestre d'armas limpa o suor) Alguém perguntou se nossas lâminas seriam eficazes contra o que se encontra em ${fato}."
+    ],
+    "santuario": [
+      "(O sacerdote acende uma vela) ${introPistaFisica} fez uma oferta aos deuses pedindo proteção em sua busca por ${fato}.",
+      "(O sacerdote fecha o livro de preces) Tivemos um fiel angustiado que buscava orientação divina sobre os perigos de ${fato}."
+    ],
+    "taverna": [
+      "(O taverneiro limpa o balcão) ${introPistaFisica} esteve aqui e não parava de perguntar sobre ${fato}.",
+      "(O taverneiro aponta para uma mesa vazia) Aquele sujeito de quem você falou? Ele passou a noite pesquisando sobre ${fato}."
+    ],
+    "torre_alta_magia": [
+      "(O arcanista consulta uma esfera) ${introPistaFisica} tentou comprar componentes para um feitiço de localização voltado para ${fato}.",
+      "(O arcanista ajusta as vestes) Detectamos resíduos mágicos de alguém que pesquisava obsessivamente as propriedades de ${fato}."
+    ],
+    "default": [
+      "(O ${venue.cargo} olha para você) ${introPistaFisica} demonstrou um interesse incomum em: \"${fato}\".",
+      "(O ${venue.cargo} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que ${fato}."
     ]
   };
 
