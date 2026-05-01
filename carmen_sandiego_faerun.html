@@ -516,7 +516,7 @@ const VENUES = [
 let G = {
   apiKey: '', criminal: null, trail: [], playerPos: 0, currentCityId: '',
   currentDay: 1, maxDays: 4, currentMinutes: 8*60,
-  venuesPerCity: {}, visitedVenues: {}, warrant: null, clues: [], usedCuriosities: {}, history: [],
+  venuesPerCity: {}, visitedVenues: {}, warrant: null, clues: [], usedCuriosities: {}, history: [], travelDistractorsPerCity: {},
   isRequesting: false 
 };
 
@@ -531,6 +531,7 @@ function startGame() {
   G.visitedVenues = {}; G.clues = []; G.usedCuriosities = {};
   G.currentCityId = G.trail[0].id;
   G.history = [G.currentCityId];
+  G.travelDistractorsPerCity = {};
   document.getElementById('setup-screen').classList.remove('active');
   document.getElementById('game-screen').classList.add('active');
   renderGameScreen();
@@ -666,7 +667,9 @@ function renderVenues() {
 function renderTravel() {
   const currentId = G.currentCityId;
   const instructionsEl = document.getElementById('travel-instructions');
+  
   instructionsEl.innerHTML = `A viagem de teleporte demora <strong>${TRAVELLING_TIME_COST} horas</strong>.<br>Lembre-se que se for para o caminho errado, você poderá voltar para a cidade de onde partiu e retomar os rastros do suspeito.<br>Escolha a cidade para onde deseja se teleportar.`;
+  
   const options = new Set();
   const trailIds = G.trail.map(c => c.id);
 
@@ -674,27 +677,24 @@ function renderTravel() {
     options.add(G.history[G.history.length - 2]);
   }
 
-  let nextCorrectId = null;
   if (G.playerPos !== -1 && G.playerPos < G.trail.length - 1) {
-    nextCorrectId = G.trail[G.playerPos + 1].id;
-    options.add(nextCorrectId);
+    options.add(G.trail[G.playerPos + 1].id);
   }
 
-  const randomCandidates = CITIES.filter(c => 
-    c.id !== currentId && 
-    !trailIds.includes(c.id)
-  ).map(c => c.id);
+  if (!G.travelDistractorsPerCity[currentId]) {
+    const randomCandidates = CITIES.filter(c => 
+      c.id !== currentId && 
+      !trailIds.includes(c.id)
+    ).map(c => c.id);
 
-  const shuffledErrors = randomCandidates.sort(() => Math.random() - 0.5);
-
-  for (let id of shuffledErrors) {
-    if (options.size >= 5) break;
-    options.add(id);
+    const shuffledErrors = randomCandidates.sort(() => Math.random() - 0.5);
+    G.travelDistractorsPerCity[currentId] = shuffledErrors.slice(0, 4);
   }
 
-  const finalOptions = Array.from(options).sort(() => Math.random() - 0.5);
+  G.travelDistractorsPerCity[currentId].forEach(id => options.add(id));
 
-  document.getElementById('travel-list').innerHTML = Array.from(options).map(id => {
+  const finalOptions = Array.from(options).slice(0, 5).sort(() => Math.random() - 0.5);
+  document.getElementById('travel-list').innerHTML = finalOptions.map(id => {
     const city = CITIES.find(c => c.id === id);
     return `<div class="city-option" style="background:#252525; padding:10px; border-radius:8px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${city.id}')">🏙️ ${city.name}</div>`;
   }).join('');
