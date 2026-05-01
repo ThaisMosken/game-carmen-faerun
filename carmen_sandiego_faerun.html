@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carmen Sandiego: Faerûn Edition v15</title>
+<title>Carmen Sandiego: Faerûn Edition v17</title>
 <style>
-/* Estilos visuais mantidos[cite: 3] */
+/* Estilos visuais mantidos */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:sans-serif;background:#121212;color:#e0e0e0;font-size:14px;line-height:1.5}
 .screen{display:none;padding:16px;flex-direction:column;gap:12px;max-width:600px;margin:0 auto}
@@ -91,7 +91,7 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 
 <script>
 // ============================================================
-// DADOS DAS CIDADES[cite: 3]
+// DADOS DAS CIDADES E CRIMINOSOS
 // ============================================================
 const CITIES = [
   {id: "waterdeep", name: "Waterdeep", curiosidades: [{tema: "Tipo de Localidade", info: "Metrópole (Cidade das Esplendores)"}, {tema: "Raças/Espécies", info: "Majoritariamente humanos, anões, elfos, halflings, gnomos."}, {tema: "Tipo de Governo", info: "Oligarquia conduzida pelos Lordes Mascarados."}, {tema: "Facções Predominantes", info: "Aliança dos Lordes, Harpistas, Bregan D'aerthe"}, {tema: "Defesa", info: "As Estátuas Ambulantes e a Cavalaria de Grifos que patrulha os céus."}]},
@@ -100,20 +100,20 @@ const CITIES = [
   {id: "luskan", name: "Luskan", curiosidades: [{tema: "Crime", info: "Refúgio para piratas governado pela Irmandade Arcana."}, {tema: "Defesa", info: "Cinco navios de guerra comandados pelos Altos Capitães."}, {tema: "Geografia", info: "A Hosttower of the Arcane, sede dos magos."}]},
   {id: "citadel_adbar", name: "Citadel Adbar", curiosidades: [{tema: "Defesa", info: "A Guarda de Ferro, elite montada em hipogrifos."}, {tema: "Economia", info: "Maior centro de fundição e forja de Mithral do Norte."}, {tema: "Infraestrutura", info: "Chaminés de forjas visíveis a quilômetros."}]},
   {id: "citadel_felbarr", name: "Citadel Felbarr", curiosidades: [{tema: "Defesa", info: "Os Portões do Martelo, que exigem dezenas de anões para abrir."}, {tema: "História", info: "Retomada após 300 anos de ocupação orc."}]},
-  {id: "mithral_hall", name: "Mithral Hall", curiosidades: [{tema: "Geografia", info: "Única fonte conhecida de Mithral puro em todo o Norte."}, {tema: "História", info: "Retomada por Bruenor Battlehammer e Drizzt Do'Urden."}]},
-  {id: "phandalin", name: "Phandalin", curiosidades: [{tema: "Geografia", info: "Próxima à Caverna Eco das Ondas e à Forja das Magias."}, {tema: "Crime", info: "Antiga base da gangue dos Redbrands."}]},
-  {id: "bryn_shander", name: "Bryn Shander", curiosidades: [{tema: "Geografia", info: "Cidade em topo de colina fortificada sem beira de lago."}, {tema: "Economia", info: "Principal centro comercial de marfim de truta Knucklehead."}]},
-  {id: "longsaddle", name: "Longsaddle", curiosidades: [{tema: "Magia", info: "Mansão Ivy, sede da família Harpell e sua magia caótica."}, {tema: "Economia", info: "Centro renomado para criação de cavalos de sela."}]},
-  {id: "mirabar", name: "Mirabar", curiosidades: [{tema: "Defesa", info: "O Machado de Mirabar, exército de humanos e anões."}, {tema: "Política", info: "Equilíbrio entre o Conselho de anões e o Marquês humano."}]},
-  {id: "triboar", name: "Triboar", curiosidades: [{tema: "Infraestrutura", info: "Cruzamento vital da Long Road com o Evermoor Way."}, {tema: "Religião", info: "Bosque de Gwaeron, sagrado para patrulheiros e rastreadores."}]},
-  {id: "yartar", name: "Yartar", curiosidades: [{tema: "Crime", info: "Sede da Sociedade da Mão de Ouro, guilda de ladinos e jogo ilegal."}, {tema: "Infraestrutura", info: "Sistema de eclusas para navegação entre rios."}]},
-  {id: "sundabar", name: "Sundabar", curiosidades: [{tema: "Defesa", info: "Três anéis concêntricos de muralhas de granito negro."}, {tema: "Geografia", info: "Forjas industriais aquecidas pelo calor natural da terra."}]},
-  {id: "daggerford", name: "Daggerford", curiosidades: [{tema: "História", info: "Fundada onde um garoto defendeu sua família usando uma adaga (dagger)."}, {tema: "Cultura", info: "Taverna Happy Cow, famosa por cerveja artesanal e queijo."}]},
-  {id: "goldenfields", name: "Goldenfields", curiosidades: [{tema: "Defesa", info: "Protegida por muralhas e criaturas da natureza despertas."}, {tema: "Infraestrutura", info: "Celeiro do Norte, abastece Waterdeep e Neverwinter."}]},
-  {id: "newfort", name: "Newfort", curiosidades: [{tema: "História", info: "Fundada por mercenários em busca de paz."}]},
-  {id: "loudwater", name: "Loudwater", curiosidades: [{tema: "Geografia", info: "Confluência de rios com pontes de madeira elaboradas."}]},
-  {id: "everlund", name: "Everlund", curiosidades: [{tema: "Política", info: "Governo focado em diplomacia entre humanos, elfos e anões."}]},
-  {id: "gauntlgrym", name: "Gauntlgrym", curiosidades: [{tema: "Magia", info: "Grande Forja aquecida por um primordial de fogo aprisionado."}]}
+  {id: "mithral_hall", name: "Mithral Hall", curiosidades: [{tema: "Geografia", info: "Única fonte conhecida de Mithral puro em todo o Norte."}, {tema: "História", info: "Lar ancestral do Clã Battlehammer, reconquistado das sombras."}]},
+  {id: "phandalin", name: "Phandalin", curiosidades: [{tema: "Geografia", info: "Vila mineradora próxima à lendária Caverna Eco das Ondas."}, {tema: "Crime", info: "Local onde a gangue Redbrand costumava extorquir colonos."}]},
+  {id: "bryn_shander", name: "Bryn Shander", curiosidades: [{tema: "Geografia", info: "Fortaleza no topo de uma colina, isolada das nevascas."}, {tema: "Economia", info: "Principal mercado de marfim entalhado de truta Knucklehead."}]},
+  {id: "longsaddle", name: "Longsaddle", curiosidades: [{tema: "Magia", info: "Mansão Ivy, sede da família Harpell e sua magia caótica."}, {tema: "Economia", info: "Centro renomado para a criação de cavalos de sela resistentes."}]},
+  {id: "mirabar", name: "Mirabar", curiosidades: [{tema: "Defesa", info: "O Machado de Mirabar, exército de humanos e anões."}, {tema: "Política", info: "Divisão de poder entre o Conselho de anões e o Marquês humano."}]},
+  {id: "triboar", name: "Triboar", curiosidades: [{tema: "Infraestrutura", info: "Cruzamento vital entre a Long Road e Evermoor Way."}, {tema: "Religião", info: "Bosque de Gwaeron, sagrado para patrulheiros e rastreadores."}]},
+  {id: "yartar", name: "Yartar", curiosidades: [{tema: "Crime", info: "Sociedade da Mão de Ouro, guilda que controla o jogo ilegal."}, {tema: "Infraestrutura", info: "Sistema de eclusas que permite navegação fluvial constante."}]},
+  {id: "sundabar", name: "Sundabar", curiosidades: [{tema: "Defesa", info: "Cercada por três anéis concêntricos de muralhas de granito negro."}, {tema: "Geografia", info: "Forjas que utilizam o calor natural de cavernas vulcânicas."}]},
+  {id: "daggerford", name: "Daggerford", curiosidades: [{tema: "História", info: "Vila fundada no vau onde um garoto defendeu sua família com uma adaga."}, {tema: "Cultura", info: "Taverna Happy Cow, famosa por cerveja e queijo curado."}]},
+  {id: "goldenfields", name: "Goldenfields", curiosidades: [{tema: "Defesa", info: "Muralhas protegidas por criaturas da natureza despertas."}, {tema: "Infraestrutura", info: "Complexo agrícola que abastece grandes metrópoles do Sul."}]},
+  {id: "newfort", name: "Newfort", curiosidades: [{tema: "História", info: "Fundada por soldados aposentados em busca de sossego."}]},
+  {id: "loudwater", name: "Loudwater", curiosidades: [{tema: "Geografia", info: "Cidade fluvial com quedas d'água e pontes de madeira."}]},
+  {id: "everlund", name: "Everlund", curiosidades: [{tema: "Política", info: "Governo diplomático focado na aliança entre as raças do Norte."}]},
+  {id: "gauntlgrym", name: "Gauntlgrym", curiosidades: [{tema: "Magia", info: "Grande Forja ancestral movida por um primordial aprisionado."}]}
 ];
 
 const CRIMINALS = [
@@ -124,21 +124,23 @@ const CRIMINALS = [
 ];
 
 const VENUES = [
-  {id:'biblioteca', name:'Biblioteca', icon:'📚', temas:['Política','Geografia','História','Magia','Infraestrutura']},
-  {id:'centro_cultural', name:'Centro Cultural', icon:'🎭', temas:['Raças/Espécies','Cultura','História']},
-  {id:'estalagem', name:'Estalagem', icon:'🛌', temas:['Raças/Espécies','Política']},
-  {id:'estaleiro', name:'Estaleiro', icon:'🏗️', temas:['Tipo de Localidade','Comércio','Economia']},
-  {id:'museu', name:'Museu', icon:'🏛️', temas:['História','Magia','Geografia']},
-  {id:'caravanas', name:'Organizador de Caravanas', icon:'🐪', temas:['Economia','Geografia']},
-  {id:'taverna', name:'Taverna', icon:'🍺', temas:['Crime','Política']}
+  {id:'biblioteca', name:'Biblioteca', icon:'📚', temas:['Política','Geografia','História','Magia','Infraestrutura'], cargo: 'Bibliotecário'},
+  {id:'centro_cultural', name:'Centro Cultural', icon:'🎭', temas:['Raças/Espécies','Cultura','História'], cargo: 'Guia Cultural'},
+  {id:'estalagem', name:'Estalagem', icon:'🛌', temas:['Raças/Espécies','Política'], cargo: 'Hospedeiro'},
+  {id:'estaleiro', name:'Estaleiro', icon:'🏗️', temas:['Tipo de Localidade','Comércio','Economia'], cargo: 'Mestre do Cais'},
+  {id:'museu', name:'Museu', icon:'🏛️', temas:['História','Magia','Geografia'], cargo: 'Curador'},
+  {id:'caravanas', name:'Organizador de Caravanas', icon:'🐪', temas:['Economia','Geografia'], cargo: 'Mestre de Carga'},
+  {id:'taverna', name:'Taverna', icon:'🍺', temas:['Crime','Política'], cargo: 'Taverneiro'}
 ];
 
 let G = {
   apiKey: '', criminal: null, trail: [], playerPos: 0, currentCityId: '',
   currentDay: 1, maxDays: 4, currentMinutes: 8*60,
   venuesPerCity: {}, visitedVenues: {}, warrant: null, clues: [], usedCuriosities: {},
-  isRequesting: false // Lock de requisição[cite: 3]
+  isRequesting: false 
 };
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
 function startGame() {
   G.apiKey = document.getElementById('api-key-input').value.trim();
@@ -155,61 +157,66 @@ function startGame() {
 }
 
 async function investigateVenue(cityId, venueId) {
-  if (G.isRequesting) return; // Bloqueia se já houver uma requisição[cite: 3]
-  
+  if (G.isRequesting) return;
   const key = `${cityId}_${venueId}`;
   if (G.visitedVenues[key]) return;
 
-  G.isRequesting = true; // Ativa lock[cite: 3]
-  if (!advanceTime(120)) { G.isRequesting = false; return; }
+  G.isRequesting = true;
+  try {
+    if (!advanceTime(120)) return;
 
-  const cityIdx = G.trail.findIndex(c => c.id === cityId);
-  const venue = VENUES.find(v => v.id === venueId);
+    const cityIdx = G.trail.findIndex(c => c.id === cityId);
+    const venue = VENUES.find(v => v.id === venueId);
+    G.visitedVenues[key] = "<span class='loading-pulse'>Consultando oráculos...</span>";
+    renderVenues();
 
-  // Exibe estado de carregamento[cite: 3]
-  G.visitedVenues[key] = "<span class='loading-pulse'>Consultando oráculos...</span>";
-  renderVenues();
-
-  if (cityIdx === G.trail.length - 1) {
-    G.visitedVenues[key] = "O suspeito está por perto!"; 
-    if (Math.random() > 0.6) { foundCriminal(); G.isRequesting = false; return; }
-  } else {
-    const nextCity = G.trail[cityIdx + 1];
-    if (!G.usedCuriosities[cityId]) G.usedCuriosities[cityId] = [];
-    
-    const available = nextCity.curiosidades.filter(c => !G.usedCuriosities[cityId].includes(c.info));
-    const matching = available.filter(c => venue.temas.includes(c.tema));
-    const fato = matching.length > 0 ? rand(matching) : (available.length > 0 ? rand(available) : rand(nextCity.curiosidades));
-    
-    G.usedCuriosities[cityId].push(fato.info);
-    const incluirC = Math.random() < 0.3;
-    const text = await generateNPCDialogue(venue, fato.info, fato.tema, incluirC);
-    G.visitedVenues[key] = text;
-    G.clues.push(`[${venue.name}] ${text}`);
+    if (cityIdx === G.trail.length - 1) {
+      G.visitedVenues[key] = "O suspeito está por perto!"; 
+      if (Math.random() > 0.6) { foundCriminal(); return; }
+    } else {
+      const nextCity = G.trail[cityIdx + 1];
+      if (!G.usedCuriosities[cityId]) G.usedCuriosities[cityId] = [];
+      
+      const available = nextCity.curiosidades.filter(c => !G.usedCuriosities[cityId].includes(c.info));
+      const matching = available.filter(c => venue.temas.includes(c.tema));
+      const fato = matching.length > 0 ? rand(matching) : (available.length > 0 ? rand(available) : rand(nextCity.curiosidades));
+      
+      G.usedCuriosities[cityId].push(fato.info); // Reserva a pista IMEDIATAMENTE
+      
+      const incluirC = Math.random() < 0.3;
+      const text = await generateNPCDialogue(venue, fato.info, fato.tema, incluirC);
+      G.visitedVenues[key] = text;
+      G.clues.push(`[${venue.name}] ${text}`);
+    }
+  } finally {
+    G.isRequesting = false;
+    renderGameScreen();
   }
-  
-  G.isRequesting = false; // Libera lock[cite: 3]
-  renderGameScreen();
 }
 
 async function generateNPCDialogue(venue, fato, tema, incluirC) {
-  // Fallback aprimorado[cite: 3]
-  const fallback = `Ouvi dizer que alguém passou por aqui demonstrando um interesse incomum em saber se ${fato}. Era alguém curioso sobre ${tema}.`;
+  // Fallback variado baseado no local
+  const fallbacks = {
+      'Taverna': `(O taverneiro limpa o balcão) Aquele sujeito? Sim, ele esteve aqui perguntando sobre a história de ${fato}.`,
+      'Biblioteca': `(O bibliotecário ajeita os óculos) Encontrei um registro de um visitante interessado em informações sobre ${fato}.`,
+      'default': `(Um ${venue.cargo} olha para você) Vi um viajante interessado no relato de que: "${fato}".`
+  };
+  const fallback = fallbacks[venue.name] || fallbacks.default;
   
   if (!G.apiKey) return fallback;
 
-  // GEMINI 2.5 FLASH[cite: 3]
+  // GEMINI 2.5 FLASH
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${G.apiKey}`;
   const infoC = incluirC ? `O suspeito tem cabelo ${G.criminal.aparencia.cabelo}.` : "Não mencione traços físicos.";
   
-  const prompt = `Aja como um NPC no local: ${venue.name}. 
-  O suspeito passou por aqui e demonstrou interesse ou perguntou sobre: "${fato}" (relacionado ao tema ${tema}). 
+  const prompt = `Persona: Você é obrigatoriamente o ${venue.cargo} deste(a) ${venue.name}. Não use "talvez". Assuma o cargo com autoridade.
+  Contexto: O suspeito passou por aqui e perguntou sobre: "${fato}" (tema: ${tema}). 
   ${infoC}
   REGRAS: 
-  1. Use o fato estritamente. 
-  2. NUNCA use pontos cardeais ou direções. 
-  3. Relate que ele "perguntou sobre" ou "demonstrou interesse em". 
-  4. Use falas curtas e imersivas de RPG (máx 2 frases).`;
+  1. Comece com uma breve ação em parênteses que ajude a definir seu cargo no local.
+  2. Seja direto. Use construções como "Ele perguntou sobre..." ou "Demonstrou interesse em...". Nunca use "Saber se...".
+  3. Proibido usar direções ou pontos cardeais. 
+  4. Máximo 2 frases de diálogo direto.`;
 
   try {
     const resp = await fetch(url, { 
@@ -220,7 +227,7 @@ async function generateNPCDialogue(venue, fato, tema, incluirC) {
     
     if (!resp.ok) {
         const err = await resp.json();
-        console.error("[DEBUG] Erro API Gemini 2.5:", err);
+        console.error("[API ERROR]", err);
         return fallback;
     }
 
@@ -228,7 +235,6 @@ async function generateNPCDialogue(venue, fato, tema, incluirC) {
     const resultText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     return resultText ? resultText.replace(/"/g, "").trim() : fallback;
   } catch(e) { 
-    console.error("[DEBUG] Falha de rede/fetch:", e);
     return fallback; 
   }
 }
@@ -316,8 +322,6 @@ window.onload = () => {
     const k = localStorage.getItem('gemini_api_key');
     if (k) document.getElementById('api-key-input').value = k;
 };
-
-function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 </script>
 </body>
 </html>
