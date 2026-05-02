@@ -1,0 +1,12 @@
+[
+  {"id":"anniken_zonledre", "name":"Anniken Zonledre", "gender":"F", "hair":"loiro", "feature":"uma tatuagem", "hobby":"cartas", "vehicle":"em uma carruagem", "cuisine":"frutos do mar"},
+  {"id":"chuck_brinn", "name":"Chuck Brinn", "gender":"M", "hair":"preto", "feature":"bigode", "hobby":"dados", "vehicle":"dirigindo uma máquina infernal", "cuisine":"comida élfica"},
+  {"id":"coral_meery", "name":"Coral Meery", "gender":"F", "hair":"castanho", "feature":"belas joias", "hobby":"dados", "vehicle":"em uma carruagem", "cuisine":"comida apimentada"},
+  {"id":"deaf_tidbes", "name":"Deaf Tidbes", "gender":"M", "hair":"preto", "feature":"um alfinete de gravata", "hobby":"xadrez", "vehicle":"em uma carruagem", "cuisine":"comida élfica"},
+  {"id":"garlon_scryat", "name":"Garlon Scryat", "gender":"M", "hair":"ruivo", "feature":"um anel impressionante", "hobby":"xadrez", "vehicle":"em uma carruagem", "cuisine":"comida tiferina"},
+  {"id":"hovio_richithor", "name":"Hovio Richithor", "gender":"M", "hair":"loiro", "feature":"uma tatuagem", "hobby":"xadrez", "vehicle":"em uma carruagem", "cuisine":"frutos do mar"},
+  {"id":"kelden_blur", "name":"Kelden Blur", "gender":"M", "hair":"ruivo", "feature":"uma tatuagem", "hobby":"dados", "vehicle":"em uma carruagem", "cuisine":"frutos do mar"},
+  {"id":"marcin_gesedano", "name":"Marcin Gesedano", "gender":"F", "hair":"castanho", "feature":"belas joias", "hobby":"cartas", "vehicle":"em uma carruagem", "cuisine":"comida tiferina"},
+  {"id":"romani_brookebeth_kadio", "name":"Romani Brookebeth Kadio", "gender":"F", "hair":"castanho", "feature":"uma tatuagem", "hobby":"dados", "vehicle":"dirigindo uma máquina infernal", "cuisine":"frutos do mar"},
+  {"id":"taylana_gaddahyal", "name":"Taylana Gaddahyal", "gender":"F", "hair":"ruivo", "feature":"um anel impressionante", "hobby":"cartas", "vehicle":"dirigindo uma biga", "cuisine":"comida tiferina"}
+]
