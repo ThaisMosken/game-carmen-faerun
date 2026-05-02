@@ -918,8 +918,27 @@ function renderVenues() {
 function renderTravel() {
   const currentId = G.currentCityId;
   const instructionsEl = document.getElementById('travel-instructions');
-  
-  instructionsEl.innerHTML = `A viagem de teleporte demora <strong>${HOURS_COST_TRAVELLING} horas</strong>.<br>Lembre-se que se for para o caminho errado, você poderá voltar para a cidade de onde partiu e retomar os rastros do suspeito.<br>Escolha a cidade para onde deseja se teleportar.`;
+
+  instructionsEl.innerHTML = `
+    <div class="card" style="font-size: 13px; color: #aaa; margin-bottom: 16px; border-left: 4px solid #fbbf24; text-align: left;">
+      <p style="margin-bottom: 10px; color: #fbbf24; font-weight: bold; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">🌀 Logística de Viagem</p>
+      
+      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; line-height: 1.4;">
+        <li style="display: flex; gap: 10px; align-items: flex-start;">
+          <span>⌛</span>
+          <span>A viagem de teleporte demora <strong>${HOURS_COST_TRAVELLING} horas</strong>.</span>
+        </li>
+        <li style="display: flex; gap: 10px; align-items: flex-start;">
+          <span>↩️</span>
+          <span>Se for para o caminho errado, você poderá se teleportar de volta à cidade de origem e retomar os rastros.</span>
+        </li>
+        <li style="display: flex; gap: 10px; align-items: flex-start;">
+          <span>🏙️</span>
+          <span>Escolha a cidade de destino abaixo para se teleportar.</span>
+        </li>
+      </ul>
+    </div>
+  `;
   
   const options = new Set();
   const trailIds = G.trail.map(c => c.id);
@@ -947,7 +966,7 @@ function renderTravel() {
   const finalOptions = Array.from(options).slice(0, 5).sort(() => Math.random() - 0.5);
   document.getElementById('travel-list').innerHTML = finalOptions.map(id => {
     const city = CITIES.find(c => c.id === id);
-    return `<div class="city-option" style="background:#252525; padding:10px; border-radius:8px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${city.id}')">🏙️ ${city.name}</div>`;
+    return `<div class="city-option" style="background:#1e1e1e; border: 1px solid #333; border-left: 3px solid #fbbf24; padding:12px; border-radius:8px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${city.id}')">🏙️ ${city.name}</div>`;
   }).join('');
 }
 
