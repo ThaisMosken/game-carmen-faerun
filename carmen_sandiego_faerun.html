@@ -72,7 +72,7 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 <div id="result-screen" class="screen" style="text-align:center">
   <div id="result-icon" style="font-size:64px"></div>
   <h1 id="result-title"></h1>
-  <div class="card" id="result-details" style="margin:20px 0;text-align:left"></div>
+  <div class="card" id="result-details" style="margin:20px 0;text-align:center"></div>
   <button class="btn primary" style="width:100%" onclick="location.reload()">Nova Partida</button>
 </div>
 
@@ -686,8 +686,18 @@ async function investigateVenue(cityId, venueId) {
     await new Promise(resolve => setTimeout(resolve, 800));
 
     if (cityIdx === G.trail.length - 1) {
+      const attemptsInCity = Object.keys(G.visitedVenues).filter(k => k.startsWith(cityId + "_")).length;
+      
+      let captureProbability = 0.4;
+      if (attemptsInCity === 1) captureProbability = 0.8;
+      if (attemptsInCity === 2) captureProbability = 1.0;
+
       G.visitedVenues[key] = "O suspeito foi visto por aqui há poucos minutos!"; 
-      if (Math.random() > 0.6) { foundCriminal(); return; }
+      
+      if (Math.random() < captureProbability) {
+        foundCriminal(); 
+        return;
+      }
     } else {
       if (!G.usedCuriosities[cityId]) G.usedCuriosities[cityId] = [];
       
@@ -926,8 +936,39 @@ function foundCriminal() { if (G.warrant === G.criminal.id) endGame('won'); else
 function endGame(r) {
   document.getElementById('game-screen').classList.remove('active');
   document.getElementById('result-screen').classList.add('active');
-  document.getElementById('result-title').textContent = r === 'won' ? "Capturado!" : "Escapou!";
-  document.getElementById('result-icon').textContent = r === 'won' ? "🏆" : "💀";
+  
+  const titleEl = document.getElementById('result-title');
+  const iconEl = document.getElementById('result-icon');
+  const detailsEl = document.getElementById('result-details');
+
+  titleEl.textContent = r === 'won' ? "Capturado!" : "Escapou!";
+  iconEl.textContent = r === 'won' ? "🏆" : "💀";
+
+  let criminalStatus = "";
+  if (r === 'won') {
+    criminalStatus = `<strong>${G.criminal.name}</strong> permanecerá atrás das grades por um bom tempo.<br>Bom trabalho!`;
+  } else {
+    const reason = r === 'timeout' ? "O tempo acabou e os rastros esfriaram." : "O mandado estava incorreto.";
+    criminalStatus = `<strong>${G.criminal.name}</strong> escapou por entre seus dedos...<br>${reason}`;
+  }
+
+  const routeNames = G.history.map(id => {
+    const city = CITIES.find(c => c.id === id);
+    return city ? city.name : id;
+  }).join(' → ');
+
+  detailsEl.innerHTML = `
+    <div style="padding:16px; line-height:1.6; text-align: center">
+      <p style="margin-bottom:12px; font-size:15px; color:#fff">${criminalStatus}</p>
+      
+      <div style="border-top:1px solid #333; padding-top:12px; font-size:13px; color:#aaa">
+        <p><strong>📅 Encerramento:</strong> Dia ${G.currentDay} às ${Math.floor(G.currentMinutes/60)}:00</p>
+        
+        <p style="margin-top:10px; color:#888; font-weight:bold">📍 Rota percorrida:</p>
+        <p style="font-size:12px; font-style:italic; line-height:1.4">${routeNames}</p>
+      </div>
+    </div>
+  `;
 }
 </script>
 </body>
