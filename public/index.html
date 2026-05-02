@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Onde em Faerûn está o Criminoso?</title>
 <style>
-/* Mantenha todo o seu CSS original intacto aqui */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:sans-serif;background:#121212;color:#e0e0e0;font-size:14px;line-height:1.5}
 .screen{display:none;padding:16px;flex-direction:column;gap:12px;max-width:600px;margin:0 auto}
@@ -17,9 +16,34 @@ h1{font-size:22px;font-weight:600;color:#fff;text-align:center;margin-bottom:10p
 .npc-bubble{background:#252525;border:1px solid #333;border-radius:12px 12px 12px 2px;padding:12px;font-size:13px;font-style:italic;color:#ccc;margin-top:8px}
 .clue-item{padding:12px;border:1px solid #333;border-radius:8px;background:#1e1e1e;margin-bottom:8px}
 .tabs{display:flex;gap:8px;margin-bottom:12px;border-bottom:1px solid #333;padding-bottom:8px}
-.tab {padding: 8px 16px; cursor: pointer; border-radius: 8px; color: #888; font-size: 14px; font-weight: bold; background: transparent; border: 2px solid transparent; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;}
-.tab.active {background: #252525; color: #fbbf24; border: 2px solid #fbbf24;}
-.tab:not(.active):hover {color: #fbbf24; background: #1e1e1e;}
+.tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #888;
+  font-size: 14px;
+  font-weight: bold;
+  background: transparent;
+  border: 2px solid transparent; 
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab.active {
+  background: #252525;
+  color: #fbbf24;
+  border: 2px solid #fbbf24;
+}
+
+.tab:not(.active):hover {
+  color: #fbbf24;
+  background: #1e1e1e;
+}
+input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-radius:8px;width:100%}
+.loading-pulse{animation:pulse 1.5s infinite; color: #777;}
+@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 </style>
 </head>
 <body>
@@ -71,18 +95,16 @@ h1{font-size:22px;font-weight:600;color:#fff;text-align:center;margin-bottom:10p
 </div>
 
 <script>
-// ATUALIZE AQUI COM AS URLs GERADAS NO TERMINAL (Mantenha aspas)
 const URLS = {
   start: 'https://start-game-hmod4ptaqq-uc.a.run.app',
-  investigate: 'COLE_A_URL_INVESTIGATE_AQUI',
-  travel: 'COLE_A_URL_TRAVEL_AQUI',
-  arrest: 'COLE_A_URL_ARREST_AQUI'
+  investigate: 'https://investigate-hmod4ptaqq-uc.a.run.app',
+  travel: 'https://travel-hmod4ptaqq-uc.a.run.app',
+  arrest: 'https://arrest-hmod4ptaqq-uc.a.run.app'
 };
 
 const HOURS_COST_INVESTIGATING = 2;
 const HOURS_COST_TRAVELLING = 8;
 
-// Catálogos simplificados apenas para exibição
 const CITIES_CATALOG = {"berdusk": "Berdusk", "bryn_shander": "Bryn Shander", "citadel_adbar": "Citadel Adbar", "citadel_felbarr": "Citadel Felbarr", "daggerford": "Daggerford", "elturel": "Elturel", "everlund": "Everlund", "gauntlgrym": "Gauntlgrym", "goldenfields": "Goldenfields", "iriaebor": "Iriaebor", "longsaddle": "Longsaddle", "loudwater": "Loudwater", "luskan": "Luskan", "menzoberranzan": "Menzoberranzan", "mirabar": "Mirabar", "mithral_hall": "Mithral Hall", "neverwinter": "Neverwinter", "newfort": "Newfort", "phandalin": "Phandalin", "porto_nyanzaru": "Porto Nyanzaru", "scornubel": "Scornubel", "silverymoon": "Silverymoon", "sundabar": "Sundabar", "triboar": "Triboar", "waterdeep": "Waterdeep", "yartar": "Yartar"};
 const VENUES_CATALOG = {"biblioteca": {name: "Biblioteca", icon: "📚"}, "cartografo": {name: "Cartógrafo", icon: "📜"}, "centro_cultural": {name: "Centro Cultural", icon: "🎭"}, "estalagem": {name: "Estalagem", icon: "🛌"}, "estaleiro": {name: "Estaleiro", icon: "🏗️"}, "museu": {name: "Museu", icon: "🏛️"}, "oficina_gemas": {name: "Oficina de Gemas", icon: "💎"}, "patio_carrocas": {name: "Pátio de Carroças", icon: "🐪"}, "patio_treinamento": {name: "Pátio de Treinamento", icon: "⚔️"}, "santuario": {name: "Santuário", icon: "🕯️"}, "taverna": {name: "Taverna", icon: "🍺"}, "torre_alta_magia": {name: "Torre de Alta Magia", icon: "🔮"}};
 const CRIMINALS_CATALOG = [{id:'anniken_zonledre', name:'Anniken Zonledre'}, {id:'chuck_brinn', name:'Chuck Brinn'}, {id:'coral_meery', name:'Coral Meery'}, {id:'deaf_tidbes', name:'Deaf Tidbes'}, {id:'garlon_scryat', name:'Garlon Scryat'}, {id:'hovio_richithor', name:'Hovio Richithor'}, {id:'kelden_blur', name:'Kelden Blur'}, {id:'marcin_gesedano', name:'Marcin Gesedano'}, {id:'romani_brookebeth_kadio', name:'Romani Brookebeth Kadio'}, {id:'taylana_gaddahyal', name:'Taylana Gaddahyal'}];
@@ -180,7 +202,6 @@ function renderGameScreen() {
     </div>`;
   }).join('');
 
-  // Sorteia opções de viagem (distratores)
   const allIds = Object.keys(CITIES_CATALOG).filter(id => id !== G.currentCityId);
   const options = allIds.sort(() => Math.random() - 0.5).slice(0, 5);
   document.getElementById('travel-list').innerHTML = options.map(id => 
