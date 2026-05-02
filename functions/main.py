@@ -220,8 +220,9 @@ def travel(req: https_fn.Request) -> https_fn.Response:
             mimetype="application/json",
             headers=cors_headers
         )
-        except Exception as e:
-            return https_fn.Response(json.dumps({"error": str(e)}), status=500, headers=cors_headers)
+
+    except Exception as e:
+        return https_fn.Response(json.dumps({"error": str(e)}), status=500, headers=cors_headers)
 
 @https_fn.on_request()
 def arrest(req: https_fn.Request) -> https_fn.Response:
