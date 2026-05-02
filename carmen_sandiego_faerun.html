@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Onde em Faerûn está Marcin Gesedano? Edition v17</title>
+<title>Onde em Faerûn está Marcin Gesedano?</title>
 <style>
-/* Estilos visuais mantidos */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:sans-serif;background:#121212;color:#e0e0e0;font-size:14px;line-height:1.5}
 .screen{display:none;padding:16px;flex-direction:column;gap:12px;max-width:600px;margin:0 auto}
@@ -21,16 +20,21 @@ h1{font-size:22px;font-weight:600;color:#fff;text-align:center;margin-bottom:10p
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 8px;
-  color: #aaa;
-  font-size: 13px;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
+  color: #888;
+  font-size: 14px;
+  font-weight: bold;
+  background: transparent;
+  border: 2px solid transparent; 
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .tab.active {
-  background: #fbbf24;
-  color: #121212;
-  font-weight: bold;
+  background: #252525;
+  color: #fbbf24;
+  border: 2px solid #fbbf24;
 }
 
 .tab:not(.active):hover {
@@ -154,9 +158,6 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 </div>
 
 <script>
-// ============================================================
-// DADOS DAS CIDADES E CRIMINOSOS
-// ============================================================
 
 const HOURS_COST_INVESTIGATING = 2;
 const HOURS_COST_TRAVELLING = 8;
@@ -789,7 +790,7 @@ async function investigateVenue(cityId, venueId) {
       
       G.usedCuriosities[cityId].push(rawLead.info);
       
-      const addClue = Math.random() < 0.4; // 40% de chance de vir pista física
+      const addClue = Math.random() < 0.4;
       const text = generateLocalDialogue(venue, rawLead.info, addClue);
       G.visitedVenues[key] = text;
       G.clues.push(`<strong>[${venue.name}]</strong> ${text}`);
@@ -1016,12 +1017,18 @@ function openWarrantModal() {
   document.getElementById('warrant-options').innerHTML = CRIMINALS.map(c => `<div class="city-option" style="padding:8px; background:#333; border-radius:4px; cursor:pointer" onclick="issueWarrant('${c.id}')">👤 ${c.name}</div>`).join('');
   document.getElementById('warrant-modal').style.display = 'flex';
 }
+
 function closeWarrantModal() { document.getElementById('warrant-modal').style.display = 'none'; }
+
 function issueWarrant(id) { 
   G.warrant = id; 
-  document.getElementById('warrant-display').textContent = CRIMINALS.find(c => c.id === id).name; 
+  const criminal = CRIMINALS.find(c => c.id === id);
+  document.getElementById('warrant-display').innerHTML = 
+    `<span style="color: #fff; font-weight: normal;">Mandado ativo:</span> <span style="color: #fbbf24;">${criminal.name}</span>`; 
+    
   closeWarrantModal(); 
 }
+
 function foundCriminal() { if (G.warrant === G.criminal.id) endGame('won'); else endGame('wrong_warrant'); }
 
 function endGame(r) {
