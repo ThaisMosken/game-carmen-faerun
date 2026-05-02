@@ -109,65 +109,67 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
             next_city = db.collection("cities").document(next_city_id).get().to_dict()
             curiosities = list(next_city.get('curiosities', {}).values())
             lead = random.choice(curiosities) if curiosities else "um local desconhecido"
+            venue_doc = db.collection("venues").document(venue_id).get().to_dict() or {}
 
-        dialogue_templates = {
-            "biblioteca": [
-                f"(O bibliotecário ajeita os óculos) {criminal_clue} requisitou pergaminhos raros que descreviam {lead}.",
-                f"(O bibliotecário consulta um registro) Tivemos um visitante interessado em histórias sobre {lead}."
-            ],
-            "cartografo": [
-                f"(O cartógrafo limpa a tinta dos dedos) {criminal_clue} queria um mapa sobre {lead}.",
-                f"(O cartógrafo limpa a tinta dos dedos) Um curioso esteve aqui olhando mapas sobre {lead}."
-            ],
-            "centro_cultural": [
-                f"(O guia local aponta para um mural) {criminal_clue} passou um longo tempo estudando a representação sobre {lead}.",
-                f"(O guia local consulta um folheto) Tivemos um visitante procurando por apresentações sobre {lead}."
-            ],
-            "estalagem": [
-                f"(O estalajadeiro entrega uma chave) {criminal_clue} alugou um quarto, mas passou a noite escrevendo sobre {lead}.",
-                f"(O estalajadeiro limpa uma caneca) Alguém com essa descrição saiu cedo, resmungando algo sobre {lead}."
-            ],
-            "estaleiro": [
-                f"(O mestre do cais observa as amarras) {criminal_clue} tentou fretar um barco que carregava alguns contêineres com {lead}.",
-                f"(O mestre do cais aponta para a água) O sujeito partiu no último barco após fazer perguntas sobre {lead}."
-            ],
-            "museu": [
-                f"(O curador ajeita uma vitrine) {criminal_clue} demonstrou um interesse acadêmico incomum na exposição sobre {lead}.",
-                f"(O curador consulta o catálogo) Lembro-me de um visitante que passou horas examinando artefatos sobre {lead}."
-            ],
-            "oficina_gemas": [
-                f"(O mestre joalheiro analisa uma pedra) {criminal_clue} trouxe uma joia para avaliar, alegando precisar de fundos para viajar para {lead}.",
-                f"(O mestre joalheiro guarda as ferramentas) Um cliente com essas características esteve aqui perguntando sobre {lead}."
-            ],
-            "patio_carrocas": [
-                f"(O mestre de carga confere uma lista) {criminal_clue} comprou mantimentos para uma viagem, mencionando algo sobre {lead}.",
-                f"(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre {lead}."
-            ],
-            "patio_treinamento": [
-                f"(O mestre d'armas golpeia o boneco) {criminal_clue} observou os treinos e perguntou sobre as táticas de combate de {lead}.",
-                f"(O mestre d'armas limpa o suor) Alguém perguntou se nossas lâminas seriam eficazes contra {lead}."
-            ],
-            "santuario": [
-                f"(O sacerdote acende uma vela) {criminal_clue} fez uma oferta aos deuses pedindo proteção e perguntou sobre {lead}.",
-                f"(O sacerdote fecha o livro de preces) Tivemos um fiel angustiado que buscava orientação divina sobre {lead}."
-            ],
-            "taverna": [
-                f"(O taverneiro limpa o balcão) {criminal_clue} esteve aqui e não parava de perguntar sobre {lead}.",
-                f"(O taverneiro aponta para uma mesa vazia) Aquele sujeito de quem você falou? Ele passou a noite pesquisando sobre {lead}."
-            ],
-            "torre_alta_magia": [
-                f"(O arcanista consulta uma esfera) {criminal_clue} contratou um feitiço para recontar sobre {lead}.",
-                f"(O arcanista ajusta as vestes) Um visitante assim passou por aqui e quase esqueceu um pergaminho sobre {lead}."
-            ],
-            "default": [
-                f"(O {venue_doc.get('role', 'encarregado')} olha para você) {criminal_clue} demonstrou um interesse incomum sobre {lead}.",
-                f"(O {venue_doc.get('role', 'encarregado')} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que {lead}."
-            ]
-        }
+            dialogue_templates = {
+                "biblioteca": [
+                    f"(O bibliotecário ajeita os óculos) {criminal_clue} requisitou pergaminhos raros que descreviam {lead}.",
+                    f"(O bibliotecário consulta um registro) Tivemos um visitante interessado em histórias sobre {lead}."
+                ],
+                "cartografo": [
+                    f"(O cartógrafo limpa a tinta dos dedos) {criminal_clue} queria um mapa sobre {lead}.",
+                    f"(O cartógrafo limpa a tinta dos dedos) Um curioso esteve aqui olhando mapas sobre {lead}."
+                ],
+                "centro_cultural": [
+                    f"(O guia local aponta para um mural) {criminal_clue} passou um longo tempo estudando a representação sobre {lead}.",
+                    f"(O guia local consulta um folheto) Tivemos um visitante procurando por apresentações sobre {lead}."
+                ],
+                "estalagem": [
+                    f"(O estalajadeiro entrega uma chave) {criminal_clue} alugou um quarto, mas passou a noite escrevendo sobre {lead}.",
+                    f"(O estalajadeiro limpa uma caneca) Alguém com essa descrição saiu cedo, resmungando algo sobre {lead}."
+                ],
+                "estaleiro": [
+                    f"(O mestre do cais observa as amarras) {criminal_clue} tentou fretar um barco que carregava alguns contêineres com {lead}.",
+                    f"(O mestre do cais aponta para a água) O sujeito partiu no último barco após fazer perguntas sobre {lead}."
+                ],
+                "museu": [
+                    f"(O curador ajeita uma vitrine) {criminal_clue} demonstrou um interesse acadêmico incomum na exposição sobre {lead}.",
+                    f"(O curador consulta o catálogo) Lembro-me de um visitante que passou horas examinando artefatos sobre {lead}."
+                ],
+                "oficina_gemas": [
+                    f"(O mestre joalheiro analisa uma pedra) {criminal_clue} trouxe uma joia para avaliar, alegando precisar de fundos para viajar para {lead}.",
+                    f"(O mestre joalheiro guarda as ferramentas) Um cliente com essas características esteve aqui perguntando sobre {lead}."
+                ],
+                "patio_carrocas": [
+                    f"(O mestre de carga confere uma lista) {criminal_clue} comprou mantimentos para uma viagem, mencionando algo sobre {lead}.",
+                    f"(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre {lead}."
+                ],
+                "patio_treinamento": [
+                    f"(O mestre d'armas golpeia o boneco) {criminal_clue} observou os treinos e perguntou sobre as táticas de combate de {lead}.",
+                    f"(O mestre d'armas limpa o suor) Alguém perguntou se nossas lâminas seriam eficazes contra {lead}."
+                ],
+                "santuario": [
+                    f"(O sacerdote acende uma vela) {criminal_clue} fez uma oferta aos deuses pedindo proteção e perguntou sobre {lead}.",
+                    f"(O sacerdote fecha o livro de preces) Tivemos um fiel angustiado que buscava orientação divina sobre {lead}."
+                ],
+                "taverna": [
+                    f"(O taverneiro limpa o balcão) {criminal_clue} esteve aqui e não parava de perguntar sobre {lead}.",
+                    f"(O taverneiro aponta para uma mesa vazia) Aquele sujeito de quem você falou? Ele passou a noite pesquisando sobre {lead}."
+                ],
+                "torre_alta_magia": [
+                    f"(O arcanista consulta uma esfera) {criminal_clue} contratou um feitiço para recontar sobre {lead}.",
+                    f"(O arcanista ajusta as vestes) Um visitante assim passou por aqui e quase esqueceu um pergaminho sobre {lead}."
+                ],
+                "default": [
+                    f"(O {venue_doc.get('role', 'encarregado')} olha para você) {criminal_clue} demonstrou um interesse incomum sobre {lead}.",
+                    f"(O {venue_doc.get('role', 'encarregado')} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que {lead}."
+                ]
+            }
 
-        else:
             templates = dialogue_templates.get(venue_id, dialogue_templates["default"])
-            final_clue = random.choice(templates)[cite: 1]
+            final_clue = random.choice(templates)
+        else:
+            final_clue = "O suspeito foi visto por aqui há poucos minutos!"
 
         return https_fn.Response(
             json.dumps({"clue": final_clue}),
@@ -218,8 +220,8 @@ def travel(req: https_fn.Request) -> https_fn.Response:
             mimetype="application/json",
             headers=cors_headers
         )
-    except Exception as e:
-        return https_fn.Response(json.dumps({"error": str(e)}), status=500, headers=cors_headers)
+        except Exception as e:
+            return https_fn.Response(json.dumps({"error": str(e)}), status=500, headers=cors_headers)
 
 @https_fn.on_request()
 def arrest(req: https_fn.Request) -> https_fn.Response:
