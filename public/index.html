@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Onde em Faerûn está Marcin Gesedano?</title>
+<title>Onde em Faerûn está o Criminoso?</title>
 <style>
+/* Mantenha todo o seu CSS original intacto aqui */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:sans-serif;background:#121212;color:#e0e0e0;font-size:14px;line-height:1.5}
 .screen{display:none;padding:16px;flex-direction:column;gap:12px;max-width:600px;margin:0 auto}
@@ -16,84 +17,23 @@ h1{font-size:22px;font-weight:600;color:#fff;text-align:center;margin-bottom:10p
 .npc-bubble{background:#252525;border:1px solid #333;border-radius:12px 12px 12px 2px;padding:12px;font-size:13px;font-style:italic;color:#ccc;margin-top:8px}
 .clue-item{padding:12px;border:1px solid #333;border-radius:8px;background:#1e1e1e;margin-bottom:8px}
 .tabs{display:flex;gap:8px;margin-bottom:12px;border-bottom:1px solid #333;padding-bottom:8px}
-.tab {
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 8px;
-  color: #888;
-  font-size: 14px;
-  font-weight: bold;
-  background: transparent;
-  border: 2px solid transparent; 
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.tab.active {
-  background: #252525;
-  color: #fbbf24;
-  border: 2px solid #fbbf24;
-}
-
-.tab:not(.active):hover {
-  color: #fbbf24;
-  background: #1e1e1e;
-}
-input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-radius:8px;width:100%}
-.loading-pulse{animation:pulse 1.5s infinite; color: #777;}
-@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+.tab {padding: 8px 16px; cursor: pointer; border-radius: 8px; color: #888; font-size: 14px; font-weight: bold; background: transparent; border: 2px solid transparent; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;}
+.tab.active {background: #252525; color: #fbbf24; border: 2px solid #fbbf24;}
+.tab:not(.active):hover {color: #fbbf24; background: #1e1e1e;}
 </style>
 </head>
 <body>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-  const firebaseConfig = {
-    apiKey: "AIzaSyCfBD20ZPLcwJ2zIiTyFsXG0-NgK0vt9mo",
-    authDomain: "singular-coil-451923-e9.firebaseapp.com",
-    projectId: "singular-coil-451923-e9",
-    storageBucket: "singular-coil-451923-e9.firebasestorage.app",
-    messagingSenderId: "788600402736",
-    appId: "1:788600402736:web:a3d270ef47b17cd5f20ef5"
-  };
-
-  const app = initializeApp(firebaseConfig);
-</script>
-
 <div id="setup-screen" class="screen active">
-  <h1>🗺️ Onde em Faerûn está Marcin Gesedano?</h1>
-  
-  <div class="card" style="line-height: 1.5; color: #ccc; margin-bottom: 20px; border-left: 4px solid #fbbf24;">
-    <p style="color: #fbbf24; font-size: 11px; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px;">📜 Briefing da Missão</p>
-    
-    <!-- Lore -->
-    <p style="margin-bottom: 16px; font-size: 14px;">Um grupo criminoso está roubando artefatos por Faerûn. Você foi contratado para capturar o suspeito deste novo crime.</p>
-
-    <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
-      <li style="display: flex; gap: 10px; align-items: flex-start;">
-        <span>⚖️</span>
-        <span>Emita um <strong>mandado de prisão</strong> antes de confrontar o suspeito.</span>
-      </li>
-      <li style="display: flex; gap: 10px; align-items: flex-start;">
-        <span>🧭</span>
-        <span>Investigue locais para coletar pistas sobre o próximo destino do alvo.</span>
-      </li>
-      <li style="display: flex; gap: 10px; align-items: flex-start;">
-        <span>⌛</span>
-        <span>Você tem <strong>7 dias</strong> antes que o rastro esfrie e o suspeito escape.</span>
-      </li>
-    </ul>
-  </div>
-  <button class="btn" style="width:100%; background: #252525; color: #fbbf24; border: 2px solid #fbbf24; font-weight: bold; font-size: 14px;" onclick="startGame()">
+  <h1>🗺️ Caçada em Faerûn</h1>
+  <button class="btn primary" style="width:100%; font-weight: bold; font-size: 14px;" onclick="startGame()">
     ▶ Iniciar Missão
   </button>
 </div>
 
 <div id="game-screen" class="screen">
   <div style="display:flex;justify-content:space-between;align-items:center">
-    <div><h2 id="current-city-name">—</h2><div id="city-tags"></div></div>
+    <div><h2 id="current-city-name">—</h2></div>
     <div style="text-align:right">
       <div id="time-display" style="font-size:12px;color:#aaa"></div>
       <div style="background:#333;border-radius:6px;height:8px;width:100px;overflow:hidden"><div id="time-fill" style="height:100%;background:#16a34a"></div></div>
@@ -108,56 +48,15 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
   <div class="tabs">
     <div class="tab active" id="tab-investigate" onclick="switchTab('investigate', this)">🔍 Investigar</div>
     <div class="tab" id="tab-travel" onclick="switchTab('travel', this)">🌀 Teleportar</div>
-    <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📜 Compêndio da Busca</div>
+    <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📜 Pistas</div>
   </div>
 
- <div id="panel-investigate">
-  <div class="card" style="font-size: 13px; color: #aaa; margin-bottom: 16px; border-left: 4px solid #fbbf24;">
-    <p style="margin-bottom: 10px; color: #fbbf24; font-weight: bold; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">🕵️ Guia de Campo</p>
-    <p style="margin-bottom: 12px; line-height: 1.4;">Você precisa obter pistas sobre o criminoso e seu paradeiro rapidamente. O tempo é escasso, acompanhe o relógio no topo da tela.</p>
-    
-    <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; line-height: 1.4;">
-      <li style="display: flex; gap: 10px; align-items: flex-start;">
-        <span>🔍</span>
-        <span>Interrogar testemunhas em estabelecimentos consome <strong id="display-investigation-cost"></strong>.</span>
-      </li>
-      <li style="display: flex; gap: 10px; align-items: flex-start;">
-        <span>🌀</span>
-        <span>Solicitar teleporte para outra cidade consome <strong id="display-travelling-cost"></strong>.</span>
-      </li>
-      <li style="display: flex; gap: 10px; align-items: flex-start;">
-        <span>⚖️</span>
-        <span>Emitir um mandado é <strong>instantâneo</strong>, mas apenas um pode estar ativo por vez.</span>
-      </li>
-      <li style="display: flex; gap: 10px; align-items: flex-start;">
-        <span>⚠️</span>
-        <span>O mandado deve ser preciso: se encontrar o suspeito sem o nome correto, ele fugirá.</span>
-      </li>
-    </ul>
-  </div>
-
-  <div id="venues-list"></div>
-</div>
-
-  <div id="panel-travel" style="display:none">
-    <div id="travel-instructions" style="margin-bottom:12px; font-size:12px; color:#aaa; line-height:1.4"></div>
-    <div id="travel-list"></div>
-  </div>
+  <div id="panel-investigate"><div id="venues-list"></div></div>
+  <div id="panel-travel" style="display:none"><div id="travel-list"></div></div>
   <div id="panel-notes" style="display:none"><div class="card" id="clues-collected"></div></div>
-
-  <div style="margin-top:16px;border:1px dashed #b91c1c;border-radius:8px;background:rgba(185,28,28,0.05)">
-    <div onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="padding:8px;cursor:pointer;color:#ef4444;font-size:11px;font-weight:bold">🛡️ PAINEL DO MESTRE ▼</div>
-    <div style="display:none;padding:12px;font-size:12px;color:#aaa">
-      <div style="margin-bottom:4px">Criminoso: <strong id="dm-criminal" style="color:#ef4444">—</strong></div>
-      <div style="margin-bottom:4px">Trilha completa: <span id="dm-trail" style="color:#eee">—</span></div>
-      <div style="margin-bottom:4px">Próxima cidade correta: <strong id="dm-next" style="color:#22c55e">—</strong></div>
-      <div>Cidade final: <strong id="dm-final" style="color:#ef4444">—</strong></div>
-    </div>
-  </div>
 </div>
 
 <div id="result-screen" class="screen" style="text-align:center">
-  <div id="result-icon" style="font-size:64px"></div>
   <h1 id="result-title"></h1>
   <div class="card" id="result-details" style="margin:20px 0;text-align:center"></div>
   <button class="btn primary" style="width:100%" onclick="location.reload()">Nova Partida</button>
@@ -172,871 +71,127 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 </div>
 
 <script>
+// ATUALIZE AQUI COM AS URLs GERADAS NO TERMINAL (Mantenha aspas)
+const URLS = {
+  start: 'https://start-game-hmod4ptaqq-uc.a.run.app',
+  investigate: 'COLE_A_URL_INVESTIGATE_AQUI',
+  travel: 'COLE_A_URL_TRAVEL_AQUI',
+  arrest: 'COLE_A_URL_ARREST_AQUI'
+};
 
 const HOURS_COST_INVESTIGATING = 2;
 const HOURS_COST_TRAVELLING = 8;
 
-const CITIES = [
-  {
-    "id": "berdusk",
-    "name": "Berdusk",
-    "curiosities": {
-      "Culture": "as academias de música e o apreço dos cidadãos pela poesia e artes visuais",
-      "Defense": "a Guarda Fluvial e os batedores que vigiam as trilhas das florestas vizinhas",
-      "Factions": "o Twilight Hall, que serve como um dos principais quartéis-generais dos Harpistas",
-      "Geographical Aspects": "a confluência navegável entre o Rio Chionthar e o Rio Waylady",
-      "Geography": "as ruas limpas e arborizadas que formam um padrão organizado ao redor do distrito central",
-      "Government Type": "uma oligarquia comercial liderada por mercadores progressistas e benevolentes",
-      "History": "o longo período de paz que permitiu o florescimento de universidades e bibliotecas",
-      "Infrastructure": "as pontes de pedra ornamentadas que cruzam os diversos canais da cidade",
-      "Magic": "a música mágica e as ilusões artísticas criadas pelos bardos de alto nível da região",
-      "Politics": "a neutralidade diplomática mantida entre as potências de Elturgard e Amn",
-      "Races": "uma população composta por humanos, elfos e uma grande comunidade de meio-elfos",
-      "Religion": "o Templo da Estrela da Manhã, um centro de conhecimento dedicado a Oghma e Milil",
-      "Settlement Type": "uma cidade elegante e refinada apelidada de a Joia do Vale",
-      "Trade": "a lã fina, os vinhos artesanais e a fabricação de instrumentos musicais"
-    }
-  },
-  {
-    "id": "bryn_shander",
-    "name": "Bryn Shander",
-    "curiosities": {
-      "Culture": "o papel da cidade como centro comercial onde o marfim é trocado por bens do sul",
-      "Defense": "o único assentamento local cercado por muralhas projetadas contra gigantes e tempestades",
-      "Factions": "a influência da coalizão das Dez-Cidades",
-      "Geographical Aspects": "um planalto em Icewind Dale sob um clima de tundra ártica",
-      "Geography": "o isolamento geográfico da vila, sendo a única das Dez-Cidades não situada às margens de um lago",
-      "Government Type": "uma vila que é regida por uma democracia representativa liderada por um Porta-voz eleito",
-      "History": "o cerco massivo liderado pelo mago Akar Kessell que consolidou a vila como a mais influente das Dez-Cidades",
-      "Infrastructure": "os telhados extremamente inclinados das construções para evitar o acúmulo de neve",
-      "Magic": "a dificuldade de se obter itens mágicos em Icewind Dale",
-      "Politics": "o Conselho dos Porta-vozes",
-      "Races": "um local de população majoritariamente humana com minorias de anões, halflings e elfos",
-      "Religion": "a Casa da Manhã, um templo de Amaunator que utiliza janelas amarelas para captar a rara luz solar",
-      "Settlement Type": "uma vila de pequeno porte na tundra gélida, o maior assentamento de Icewind Dale",
-      "Trade": "marfim de truta-cabeça-de-nós e peles raras"
-    }
-  },
-  {
-    "id": "citadel_adbar",
-    "name": "Citadel Adbar",
-    "curiosities": {
-      "Culture": "a fama de que suas forjas incessantes que produzem o melhor aço temperado do Norte",
-      "Defense": "um local feito para servir de barreira de contenção contra incursões vindas do Subterrâneo",
-      "Factions": "os laços históricos com a antiga Aliança dos Lordes",
-      "Geographical Aspects": "uma rede de túneis sob as Montanhas de Gelo",
-      "Geography": "uma fortaleza nas Montanhas de Gelo com apenas duas torres de granito maciço na superfície e quilômetros de minas e túneis profundos",
-      "Government Type": "uma monarquia hereditária sob a linhagem da Casa Adbar",
-      "History": "a linhagem contínua de reis que governa este remanescente do império de Delzoun há milênios",
-      "Infrastructure": "os extensos canais de ventilação que levam ar fresco para os níveis mais profundos da montanha",
-      "Magic": "a criação de runas de proteção feitas pelos clérigos de Moradin",
-      "Politics": "o isolamento da cidade para focar na segurança interna contra ataques do subterrâneo",
-      "Races": "uma população de anões do escudo com pequenas comunidades de gnomos das rochas",
-      "Religion": "um dos maiores centros de adoração a Moradin, o Forjador de Almas",
-      "Settlement Type": "uma majestosa fortaleza anã e cidade subterrânea",
-      "Trade": "ferro, minérios brutos e armaduras de qualidade magistral"
-    }
-  },
-  {
-    "id": "citadel_felbarr",
-    "name": "Citadel Felbarr",
-    "curiosities": {
-      "Culture": "a posição de um dos principais centros de mineração de ouro do Norte",
-      "Defense": "famosas unidades de infantaria pesada apoiadas por cavaleiros de hipogrifos",
-      "Factions": "os laços históricos com a antiga Aliança dos Lordes",
-      "Geographical Aspects": "montanhas com clima alpino extremo",
-      "Geography": "as extensas fazendas de superfície fortificadas que sustentam a população durante cercos",
-      "Government Type": "a monarquia hereditária da Casa Warcrown",
-      "History": "o período em que foi ocupada por orcs e chamada de Cidadela das Muitas Flechas",
-      "Infrastructure": "os portões maciços conhecidos como Martelo e Torquês que guardam a entrada principal",
-      "Magic": "os glifos de guarda ocultos que protegem os depósitos de ouro e metais preciosos",
-      "Politics": "a política focada na restauração total da glória anã após séculos de ocupação orc",
-      "Races": "anões do escudo e alguns gnomos e humanos",
-      "Religion": "o Salão dos Reis, o coração espiritual decorado com estátuas dos antigos monarcas",
-      "Settlement Type": "uma fortaleza subterrânea anã estrategicamente localizada",
-      "Trade": "minério de ferro e metais trabalhados"
-    }
-  },
-  {
-    "id": "daggerford",
-    "name": "Daggerford",
-    "curiosities": {
-      "Culture": "o sistema tradicional de guildas de artesãos que regula a subsistência da comunidade",
-      "Defense": "uma milícia onde os cidadãos treinam periodicamente para defender as muralhas",
-      "Factions": "a participação ativa da vila na Aliança dos Lordes",
-      "Geographical Aspects": "as planícies férteis situadas às margens do Rio Delimbiyr",
-      "Geography": "o papel da cidade como parada vital na Estrada do Trade entre Waterdeep e Baldur's Gate",
-      "Government Type": "um ducado regido por uma monarquia local",
-      "History": "a lenda de um garoto que defendeu o vau do rio contra homens-lagarto usando apenas uma adaga",
-      "Infrastructure": "os rumores de que o Castelo do Duque foi erguido sobre ruínas de um antigo império élfico",
-      "Magic": "a posse de uma adaga mágica histórica que é o símbolo de legitimidade da linhagem ducal",
-      "Politics": "a forte independência política mantida pela cidade em relação às metrópoles vizinhas",
-      "Races": "uma comunidade diversa de humanos, halflings e gnomos",
-      "Religion": "a diversidade de deuses cultuados, como Chauntea, Lathander, Tempus, Tymora e Beshaba",
-      "Settlement Type": "uma vila fortificada de importância estratégica",
-      "Trade": "gado, couro e produtos agrícolas"
-    }
-  },
-  {
-    "id": "elturel",
-    "name": "Elturel",
-    "curiosities": {
-      "Culture": "o rigoroso juramento de lealdade feito pelos Cavaleiros do Inferno",
-      "Defense": "o Olhar do Companheiro, o segundo sol que paira sobre a cidade e bane os mortos-vivos",
-      "Factions": "a Ordem do Companheiro e os defensores jurados de Elturgard",
-      "Geographical Aspects": "as colinas rochosas que se erguem sobre as margens do Rio Chionthar",
-      "Geography": "a localização elevada no topo de um penhasco de pedra que domina a paisagem fluvial",
-      "Government Type": "uma teocracia rígida liderada pelo Grão-Observador",
-      "History": "o surgimento milagroso de uma segunda esfera solar para salvar a cidade de uma praga de vampiros",
-      "Infrastructure": "o High Hall, um palácio fortificado e templo que serve como o coração administrativo",
-      "Magic": "a luz eterna e divina que emana do Companheiro durante o dia e a noite",
-      "Politics": "o Código de Elturel que impõe leis morais e civis estritas a todos os residentes",
-      "Races": "uma população majoritariamente humana com minorias de anões e elfos solares",
-      "Religion": "a adoração fervorosa a Torm, Helm e Lathander em seus grandes templos de pedra",
-      "Settlement Type": "uma cidade sagrada que serve como capital de Elturgard",
-      "Trade": "o gado, cavalos e produtos agrícolas produzidos no Vale"
-    }
-  },
-  {
-    "id": "everlund",
-    "name": "Everlund",
-    "curiosities": {
-      "Culture": "uma cidade conhecida pela tolerância racial e hospitalidade com viajantes",
-      "Defense": "uma cidade protegida pelo Exército do Vale com muralhas duplas com fossos",
-      "Factions": "a base de operações dos Harpistas no Norte, sediados na Moongleam Tower",
-      "Geographical Aspects": "as planícies férteis e florestas temperadas às margens do Rio Rauvin",
-      "Geography": "a proximidade com as charnecas perigosas de Evermoors",
-      "Government Type": "um Conselho de Anciãos composto por líderes de guildas e figuras influentes",
-      "History": "a fundação da cidade que começou como um pequeno posto avançado de caçadores e madeireiros e se tornou uma das mais importantes cidades comerciais da região",
-      "Infrastructure": "os grandes celeiros públicos projetados para estocar comida para invernos rigorosos",
-      "Magic": "a Moongleam Tower que emite uma luz mágica suave que guia viajantes à noite",
-      "Politics": "a diplomacia ativa com os elfos de High Forest",
-      "Races": "uma população majoritariamente humana com presença significativa de elfos e meio-elfos vindos de florestas próximas",
-      "Religion": "os templos dedicados a Corellon Larethian, Shiallia e Mielikki",
-      "Settlement Type": "uma grande cidade mercantil fortificada",
-      "Trade": "grãos e produtos agrícolas"
-    }
-  },
-  {
-    "id": "gauntlgrym",
-    "name": "Gauntlgrym",
-    "curiosities": {
-      "Culture": "uma sociedade militarizada e focada no resgate da tradição anã",
-      "Defense": "as defesas naturais baseadas no controle de fluxos de lava contra invasores",
-      "Factions": "a aliança com o Enclave Esmeralda para monitorar a atividade do Monte Hotenow",
-      "Geographical Aspects": "as profundezas abaixo das montanhas próximas ao Monte Hotenow",
-      "Geography": "uma conexão entre o Plano Material e o Plano Elemental do Fogo",
-      "Government Type": "uma monarquia liderada pelo Rei com o conselho de clãs anões que o assessora",
-      "History": "uma fortaleza perdida por séculos e considerada um mito até ser redescoberta, ocupada por drow, orcs e demônios em diferentes períodos de sua queda",
-      "Infrastructure": "os canais de magma que fornecem luz e calor constante para a cidade",
-      "Magic": "a Grande Forja que utiliza o poder de um Primordial para imbuir itens com magia potente",
-      "Politics": "o foco na reconstrução e defesa contra incursões do Subterrâneo",
-      "Races": "uma comunidade majoritariamente de anões do escudo com criaturas elementais capturadas que auxiliam nas forjas",
-      "Religion": "um altar comum a todos os deuses do Panteão Anão",
-      "Settlement Type": "a lendária capital subterrânea do império anão de Delzoun, esculpida inteiramente na rocha",
-      "Trade": "armas e armaduras de aço anão e joias raras e cristais extraídos das profundezas"
-    }
-  },
-  {
-    "id": "goldenfields",
-    "name": "Goldenfields",
-    "curiosities": {
-      "Culture": "a comunitária focada no trabalho agrícola e na vida simples com grandes festivais de colheita",
-      "Defense": "um treant ancestral chamdo Lifferlas que guarda plantações para o Enclave Esmeralda",
-      "Factions": "um centro vital de recursos para o Enclave Esmeralda",
-      "Geographical Aspects": "o fértil Vale de Dessarin",
-      "Geography": "as vastas planícies às margens do Rio Dessarin cobertas por fazendas verdejantes",
-      "Government Type": "uma teocracia liderada pelo Abade de Chauntea",
-      "History": "a fundação pelo arquimago Tolgar Anuvien, que utilizou magia para fertilizar todo o solo",
-      "Infrastructure": "a muralha de pedra de 20 pés de altura que cerca os 30 milhas quadradas do complexo",
-      "Magic": "o solo permanentemente abençoado para produzir colheitas três vezes maiores que o normal",
-      "Politics": "as leis baseadas estritamente nos dogmas de Chauntea",
-      "Races": "uma população humana convivendo com halflings e criaturas despertas",
-      "Religion": "um templo vivo dedicado a Chauntea, a Grande Mãe",
-      "Settlement Type": "uma imensa abadia fortificada e complexo agrícola",
-      "Trade": "a vasta produção agrícola de um vilarejo ser capaz de sustentar várias cidades vizinhas durante crises"
-    }
-  },
-  {
-    "id": "iriaebor",
-    "name": "Iriaebor",
-    "curiosities": {
-      "Culture": "a arquitetura de prédios extremamente altos conectados por pontes suspensas de madeira e corda",
-      "Defense": "os Cavaleiros de Iriaebor que patrulham o cume e as trilhas de acesso",
-      "Factions": "os membros da Aliança dos Lordes que garantem a segurança das rotas de comércio",
-      "Geographical Aspects": "o vale do rio Chionthar",
-      "Geography": "a névoa densa que cobre a base do cume ao amanhecer, deixando apenas as torres visíveis",
-      "Government Type": "um conselho de mercadores presidido por um lorde eleito para mandatos curtos",
-      "History": "a necessidade de expansão vertical devido à limitação de espaço físico no topo da rocha",
-      "Infrastructure": "as torres de pedra que desafiam a gravidade e as escadarias externas esculpidas no penhasco",
-      "Magic": "o uso de feitiçaria de reforço estrutural para manter as torres mais altas em pé",
-      "Politics": "a gestão das rotas de comércio vitais entre o Mar das Estrelas Cadentes e a Costa da Espada",
-      "Races": "uma população humana com uma presença menor de outras raças",
-      "Religion": "os templos de Eldath que mantêm jardins suspensos e fontes de água pura no topo das torres",
-      "Settlement Type": "uma cidade vertical construída em um cume rochoso, chamada de a Cidade das Mil Torres",
-      "Trade": "os cavalos de raça e o gerenciamento de caravanas que cruzam as Terras Centrais"
-    }
-  },
-  {
-    "id": "longsaddle",
-    "name": "Longsaddle",
-    "curiosities": {
-      "Culture": "a comunidade conhecida pela presença de magos peculiares e muitas vezes excêntricos e fenômenos mágicos estranhos são considerados rotina",
-      "Defense": "os feitiços complexos que protegem toda a vila e as milícia de cidadãos treinada por magos em táticas de suporte elemental",
-      "Factions": "a aliança estratégica entre a família Harpell e a Aliança dos Lordes",
-      "Geographical Aspects": "as planícies abertas e gramadas do Vale de Dessarin",
-      "Geography": "a localização estratégica na Trilha Longa para o reabastecimento de caravanas",
-      "Government Type": "uma magocracia informal exercida pela família Harpell",
-      "History": "a ligação do comércio de cavalos de raça com estranhos experimentos mágicos",
-      "Infrastructure": "a Mansão de Hera, uma residência mágica com torres flutuantes e arquitetura mutante",
-      "Magic": "o excesso de magia residual que faz animais de fazenda brilharem no escuro",
-      "Politics": "a excentricidade dos magos Harpell e seus experimentos que alteram a fauna local",
-      "Races": "uma população humana com minorias de halflings e elfos",
-      "Religion": "o culto informal a Tymora devido aos riscos dos experimentos mágicos constantes",
-      "Settlement Type": "uma vila peculiar situada em pradarias",
-      "Trade": "gado de alta linhagem e componentes mágicos"
-    }
-  },
-  {
-    "id": "loudwater",
-    "name": "Loudwater",
-    "curiosities": {
-      "Culture": "a preservação da beleza natural onde as casas são construídas entre árvores centenárias",
-      "Defense": "guardas que utilizam táticas de emboscada e arquearia nas florestas próximas",
-      "Factions": "o papel da cidade como refúgio seguro para membros do Enclave Esmeralda",
-      "Geographical Aspects": "o vale fértil banhado pelas águas do Rio Delimbiyr",
-      "Geography": "o terreno suave e arborizado que esconde a cidade de olhares distantes",
-      "Government Type": "uma Senhora da Vila que governa com sabedoria e apoio popular",
-      "History": "o legado dos antigos reinos élficos e anões que outrora floresceram no vale",
-      "Infrastructure": "a Ponte do Peixe Voador, uma construção antiga e imponente que atravessa o rio, construída por anões como presente para seus amigos elfos",
-      "Magic": "o uso de magia da natureza para manter a saúde da fauna e flora locais",
-      "Politics": "os esforços diplomáticos para equilibrar o desenvolvimento urbano e a preservação florestal",
-      "Races": "uma mistura harmoniosa de humanos, meio-elfos e elfos",
-      "Religion": "templos abertos à floresta dedicados a Mielikki e Silvanus",
-      "Settlement Type": "uma cidade pitoresca com forte influência cultural élfica",
-      "Trade": "vinhos finos, madeira esculpida e instrumentos musicais de qualidade"
-    }
-  },
-  {
-    "id": "luskan",
-    "name": "Luskan",
-    "curiosities": {
-      "Culture": "a cidade ter a reputação de ser um porto seguro para corsários e foras da lei",
-      "Defense": "uma frota naval composta por magos, piratas, piratas magos e magos piratas",
-      "Factions": "a influência política dos Navios Rethnor e da Irmandade Arcana",
-      "Geographical Aspects": "a foz do Rio Mirar sob suas águas gélidas",
-      "Geography": "a divisão da cidade pelo Rio Mirar, conectada por três pontes estratégicas",
-      "Government Type": "uma oligarquia controlada pelos Altos Capitães e pela Irmandade Arcana",
-      "History": "as ruínas da antiga cidade mágica de Illusk",
-      "Infrastructure": "o sistema de docas fortificado capaz de ocultar frotas inteiras",
-      "Magic": "a Torre de Hóstia Arcana, uma estrutura mágica que se assemelha a uma gigantesca árvore de pedra",
-      "Politics": "a divisão de poder entre as cinco facções de capitães conhecidas como Navios",
-      "Races": "uma mistura de humanos, meio-orcs e tripulações piratas",
-      "Religion": "a presença de cultos dedicados a Auril, a Donzela do Gelo, devido ao frio extremo e santuários a Umberlee onde piratas fazem oferendas por viagens seguras",
-      "Settlement Type": "um grande porto conhecido como a Cidade das Velas",
-      "Trade": "mercadoria ilegal transportada por piratas"
-    }
-  },
-  {
-    "id": "menzoberranzan",
-    "name": "Menzoberranzan",
-    "curiosities": {
-      "Culture": "uma sociedade implacável baseada na lei da sobrevivência do mais forte e na crueldade",
-      "Defense": "exércitos de guerreiros drow e a temível magia das altas sacerdotisas",
-      "Factions": "as lutas constantes por poder entre as Casas Nobres, como a poderosa Casa Baenre",
-      "Geographical Aspects": "uma caverna colossal iluminada por fungos luminescentes no Subterrâneo",
-      "Geography": "a localização profunda no Subterrâneo Superior, longe da luz do sol",
-      "Government Type": "uma teocracia matriarcal governada pelo Conselho Regente das Oito Casas Maiores",
-      "History": "a fundação da cidade pela Matrona Menzoberra após sua fuga de cidades rivais",
-      "Infrastructure": "o Narbondel, um pilar de pedra gigantesco que serve como relógio mágico da cidade",
-      "Magic": "a densa teia de energia arcana que permite a levitação e o uso de glifos de escuridão",
-      "Politics": "o sistema político onde o assassinato silencioso é uma forma legítima de ascensão social",
-      "Races": "uma população de elfos negros e uma imensa quantidade de escravos de várias raças",
-      "Religion": "o domínio absoluto e fanático do culto à Rainha Aranha, Lolth",
-      "Settlement Type": "uma metrópole subterrânea drow e cidade das intrigas",
-      "Trade": "escravos, venenos exóticos e itens mágicos forjados em adamante"
-    }
-  },
-  {
-    "id": "mirabar",
-    "name": "Mirabar",
-    "curiosities": {
-      "Culture": "a cooperação técnica e comercial sem precedentes entre humanos na superfície e anões no subterrâneo",
-      "Defense": "o Machado de Mirabar, uma força militar altamente equipada com armas e armaduras magistrais",
-      "Factions": "a participação estratégica da cidade na Aliança dos Lordes",
-      "Geographical Aspects": "as terras áridas e rochosas ao norte do Rio Mirar",
-      "Geography": "uma cidade dividida entre os níveis de superfície para moradia e os níveis profundos para mineração",
-      "Government Type": "um sistema de poder compartilhado entre o Cetro humano e o Conselho de Pedras anão",
-      "History": "a fundação da cidade sobre as ruínas de Gharragheer, um antigo reduto anão de eras passadas",
-      "Infrastructure": "um sistema complexo de elevadores e máquinas movidas pela força das águas do rio",
-      "Magic": "o uso de pedras rúnicas mágicas para estabilizar túneis e proteger armazéns",
-      "Politics": "a tensão constante entre a produção mineira anã e as rotas de comércio humanas",
-      "Races": "uma sociedade integrada de humanos e anões do escudo",
-      "Religion": "a forte devoção a Gond e Moradin, celebrando o trabalho manual e a engenharia",
-      "Settlement Type": "uma metrópole industrial e cidade-estado fortificada",
-      "Trade": "o maior centro de exportação de metais brutos e pedras preciosas do Norte"
-    }
-  },
-  {
-    "id": "mithral_hall",
-    "name": "Mithral Hall",
-    "curiosities": {
-      "Culture": "o imenso orgulho dos clãs na manutenção das tradições de mineração e forja de seus ancestrais",
-      "Defense": "o Batalhão dos Estripadores, uma unidade de elite de anões guerreiros conhecidos por sua ferocidade",
-      "Factions": "os fortes laços de amizade com os Companheiros do Salão e a Aliança dos Lordes",
-      "Geographical Aspects": "as profundezas geladas das Montanhas do Cume do Mundo",
-      "Geography": "uma vasta rede de salões e túneis que se estende por quilômetros sob a cordilheira",
-      "Government Type": "uma monarquia hereditária liderada pelo Rei da linhagem Battlehammer",
-      "History": "a épica reconquista da fortaleza que estava sob o domínio do dragão das sombras Shimmergloom",
-      "Infrastructure": "as pontes de pedra vertiginosas que cruzam abismos aparentemente sem fundo",
-      "Magic": "a utilização de chamas elementais para forjar itens mágicos de mithral puro",
-      "Politics": "a unificação dos clãs anões do Norte sob um único estandarte de guerra",
-      "Races": "uma população de anões do escudo com pequenas comunidades de gnomos das profundezas e humanos",
-      "Religion": "o Salão de Dumathoin, um templo magnífico dedicado ao Guardião dos Segredos Sob a Montanha",
-      "Settlement Type": "uma lendária fortaleza anã esculpida no coração das montanhas",
-      "Trade": "o valioso mithral, prata e ferro de alta qualidade"
-    }
-  },
-  {
-    "id": "neverwinter",
-    "name": "Neverwinter",
-    "curiosities": {
-      "Culture": "uma cidade que ganhou o título de Cidade das Mãos Hábeis pela alta qualidade de seus artesãos",
-      "Defense": "as redes de vigilância compostas por cidadãos leais ao Lorde Protetor",
-      "Factions": "o papel central da cidade dentro da Aliança dos Lordes",
-      "Geographical Aspects": "o litoral perto do Monte Hotenow",
-      "Geography": "as águas do porto sempre líquidas devido ao calor vindo do Monte Hotenow",
-      "Government Type": "um protetorado militar liderado pelo Lorde Protetor",
-      "History": "a erupção catastrófica de 1451 CV que quase destruiu a cidade e abriu um imenso abismo através dela",
-      "Infrastructure": "as três pontes famosas — o Golfinho, o Wyvern Alado e o Dragão Adormecido",
-      "Magic": "antiga sede da Ordem de Magos das Capas de Muitas Estrelas",
-      "Politics": "os esforços de Dagult Neverember para reconstruir a infraestrutura após a erupção de um vulcã nas proximidades",
-      "Races": "uma sociedade cosmopolita de humanos, elfos e anões",
-      "Religion": "o Templo do Conhecimento, dedicado a Oghma, que serve como biblioteca pública",
-      "Settlement Type": "uma metrópole resiliente à beira-mar",
-      "Trade": "joias finas, vidro soprado e constructos mecânicos"
-    }
-  },
-  {
-    "id": "newfort",
-    "name": "Newfort",
-    "curiosities": {
-      "Culture": "a vida rústica e pragmática de pioneiros que enfrentam os perigos da natureza",
-      "Defense": "uma paliçada de troncos de madeira e batedores que vigiam os arredores",
-      "Factions": "agentes da Ordem da Manopla que buscam estabelecer a lei em terras indomadas",
-      "Geographical Aspects": "uma clareira isolada cercada por florestas densas e selvagens",
-      "Geography": "o isolamento geográfico de uma vila situada longe das principais rotas comerciais",
-      "Government Type": "um conselho informal de anciãos que toma as decisões para a comunidade",
-      "History": "a fundação recente por famílias que fugiam da superlotação das grandes cidades",
-      "Infrastructure": "construções simples de toras de madeira e um armazém fortificado para suprimentos",
-      "Magic": "o uso ocasional de pergaminhos de proteção contra feras selvagens",
-      "Politics": "a disputa interna pela distribuição de terras férteis recém-descobertas",
-      "Races": "colonos humanos, meio-orcs e alguns anões em busca de novas terras",
-      "Religion": "santuários simples dedicados a Silvanus e Chauntea para abençoar a terra",
-      "Settlement Type": "um pequeno assentamento de fronteira e posto avançado",
-      "Trade": "madeira bruta, peles de animais e minerais extraídos localmente"
-    }
-  },
-  {
-    "id": "phandalin",
-    "name": "Phandalin",
-    "curiosities": {
-      "Culture": "a descoberta da Forja de Magic na Caverna do Eco da Onda",
-      "Defense": "uma vila vulnerável sem muralhas defensivas",
-      "Factions": "a atuação discreta dos Harpistas e da Ordem da Manopla na região",
-      "Geographical Aspects": "o sopé das Montanhas da Espada, rico em depósitos minerais",
-      "Geography": "uma vila próxima à extremidade sul da Floresta de Neverwinter",
-      "Government Type": "um conselho liderado por um Mestre da Cidade eleito anualmente",
-      "History": "a devastação da vila original por clãs orcs e sua recente recolonização",
-      "Infrastructure": "as ruínas da Mansão Tresendar que escondem complexos subterrâneos",
-      "Magic": "a Caverna do Eco da Onda, um local de poder mágico ancestral",
-      "Politics": "a disputa de influência comercial entre os Zhentarim e a Aliança dos Lordes",
-      "Races": "mineradores humanos e anões com minorias de gnomos",
-      "Religion": "o Santuário da Sorte, um pequeno templo de pedra dedicado à deusa Tymora",
-      "Settlement Type": "uma vila de fronteira em rápido crescimento",
-      "Trade": "ouro, prata e metais preciosos"
-    }
-  },
-  {
-    "id": "porto_nyanzaru",
-    "name": "Porto Nyanzaru",
-    "curiosities": {
-      "Culture": "as famosas e perigosas corridas de dinossauros realizadas nas ruas da cidade",
-      "Defense": "muralhas de pedra maciça e guardas armados com tridentes e redes",
-      "Factions": "a influência dos príncipes que ditam as regras de todo o comércio chultano",
-      "Geographical Aspects": "as praias escaldantes e a selva densa da Península de Chult",
-      "Geography": "a baía estratégica que serve como único porto seguro na costa norte de Chult",
-      "Government Type": "um conselho de sete Príncipes Mercantes que controlam os monopólios comerciais",
-      "History": "a conquista da independência após anos de exploração por nações estrangeiras",
-      "Infrastructure": "o Grande Bazar, um mercado colorido e caótico onde tudo pode ser encontrado",
-      "Magic": "o uso de magias de proteção contra doenças tropicais e o auxílio de dinossauros despertos",
-      "Politics": "as alianças voláteis entre os príncipes para manter o controle absoluto da região",
-      "Races": "humanos chultanos, tabaxis e minorias de anões albinos",
-      "Religion": "templos dedicados a Gond, Savras e a antiga reverência ao guardião Ubtao",
-      "Settlement Type": "uma metrópole tropical vibrante e portão de entrada para a selva",
-      "Trade": "gemas preciosas, ervas raras, especiarias e animais exóticos"
-    }
-  },
-  {
-    "id": "scornubel",
-    "name": "Scornubel",
-    "curiosities": {
-      "Culture": "a agitada vida noturna e as feiras de trocas que nunca param de funcionar",
-      "Defense": "os grupos de mercenários contratados pelos consórcios para garantir a paz nas ruas",
-      "Factions": "a presença discreta mas poderosa de agentes dos Zhentarim nas rotas mercantes",
-      "Geographical Aspects": "a planície estratégica onde a Estrada do Trade se encontra com o Rio Chionthar",
-      "Geography": "os vastos e lamacentos pátios de carruagens que ocupam o centro da cidade",
-      "Government Type": "um conselho informal composto por mercadores influentes e líderes de caravanas",
-      "History": "a fundação da vila como um ponto de parada seguro para viajantes que cruzam o Vale",
-      "Infrastructure": "as inúmeras oficinas especializadas em reparos de rodas, eixos e arreios",
-      "Magic": "o uso de magias de adivinhação simples para prever as condições das estradas",
-      "Politics": "a liberdade comercial quase absoluta com impostos mínimos para atrair novos negócios",
-      "Races": "uma mistura diversa de humanos, halflings e meio-orcs atraídos pelo comércio",
-      "Religion": "os templos e santuários dedicados a Waukeen e Tymora para abençoar o lucro",
-      "Settlement Type": "uma movimentada e cosmopolita metrópole comercial conhecida como a Cidade das Carruagens",
-      "Trade": "o aluguel de carruagens, cavalos e o fornecimento de suprimentos para viagens longas"
-    }
-  },
-  {
-    "id": "silverymoon",
-    "name": "Silverymoon",
-    "curiosities": {
-      "Culture": "o Conclave, uma instituição que une as maiores escolas de magia e música do Norte",
-      "Defense": "uma guarda liderada por magos dentro de um Mythal, um campo de magia antiga que protege a cidade contra fogo e necromancia",
-      "Factions": "o papel central da cidade dentro da Aliança dos Lordes",
-      "Geographical Aspects": "as florestas prateadas que cercam a região de Luruar",
-      "Geography": "a divisão entre a Cidade Velha e a Cidade Nova pelas águas do Rio Rauvin",
-      "Government Type": "uma magocracia erudita liderada por um Alto Mago eleito",
-      "History": "uma cidade fundada como um refúgio onde elfos e humanos podiam viver em paz e governada por séculos pela lendária Alta Maga Alustriel Silverhand",
-      "Infrastructure": "a Ponte da Lua, uma estrutura de força invisível que brilha sob o luar",
-      "Magic": "o Mythal, um campo de magia que impede o uso de magias de fogo e necromancia por inimigos",
-      "Politics": "a liderança histórica da cidade na Liga das Fronteiras Prateadas",
-      "Races": "uma integração entre humanos e diversas linhagens de elfos",
-      "Religion": "uma cidade consagrada ao aprendizado, sendo sagrada para seguidores de Mystra e Oghma",
-      "Settlement Type": "uma metrópole dedicada ao conhecimento e às artes",
-      "Trade": "itens mágicos e instrumentos musicais"
-    }
-  },
-  {
-    "id": "sundabar",
-    "name": "Sundabar",
-    "curiosities": {
-      "Culture": "a resiliência de um povo que sobreviveu a inúmeros cercos de hordas orcs",
-      "Defense": "a Cidadela Eterna, uma fortificação interna considerada praticamente inexpugnável",
-      "Factions": "a participação histórica como pilar central da Liga das Fronteiras Prateadas",
-      "Geographical Aspects": "as colinas íngremes próximas à foz do Rio Rauvin",
-      "Geography": "um sistema de muralhas concêntricas que protege tanto a superfície quanto os níveis inferiores",
-      "Government Type": "um Mestre de Sundabar que governa com autoridade marcial",
-      "History": "a reconstrução da cidade após a devastação sofrida durante a Guerra das Muitas Flechas",
-      "Infrastructure": "as forjas centrais alimentadas por uma fonte de fogo eterno nas profundezas",
-      "Magic": "as magias de proteção rúnica que cobrem os principais portões da fortaleza",
-      "Politics": "a manutenção de uma diplomacia rígida para garantir a segurança das Marcas Argênteas",
-      "Races": "uma população de humanos e anões do escudo unidos por séculos de aliança",
-      "Religion": "os templos dedicados a Helm e Tyr, focados na vigilância e na justiça",
-      "Settlement Type": "uma fortaleza militar massiva e antiga metrópole",
-      "Trade": "armas de aço temperado e o refino de minérios raros"
-    }
-  },
-  {
-    "id": "triboar",
-    "name": "Triboar",
-    "curiosities": {
-      "Culture": "o espírito hospitaleiro de uma cidade que recebe viajantes de todos os cantos de Faerûn",
-      "Defense": "a Milícia de Triboar, composta por cidadãos que patrulham as estradas vizinhas",
-      "Factions": "o papel da vila como ponto de encontro discreto para os Harpistas",
-      "Geographical Aspects": "as planícies abertas do Vale de Dessarin no cruzamento de trilhas vitais",
-      "Geography": "a localização estratégica no encontro entre a Trilha Longa e o Caminho de Evermoor",
-      "Government Type": "um cargo de Protetor da Vila que é eleito anualmente pelos cidadãos",
-      "History": "a lenda de um herói que derrotou três javalis gigantes em um único dia para proteger os colonos",
-      "Infrastructure": "os extensos estábulos e campos de treinamento para gado e cavalos de guerra",
-      "Magic": "o uso de amuletos de viagem e itens de conservação de alimentos por mercadores locais",
-      "Politics": "o foco na defesa contra incursões de gigantes vindos das montanhas próximas",
-      "Races": "uma população majoritariamente humana com minorias de halflings, anões e elfos",
-      "Religion": "o santuário dedicado a Gwaeron Windstrom, o padroeiro dos rastreadores e guardas",
-      "Settlement Type": "uma vila de fronteira que serve como centro de caravanas",
-      "Trade": "o comércio de cavalos de montaria e o reabastecimento de caravanas mercantes"
-    }
-  },
-  {
-    "id": "waterdeep",
-    "name": "Waterdeep",
-    "curiosities": {
-      "Culture": "o rígido controle exercido pelas guildas profissionais sobre todas as atividades comerciais",
-      "Defense": "uma guarda que conta com as Estátuas Ambulantes, colossos de pedra gigantescos prontos para defender a cidade",
-      "Factions": "o papel central da cidade dentro da Aliança dos Lordes",
-      "Geographical Aspects": "a baía estratégica banhada pelas águas do Mar das Espadas",
-      "Geography": "a entrada para Montanha Profunda sob a taverna Portal Bocejante",
-      "Government Type": "uma oligarquia secreta liderada pelos Lordes Mascarados",
-      "History": "uma cidade construída sobre as ruínas do antigo reino élfico de Aelinthaldaar",
-      "Infrastructure": "um sistema de esgotos massivo e razoavelmente bem mapeado, habitado por diversas subculturas",
-      "Magic": "o Campo de Proteção contra Dragões que impede a entrada dessas criaturas na cidade",
-      "Politics": "o estrito Código Legal que impõe ordem e punições severas na metrópole",
-      "Races": "uma população imensa e cosmopolita de todas as raças de Faerûn",
-      "Religion": "a Casa das Mãos Inspiradas, um templo-oficina monumental dedicado a Gond",
-      "Settlement Type": "a maior metrópole da Costa da Espada",
-      "Trade": "um pouco de tudo"
-    }
-  },
-  {
-    "id": "yartar",
-    "name": "Yartar",
-    "curiosities": {
-      "Culture": "as festividades vibrantes do Festival de Escudos realizadas nas águas do rio",
-      "Defense": "as patrulhas fluviais da Guarda de Yartar que protegem o porto contra piratas",
-      "Factions": "as atividades ocultas da Mão de Ferro e a influência comercial dos Zhentarim",
-      "Geographical Aspects": "as margens do Rio Dessarin em um ponto de bifurcação navegável",
-      "Geography": "o papel da cidade como porto de entrada para o comércio que sobe o Rio Dessarin",
-      "Government Type": "a liderança absoluta exercida pelo Barão das Águas",
-      "History": "os conflitos históricos entre guildas rivais de ladrões que lutam pelo controle das docas",
-      "Infrastructure": "o Palácio do Barão, uma estrutura imponente que parece flutuar sobre as águas",
-      "Magic": "os engenhosos aparatos mecânicos e mágicos utilizados para a navegação fluvial",
-      "Politics": "a disputa pelo monopólio das rotas de transporte entre o Norte e as terras do sul",
-      "Races": "uma comunidade cosmopolita de humanos, gnomos e halflings",
-      "Religion": "a popularidade de Tymora, a deusa da sorte, entre os mercadores e apostadores locais",
-      "Settlement Type": "uma cidade ribeirinha fortificada e ponto de comércio fluvial",
-      "Trade": "barcos de transporte, peixes frescos e o mercado negro local"
-    }
-  }
-];
-
-const CRIMINALS = [
-  {id:'anniken_zonledre', name:'Anniken Zonledre', gender:'F', hair:'loiro', feature:'uma tatuagem', hobby:'cartas', vehicle:'em uma carruagem', cuisine:'frutos do mar'},
-  {id:'chuck_brinn', name:'Chuck Brinn', gender:'M', hair:'preto', feature:'bigode', hobby:'dados', vehicle:'dirigindo uma máquina infernal', cuisine:'comida élfica'},
-  {id:'coral_meery', name:'Coral Meery', gender:'F', hair:'castanho', feature:'belas joias', hobby:'dados', vehicle:'em uma carruagem', cuisine:'comida apimentada'},
-  {id:'deaf_tidbes', name:'Deaf Tidbes', gender:'M', hair:'preto', feature:'um alfinete de gravata', hobby:'xadrez', vehicle:'em uma carruagem', cuisine:'comida élfica'},
-  {id:'garlon_scryat', name:'Garlon Scryat', gender:'M', hair:'ruivo', feature:'um anel impressionante', hobby:'xadrez', vehicle:'em uma carruagem', cuisine:'comida tiferina'},
-  {id:'hovio_richithor', name:'Hovio Richithor', gender:'M', hair:'loiro', feature:'uma tatuagem', hobby:'xadrez', vehicle:'em uma carruagem', cuisine:'frutos do mar'},
-  {id:'kelden_blur', name:'Kelden Blur', gender:'M', hair:'ruivo', feature:'uma tatuagem', hobby:'dados', vehicle:'em uma carruagem', cuisine:'frutos do mar'},
-  {id:'marcin_gesedano', name:'Marcin Gesedano', gender:'F', hair:'castanho', feature:'belas joias', hobby:'cartas', vehicle:'em uma carruagem', cuisine:'comida tiferina'},
-  {id:'romani_brookebeth_kadio', name:'Romani Brookebeth Kadio', gender:'F', hair:'castanho', feature:'uma tatuagem', hobby:'dados', vehicle:'dirigindo uma máquina infernal', cuisine:'frutos do mar'},
-  {id:'taylana_gaddahyal', name:'Taylana Gaddahyal', gender:'F', hair:'ruivo', feature:'um anel impressionante', hobby:'cartas', vehicle:'dirigindo uma biga', cuisine:'comida tiferina'}
-];
-
-const VENUES = [
-  {id:'biblioteca', name:'Biblioteca', icon:'📚', topics:['Politics','Geography','History','Magic','Infrastructure'], role: 'Bibliotecário'},
-  {id:'cartografo', name:'Cartógrafo', icon:'📜', topics:['Geographical Aspects','Settlement Type'], role: 'Guia Local'},
-  {id:'centro_cultural', name:'Centro Cultural', icon:'🎭', topics:['Culture','History'], role: 'Guia Local'},
-  {id:'estalagem', name:'Estalagem', icon:'🛌', topics:['Politics'], role: 'Estalajadeiro'},
-  {id:'estaleiro', name:'Estaleiro', icon:'🏗️', topics:['Trade'], role: 'Mestre do Cais'},
-  {id:'museu', name:'Museu', icon:'🏛️', topics:['History','Magic','Geography'], role: 'Curador'},
-  {id:'oficina_gemas', name:'Oficina de Gemas', icon:'💎', topics:['Settlement Type'], role: 'Mestre Joalheiro'},
-  {id:'patio_carrocas', name:'Pátio de Carroças', icon:'🐪', topics:['History','Geography'], role: 'Mestre de Carga'},
-  {id:'patio_treinamento', name:'Pátio de Treinamento', icon:'⚔️', topics:['Defense','Races'], role: 'Mestre d\'Armas'},
-  {id:'santuario', name:'Santuário dos Deuses Antigos', icon:'🕯️', topics:['Religion'], role: 'Sacerdote'},
-  {id:'taverna', name:'Taverna', icon:'🍺', topics:['Politics'], role: 'Taverneiro'},
-  {id:'torre_alta_magia', name:'Torre de Alta Magia', icon:'🔮', topics:['Magic','History'], role: 'Arcanista'},
-];
+// Catálogos simplificados apenas para exibição
+const CITIES_CATALOG = {"berdusk": "Berdusk", "bryn_shander": "Bryn Shander", "citadel_adbar": "Citadel Adbar", "citadel_felbarr": "Citadel Felbarr", "daggerford": "Daggerford", "elturel": "Elturel", "everlund": "Everlund", "gauntlgrym": "Gauntlgrym", "goldenfields": "Goldenfields", "iriaebor": "Iriaebor", "longsaddle": "Longsaddle", "loudwater": "Loudwater", "luskan": "Luskan", "menzoberranzan": "Menzoberranzan", "mirabar": "Mirabar", "mithral_hall": "Mithral Hall", "neverwinter": "Neverwinter", "newfort": "Newfort", "phandalin": "Phandalin", "porto_nyanzaru": "Porto Nyanzaru", "scornubel": "Scornubel", "silverymoon": "Silverymoon", "sundabar": "Sundabar", "triboar": "Triboar", "waterdeep": "Waterdeep", "yartar": "Yartar"};
+const VENUES_CATALOG = {"biblioteca": {name: "Biblioteca", icon: "📚"}, "cartografo": {name: "Cartógrafo", icon: "📜"}, "centro_cultural": {name: "Centro Cultural", icon: "🎭"}, "estalagem": {name: "Estalagem", icon: "🛌"}, "estaleiro": {name: "Estaleiro", icon: "🏗️"}, "museu": {name: "Museu", icon: "🏛️"}, "oficina_gemas": {name: "Oficina de Gemas", icon: "💎"}, "patio_carrocas": {name: "Pátio de Carroças", icon: "🐪"}, "patio_treinamento": {name: "Pátio de Treinamento", icon: "⚔️"}, "santuario": {name: "Santuário", icon: "🕯️"}, "taverna": {name: "Taverna", icon: "🍺"}, "torre_alta_magia": {name: "Torre de Alta Magia", icon: "🔮"}};
+const CRIMINALS_CATALOG = [{id:'anniken_zonledre', name:'Anniken Zonledre'}, {id:'chuck_brinn', name:'Chuck Brinn'}, {id:'coral_meery', name:'Coral Meery'}, {id:'deaf_tidbes', name:'Deaf Tidbes'}, {id:'garlon_scryat', name:'Garlon Scryat'}, {id:'hovio_richithor', name:'Hovio Richithor'}, {id:'kelden_blur', name:'Kelden Blur'}, {id:'marcin_gesedano', name:'Marcin Gesedano'}, {id:'romani_brookebeth_kadio', name:'Romani Brookebeth Kadio'}, {id:'taylana_gaddahyal', name:'Taylana Gaddahyal'}];
 
 let G = {
-  sessionId: null,
-  currentCityId: '',
-  currentDay: 1, 
-  maxDays: 7, 
-  currentMinutes: 8*60,
-  venuesInCity: [],
-  visitedVenues: {}, 
-  warrant: null, 
-  clues: [], 
-  isRequesting: false
+  sessionId: null, currentCityId: '', currentDay: 1, maxDays: 7, currentMinutes: 8*60,
+  venuesInCity: [], visitedVenues: {}, warrant: null, clues: [], history: [], isRequesting: false
 };
 
-function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
 async function startGame() {
-  if (G.isRequesting) return;
-  G.isRequesting = true;
-
+  if (G.isRequesting) return; G.isRequesting = true;
   try {
-    const response = await fetch('https://singular-coil-451923-e9.web.app');
-    const data = await response.json();
-
+    const res = await fetch(URLS.start);
+    const data = await res.json();
     if (data.error) throw new Error(data.error);
 
     G.sessionId = data.sessionId;
     G.currentCityId = data.firstCityId;
     G.venuesInCity = data.venues;
+    G.history = [data.firstCityId];
     
-    G.currentDay = 1; 
-    G.currentMinutes = 8*60;
-    G.visitedVenues = {}; 
-    G.clues = [];
-
     document.getElementById('setup-screen').classList.remove('active');
     document.getElementById('game-screen').classList.add('active');
-    
     renderGameScreen();
-  } catch (error) {
-    console.error("Erro ao iniciar jogo:", error);
-    alert("Falha ao conectar com o mestre do jogo em Faerûn.");
-  } finally {
-    G.isRequesting = false;
-  }
+  } catch (e) { alert("Falha ao conectar."); } finally { G.isRequesting = false; }
 }
 
-async function investigateVenue(cityId, venueId) {
-  if (G.isRequesting) return;
-  const key = `${cityId}_${venueId}`;
-  if (G.visitedVenues[key]) return;
+async function investigateVenue(venueId) {
+  if (G.isRequesting) return; 
+  if (!advanceTime(HOURS_COST_INVESTIGATING * 60)) return;
+  G.isRequesting = true;
 
+  try {
+    const res = await fetch(URLS.investigate, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: G.sessionId, venueId: venueId })
+    });
+    const data = await res.json();
+    
+    G.visitedVenues[`${G.currentCityId}_${venueId}`] = data.clue;
+    G.clues.push(`<strong>[Investigação]</strong> ${CITIES_CATALOG[G.currentCityId]}: ${data.clue}`);
+    renderGameScreen();
+  } catch (e) { alert("Erro na investigação."); } finally { G.isRequesting = false; }
+}
+
+async function travelTo(targetCityId) {
+  if (G.isRequesting) return;
+  if (!advanceTime(HOURS_COST_TRAVELLING * 60)) return;
+  G.isRequesting = true;
+
+  try {
+    const res = await fetch(URLS.travel, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: G.sessionId, targetCityId: targetCityId })
+    });
+    const data = await res.json();
+
+    G.history.push(targetCityId);
+    G.currentCityId = data.cityId;
+    G.venuesInCity = data.venues;
+    
+    G.clues.push(`<strong>[Teleporte]</strong> Chegada em ${CITIES_CATALOG[targetCityId]} (Dia ${G.currentDay})`);
+    renderGameScreen();
+    switchTab('investigate', document.getElementById('tab-investigate'));
+  } catch (e) { alert("Erro no teleporte."); } finally { G.isRequesting = false; }
+}
+
+async function issueArrest() {
+  if (!G.warrant || G.isRequesting) return;
   G.isRequesting = true;
   try {
-    if (!advanceTime(HOURS_COST_INVESTIGATING * 60)) return;
-
-    const cityIdx = G.trail.findIndex(c => c.id === cityId);
-    const venue = VENUES.find(v => v.id === venueId);
-    const nextCity = G.trail[cityIdx + 1];
-
-    G.visitedVenues[key] = "<span class='loading-pulse'>Consultando testemunhas...</span>";
-    renderVenues();
-
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    if (cityIdx === G.trail.length - 1) {
-      const attemptsInCity = Object.keys(G.visitedVenues).filter(k => k.startsWith(cityId + "_")).length;
-      
-      let captureProbability = 0.4;
-      if (attemptsInCity === 1) captureProbability = 0.8;
-      if (attemptsInCity === 2) captureProbability = 1.0;
-
-      G.visitedVenues[key] = "O suspeito foi visto por aqui há poucos minutos!"; 
-      
-      if (Math.random() < captureProbability) {
-        foundCriminal(); 
-        return;
-      }
-    } else {
-      if (!G.usedCuriosities[cityId]) G.usedCuriosities[cityId] = [];
-      
-      const eligibleTopics = venue.topics
-        .map(t => ({ topic: t, info: nextCity.curiosities[t] }))
-        .filter(c => c.info && !G.usedCuriosities[cityId].includes(c.info));
-
-      let rawLead;
-      if (eligibleTopics.length > 0) {
-        rawLead = rand(eligibleTopics);
-      } else {
-        const allAvailable = Object.entries(nextCity.curiosities)
-          .filter(([topic, info]) => info !== null && !G.usedCuriosities[cityId].includes(info))
-          .map(([topic, info]) => ({ topic, info }));
-        
-        rawLead = allAvailable.length > 0 ? rand(allAvailable) : { topic: "Geral", info: "Visto na região recentemente." };
-      }
-      
-      G.usedCuriosities[cityId].push(rawLead.info);
-      
-      const addClue = Math.random() < 0.4;
-      const text = generateLocalDialogue(venue, rawLead.info, addClue);
-      G.visitedVenues[key] = text;
-      G.clues.push(`<strong>[${venue.name}]</strong> ${text}`);
-    }
-  } finally {
-    G.isRequesting = false;
-    renderGameScreen();
-  }
-}
-
-function generateLocalDialogue(venue, rawLead, addClue) {
-
-  const genderClue = G.criminal.gender === 'F' ? `A mulher` : `O homem`;
-
-  const criminalDescriptions = [
-    `${genderClue} que você procura esteve aqui e`,
-    `Vi uma pessoa de cabelo ${G.criminal.hair} que`,
-    `Vi alguém com ${G.criminal.feature} que`,
-    `Havia por aqui um viajante que costumava jogar ${G.criminal.hobby} e que`,
-    `Alguém assim chegou ${G.criminal.vehicle} e`,
-    `Uma pessoa assim estava comentando sobre gostar de ${G.criminal.cuisine} e`
-  ];
-
-  const criminalClue = addClue ? rand(criminalDescriptions) + " " : " Um viajante ";
-  const lead = rawLead.charAt(0).toLowerCase() + rawLead.slice(1);
-  
-  const dialogueTemplates = {
-    "biblioteca": [
-      `(O bibliotecário ajeita os óculos) ${criminalClue} requisitou pergaminhos raros que descreviam ${lead}.`,
-      `(O bibliotecário consulta um registro) Tivemos um visitante interessado em histórias sobre ${lead}.`
-    ],
-    "cartografo": [
-      `(O cartógrafo limpa a tinta dos dedos) ${criminalClue} queria um mapa de ${lead}.`,
-      `(O cartógrafo limpa a tinta dos dedos) Um curioso esteve aqui olhando mapas de ${lead}.`
-    ],
-    "centro_cultural": [
-      `(O guia local aponta para um mural) ${criminalClue} passou um longo tempo estudando a representação sobre ${lead}.`,
-      `(O guia local consulta um folheto) Tivemos um visitante procurando por apresentações sobre ${lead}.`
-    ],
-    "estalagem": [
-      `(O estalajadeiro entrega uma chave) ${criminalClue} alugou um quarto, mas passou a noite escrevendo sobre ${lead}.`,
-      `(O estalajadeiro limpa uma caneca) Alguém com essa descrição saiu cedo, resmungando algo sobre ${lead}.`
-    ],
-    "estaleiro": [
-      `(O mestre do cais observa as amarras) ${criminalClue} tentou fretar um barco que carregava alguns contêineres com ${lead}.`,
-      `(O mestre do cais aponta para a água) O sujeito partiu no último barco após fazer perguntas sobre ${lead}.`
-    ],
-    "museu": [
-      `(O curador ajeita uma vitrine) ${criminalClue} demonstrou um interesse acadêmico incomum na exposição sobre ${lead}.`,
-      `(O curador consulta o catálogo) Lembro-me de um visitante que passou horas examinando artefatos sobre ${lead}.`
-    ],
-    "oficina_gemas": [
-      `(O mestre joalheiro analisa uma pedra) ${criminalClue} trouxe uma joia para avaliar, alegando precisar de fundos para viajar para ${lead}.`,
-      `(O mestre joalheiro guarda as ferramentas) Um cliente com essas características esteve aqui perguntando sobre ${lead}.`
-    ],
-    "patio_carrocas": [
-      `(O mestre de carga confere uma lista) ${criminalClue} comprou mantimentos para uma viagem, mencionando algo sobre ${lead}.`,
-      `(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre ${lead}.`
-    ],
-    "patio_treinamento": [
-      `(O mestre d'armas golpeia o boneco) ${criminalClue} observou os treinos e perguntou sobre as táticas de combate de ${lead}.`,
-      `(O mestre d'armas limpa o suor) Alguém perguntou se nossas lâminas seriam eficazes contra ${lead}.`
-    ],
-    "santuario": [
-      `(O sacerdote acende uma vela) ${criminalClue} fez uma oferta aos deuses pedindo proteção e perguntou sobre ${lead}.`,
-      `(O sacerdote fecha o livro de preces) Tivemos um fiel angustiado que buscava orientação divina sobre ${lead}.`
-    ],
-    "taverna": [
-      `(O taverneiro limpa o balcão) ${criminalClue} esteve aqui e não parava de perguntar sobre ${lead}.`,
-      `(O taverneiro aponta para uma mesa vazia) Aquele sujeito de quem você falou? Ele passou a noite pesquisando sobre ${lead}.`
-    ],
-    "torre_alta_magia": [
-      `(O arcanista consulta uma esfera) ${criminalClue} contratou um feitiço para recontar sobre ${lead}.`,
-      `(O arcanista ajusta as vestes) Um visitante assim passou por aqui e quase esqueceu um pergaminho sobre ${lead}.`
-    ],
-    "default": [
-      `(O ${venue.role} olha para você) ${criminalClue} demonstrou um interesse incomum sobre ${lead}.`,
-      `(O ${venue.role} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que ${lead}.`
-    ]
-  };
-
-  const options = dialogueTemplates[venue.id] || dialogueTemplates.default;
-  return rand(options);
-}
-
-function travelTo(cityId) {
-  if (G.isRequesting) return;
-
-  const fromCity = CITIES.find(c => c.id === G.currentCityId);
-  const toCity = CITIES.find(c => c.id === cityId);
-
-  if (!advanceTime(HOURS_COST_TRAVELLING * 60)) return;
-
-  G.clues.push(`<strong>[Teleporte]</strong> De ${fromCity.name} para ${toCity.name} (Dia ${G.currentDay})`);
-
-  if (G.history.length > 1 && cityId === G.history[G.history.length - 2]) {
-    G.history.pop();
-  } else {
-    G.history.push(cityId);
-  }
-
-  G.currentCityId = cityId;
-  G.playerPos = G.trail.findIndex(c => c.id === cityId);
-
-  if (!G.venuesPerCity[cityId]) {
-    G.venuesPerCity[cityId] = [...VENUES].sort(() => Math.random() - 0.5).slice(0, 3);
-  }
-
-  renderGameScreen(); 
-  switchTab('investigate', document.getElementById('tab-investigate'));
+    const res = await fetch(URLS.arrest, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: G.sessionId, warrantId: G.warrant })
+    });
+    const data = await res.json();
+    endGame(data.status);
+  } catch (e) { alert("Erro ao contatar guarnição."); } finally { G.isRequesting = false; }
 }
 
 function renderGameScreen() {
-  const city = G.trail[G.playerPos] || CITIES.find(c => c.id === G.currentCityId);
-  document.getElementById('current-city-name').innerHTML = 
-    `Você está em <span style="color: #fbbf24; font-weight: bold;">${city.name}</span>`;
+  document.getElementById('current-city-name').innerHTML = `Você está em <span style="color: #fbbf24;">${CITIES_CATALOG[G.currentCityId]}</span>`;
   document.getElementById('time-display').textContent = `Dia ${G.currentDay} - ${Math.floor(G.currentMinutes/60)}:00`;
   document.getElementById('time-fill').style.width = `${(1 - (G.currentDay/G.maxDays)) * 100}%`;
-  renderVenues(); renderTravel();
-  if (G.criminal) {
-    document.getElementById('dm-criminal').textContent = G.criminal.name;
-    document.getElementById('dm-trail').textContent = G.trail.map(c => c.name).join(' → ');
-    document.getElementById('dm-next').textContent = G.trail[G.playerPos + 1]?.name || "Final";
-    document.getElementById('dm-final').textContent = G.trail[G.trail.length - 1].name;
-  }
-}
-
-function renderVenues() {
-  const id = G.currentCityId;
-  const list = document.getElementById('venues-list');
-  list.innerHTML = (G.venuesPerCity[id] || []).map(v => {
-    const visited = G.visitedVenues[`${id}_${v.id}`];
+  
+  const vList = document.getElementById('venues-list');
+  vList.innerHTML = G.venuesInCity.map(vid => {
+    const v = VENUES_CATALOG[vid];
+    const answer = G.visitedVenues[`${G.currentCityId}_${vid}`];
     return `<div class="clue-item">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div onclick="${visited || G.isRequesting ? '' : `investigateVenue('${id}','${v.id}')`}" style="cursor:pointer; ${G.isRequesting && !visited ? 'opacity:0.5; cursor:wait;' : ''}">
-          ${v.icon} <strong>${v.name}</strong>
-        </div>
-        ${visited && !visited.includes('pulse') ? '✅' : ''}
+      <div onclick="${answer ? '' : `investigateVenue('${vid}')`}" style="cursor:pointer;">
+        ${v.icon} <strong>${v.name}</strong> ${answer ? '✅' : ''}
       </div>
-      ${visited ? `<div class="npc-bubble">${visited}</div>` : ''}
+      ${answer ? `<div class="npc-bubble">${answer}</div>` : ''}
     </div>`;
   }).join('');
-}
 
-function renderTravel() {
-  const currentId = G.currentCityId;
-  const instructionsEl = document.getElementById('travel-instructions');
-
-  instructionsEl.innerHTML = `
-    <div class="card" style="font-size: 13px; color: #aaa; margin-bottom: 16px; border-left: 4px solid #fbbf24; text-align: left;">
-      <p style="margin-bottom: 10px; color: #fbbf24; font-weight: bold; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">🌀 Logística de Viagem</p>
-      
-      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; line-height: 1.4;">
-        <li style="display: flex; gap: 10px; align-items: flex-start;">
-          <span>⌛</span>
-          <span>A viagem de teleporte demora <strong>${HOURS_COST_TRAVELLING} horas</strong>.</span>
-        </li>
-        <li style="display: flex; gap: 10px; align-items: flex-start;">
-          <span>↩️</span>
-          <span>Se for para o caminho errado, você poderá se teleportar de volta à cidade de origem e retomar os rastros.</span>
-        </li>
-        <li style="display: flex; gap: 10px; align-items: flex-start;">
-          <span>🏙️</span>
-          <span>Escolha a cidade de destino abaixo para se teleportar.</span>
-        </li>
-      </ul>
-    </div>
-  `;
-  
-  const options = new Set();
-  const trailIds = G.trail.map(c => c.id);
-
-  if (G.history.length > 1) {
-    options.add(G.history[G.history.length - 2]);
-  }
-
-  if (G.playerPos !== -1 && G.playerPos < G.trail.length - 1) {
-    options.add(G.trail[G.playerPos + 1].id);
-  }
-
-  if (!G.travelDistractorsPerCity[currentId]) {
-    const randomCandidates = CITIES.filter(c => 
-      c.id !== currentId && 
-      !trailIds.includes(c.id)
-    ).map(c => c.id);
-
-    const shuffledErrors = randomCandidates.sort(() => Math.random() - 0.5);
-    G.travelDistractorsPerCity[currentId] = shuffledErrors.slice(0, 4);
-  }
-
-  G.travelDistractorsPerCity[currentId].forEach(id => options.add(id));
-
-  const finalOptions = Array.from(options).slice(0, 5).sort(() => Math.random() - 0.5);
-  document.getElementById('travel-list').innerHTML = finalOptions.map(id => {
-    const city = CITIES.find(c => c.id === id);
-    return `<div class="city-option" style="background:#1e1e1e; border: 1px solid #333; border-left: 3px solid #fbbf24; padding:12px; border-radius:8px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${city.id}')">🏙️ ${city.name}</div>`;
-  }).join('');
+  // Sorteia opções de viagem (distratores)
+  const allIds = Object.keys(CITIES_CATALOG).filter(id => id !== G.currentCityId);
+  const options = allIds.sort(() => Math.random() - 0.5).slice(0, 5);
+  document.getElementById('travel-list').innerHTML = options.map(id => 
+    `<div style="background:#1e1e1e; border: 1px solid #333; padding:12px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${id}')">🏙️ ${CITIES_CATALOG[id]}</div>`
+  ).join('');
 }
 
 function advanceTime(m) { 
   G.currentMinutes += m; 
-
-  while (G.currentMinutes > 23 * 60) {
-    const overflow = G.currentMinutes - (23 * 60);    
-    G.currentDay++;    
-    G.currentMinutes = (8 * 60) + overflow;
-  }
-
-  if (G.currentDay > G.maxDays) { 
-    endGame('timeout'); 
-    return false; 
-  }
+  while (G.currentMinutes > 23 * 60) { G.currentDay++; G.currentMinutes = (8 * 60) + (G.currentMinutes - 23 * 60); }
+  if (G.currentDay > G.maxDays) { endGame('timeout'); return false; }
   return true;
 }
 
@@ -1044,63 +199,27 @@ function switchTab(t, el) {
   ['investigate','travel','notes'].forEach(p => document.getElementById('panel-'+p).style.display = p === t ? 'block' : 'none');
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
   if (el) el.classList.add('active');
-  if (t === 'notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br><br>') || "Sem pistas por enquanto.";
+  if (t === 'notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br><br>') || "Sem pistas.";
 }
 
 function openWarrantModal() {
-  document.getElementById('warrant-options').innerHTML = CRIMINALS.map(c => `<div class="city-option" style="padding:8px; background:#333; border-radius:4px; cursor:pointer" onclick="issueWarrant('${c.id}')">👤 ${c.name}</div>`).join('');
+  document.getElementById('warrant-options').innerHTML = CRIMINALS_CATALOG.map(c => 
+    `<div style="padding:8px; background:#333; cursor:pointer" onclick="issueWarrant('${c.id}', '${c.name}')">👤 ${c.name}</div>`
+  ).join('');
   document.getElementById('warrant-modal').style.display = 'flex';
 }
-
 function closeWarrantModal() { document.getElementById('warrant-modal').style.display = 'none'; }
-
-function issueWarrant(id) { 
+function issueWarrant(id, name) { 
   G.warrant = id; 
-  const criminal = CRIMINALS.find(c => c.id === id);
-  document.getElementById('warrant-display').innerHTML = 
-    `<span style="color: #fff; font-weight: normal;">Mandado ativo:</span> <span style="color: #fbbf24;">${criminal.name}</span>`; 
-    
+  document.getElementById('warrant-display').innerHTML = `<span style="color: #fbbf24;">${name}</span> <button onclick="issueArrest()" class="btn primary" style="padding:4px 8px; margin-left:8px;">Prender Agora</button>`; 
   closeWarrantModal(); 
 }
-
-function foundCriminal() { if (G.warrant === G.criminal.id) endGame('won'); else endGame('wrong_warrant'); }
 
 function endGame(r) {
   document.getElementById('game-screen').classList.remove('active');
   document.getElementById('result-screen').classList.add('active');
-  
-  const titleEl = document.getElementById('result-title');
-  const iconEl = document.getElementById('result-icon');
-  const detailsEl = document.getElementById('result-details');
-
-  titleEl.textContent = r === 'won' ? "Capturado!" : "Escapou!";
-  iconEl.textContent = r === 'won' ? "🏆" : "💀";
-
-  let criminalStatus = "";
-  if (r === 'won') {
-    criminalStatus = `<strong>${G.criminal.name}</strong> permanecerá atrás das grades por um bom tempo.<br>Bom trabalho!`;
-  } else {
-    const reason = r === 'timeout' ? "O tempo acabou e os rastros esfriaram." : "O mandado estava incorreto.";
-    criminalStatus = `<strong>${G.criminal.name}</strong> escapou por entre seus dedos...<br>${reason}`;
-  }
-
-  const routeNames = G.history.map(id => {
-    const city = CITIES.find(c => c.id === id);
-    return city ? city.name : id;
-  }).join(' → ');
-
-  detailsEl.innerHTML = `
-    <div style="padding:16px; line-height:1.6; text-align: center">
-      <p style="margin-bottom:12px; font-size:15px; color:#fff">${criminalStatus}</p>
-      
-      <div style="border-top:1px solid #333; padding-top:12px; font-size:13px; color:#aaa">
-        <p><strong>📅 Encerramento:</strong> Dia ${G.currentDay} às ${Math.floor(G.currentMinutes/60)}:00</p>
-        
-        <p style="margin-top:10px; color:#888; font-weight:bold">📍 Rota percorrida:</p>
-        <p style="font-size:12px; font-style:italic; line-height:1.4">${routeNames}</p>
-      </div>
-    </div>
-  `;
+  document.getElementById('result-title').textContent = r === 'won' ? "Capturado!" : "Escapou!";
+  document.getElementById('result-details').innerHTML = r === 'won' ? "Missão cumprida." : (r === 'timeout' ? "Tempo esgotado." : "Suspeito errado.");
 }
 </script>
 </body>
