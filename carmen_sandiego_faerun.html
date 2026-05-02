@@ -971,7 +971,7 @@ function switchTab(t, el) {
   ['investigate','travel','notes'].forEach(p => document.getElementById('panel-'+p).style.display = p === t ? 'block' : 'none');
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
   if (el) el.classList.add('active');
-  if (t === 'notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br>') || "Sem pistas por enquanto.";
+  if (t === 'notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br><br>') || "Sem pistas por enquanto.";
 }
 
 function openWarrantModal() {
