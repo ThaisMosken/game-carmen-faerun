@@ -833,7 +833,7 @@ function generateLocalDialogue(venue, rawLead, addClue) {
   
   const dialogueTemplates = {
     "biblioteca": [
-      `(O bibliotecário ajeita os óculos) ${criminalClue} requisitou pergaminhos raros que descreviam \"${lead}\".`,
+      `(O bibliotecário ajeita os óculos) ${criminalClue} requisitou pergaminhos raros que descreviam ${lead}.`,
       `(O bibliotecário consulta um registro) Tivemos um visitante interessado em histórias sobre ${lead}.`
     ],
     "cartografo": [
@@ -881,7 +881,7 @@ function generateLocalDialogue(venue, rawLead, addClue) {
       `(O arcanista ajusta as vestes) Um visitante assim passou por aqui e quase esqueceu um pergaminho sobre ${lead}.`
     ],
     "default": [
-      `(O ${venue.role} olha para você) ${criminalClue} demonstrou um interesse incomum em: \"${lead}\".`,
+      `(O ${venue.role} olha para você) ${criminalClue} demonstrou um interesse incomum sobre ${lead}.`,
       `(O ${venue.role} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que ${lead}.`
     ]
   };
