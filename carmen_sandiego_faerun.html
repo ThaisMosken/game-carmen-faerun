@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carmen Sandiego: Faerûn Edition v17</title>
+<title>Onde em Faerûn está Marcin Gesedano? Edition v17</title>
 <style>
 /* Estilos visuais mantidos */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -27,8 +27,32 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 <body>
 
 <div id="setup-screen" class="screen active">
-  <h1>🗺️ Carmen Sandiego: Faerûn</h1>
-  <button class="btn primary" style="width:100%" onclick="startGame()">▶ Iniciar Missão</button>
+  <h1>🗺️ Onde em Faerûn está Marcin Gesedano?</h1>
+  
+  <div class="card" style="line-height: 1.5; color: #ccc; margin-bottom: 20px; border-left: 4px solid #fbbf24;">
+    <p style="color: #fbbf24; font-size: 11px; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px;">📜 Briefing da Missão</p>
+    
+    <!-- Lore -->
+    <p style="margin-bottom: 16px; font-size: 14px;">Um grupo criminoso está roubando artefatos por Faerûn. Você foi contratado para capturar o suspeito deste novo crime.</p>
+
+    <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+      <li style="display: flex; gap: 10px; align-items: flex-start;">
+        <span>⚖️</span>
+        <span>Emita um <strong>mandado de prisão</strong> antes de confrontar o suspeito.</span>
+      </li>
+      <li style="display: flex; gap: 10px; align-items: flex-start;">
+        <span>🧭</span>
+        <span>Investigue locais para coletar pistas sobre o próximo destino do alvo.</span>
+      </li>
+      <li style="display: flex; gap: 10px; align-items: flex-start;">
+        <span>⌛</span>
+        <span>Você tem <strong>7 dias</strong> antes que o rastro esfrie e o suspeito escape.</span>
+      </li>
+    </ul>
+  </div>
+  <button class="btn" style="width:100%; background: #252525; color: #fbbf24; border: 2px solid #fbbf24; font-weight: bold; font-size: 14px;" onclick="startGame()">
+    ▶ Iniciar Missão
+  </button>
 </div>
 
 <div id="game-screen" class="screen">
@@ -51,7 +75,34 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
     <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📜 Compêndio da Busca</div>
   </div>
 
-  <div id="panel-investigate"><div id="venues-list"></div></div>
+ <div id="panel-investigate">
+  <div class="card" style="font-size: 13px; color: #aaa; margin-bottom: 16px; border-left: 4px solid #fbbf24;">
+    <p style="margin-bottom: 10px; color: #fbbf24; font-weight: bold; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">🕵️ Guia de Campo</p>
+    <p style="margin-bottom: 12px; line-height: 1.4;">Você precisa obter pistas sobre o criminoso e seu paradeiro rapidamente. O tempo é escasso, acompanhe o relógio no topo da tela.</p>
+    
+    <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; line-height: 1.4;">
+      <li style="display: flex; gap: 10px; align-items: flex-start;">
+        <span>🔍</span>
+        <span>Interrogar testemunhas em estabelecimentos consome <strong id="display-investigation-cost"></strong>.</span>
+      </li>
+      <li style="display: flex; gap: 10px; align-items: flex-start;">
+        <span>🌀</span>
+        <span>Solicitar teleporte para outra cidade consome <strong id="display-travelling-cost"></strong>.</span>
+      </li>
+      <li style="display: flex; gap: 10px; align-items: flex-start;">
+        <span>⚖️</span>
+        <span>Emitir um mandado é <strong>instantâneo</strong>, mas apenas um pode estar ativo por vez.</span>
+      </li>
+      <li style="display: flex; gap: 10px; align-items: flex-start;">
+        <span>⚠️</span>
+        <span>O mandado deve ser preciso: se encontrar o suspeito sem o nome correto, ele fugirá.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div id="venues-list"></div>
+</div>
+
   <div id="panel-travel" style="display:none">
     <div id="travel-instructions" style="margin-bottom:12px; font-size:12px; color:#aaa; line-height:1.4"></div>
     <div id="travel-list"></div>
@@ -523,7 +574,7 @@ const CITIES = [
       "Defesa": "uma guarda liderada por magos dentro de um Mythal, um campo de magia antiga que protege a cidade contra fogo e necromancia",
       "Facções": "o papel central da cidade dentro da Aliança dos Lordes",
       "Geografia": "a divisão entre a Cidade Velha e a Cidade Nova pelas águas do Rio Rauvin",
-      "História": "uma cidade governada por séculos pela lendária Alta Maga Alustriel Silverhand, fundada como um refúgio onde elfos e humanos podiam viver em paz",
+      "História": "uma cidade fundada como um refúgio onde elfos e humanos podiam viver em paz e governada por séculos pela lendária Alta Maga Alustriel Silverhand",
       "Infraestrutura": "a Ponte da Lua, uma estrutura de força invisível que brilha sob o luar",
       "Magia": "o Mythal, um campo de magia que impede o uso de magias de fogo e necromancia por inimigos",
       "Política": "a liderança histórica da cidade na Liga das Fronteiras Prateadas",
@@ -664,6 +715,8 @@ function startGame() {
   G.travelDistractorsPerCity = {};
   document.getElementById('setup-screen').classList.remove('active');
   document.getElementById('game-screen').classList.add('active');
+  document.getElementById('display-investigation-cost').textContent = HOURS_COST_INVESTIGATING + 'h';
+  document.getElementById('display-travelling-cost').textContent = HOURS_COST_TRAVELLING + 'h';
   renderGameScreen();
 }
 
