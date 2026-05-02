@@ -30,6 +30,6 @@ def upload_collection(collection_name, file_path):
     print(f"Sucesso: Coleção '{collection_name}' atualizada com {len(data_list)} registros.")
 
 if __name__ == "__main__":
-    upload_collection("cities", "../data/cities.json")
-    upload_collection("criminals", "../data/criminals.json")
-    upload_collection("venues", "../data/venues.json")
+    upload_collection("cities", "data/cities.json")
+    upload_collection("criminals", "data/criminals.json")
+    upload_collection("venues", "data/venues.json")
