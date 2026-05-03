@@ -269,7 +269,7 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
             ],
             "patio_treinamento": [
                 f"(O mestre d'armas golpeia o boneco) {criminal_clue}observou os treinos e perguntou sobre {lead_lower}.",
-                f"(O mestre d'armas limpa o suor) Alguem perguntou se nossas lâminas seriam eficazes contra {lead_lower}.",
+                f"(O mestre d'armas limpa o suor) Alguém perguntou se nossas lâminas seriam eficazes contra {lead_lower}.",
             ],
             "santuario": [
                 f"(O sacerdote acende uma vela) {criminal_clue}fez uma oferta aos deuses pedindo proteção e perguntou sobre {lead_lower}.",
@@ -287,7 +287,7 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
 
         templates = dialogue_templates.get(venue_id, [
             f"(O {role} olha para você) {criminal_clue}demonstrou um interesse incomum sobre {lead_lower}.",
-            f"(O {role} faz uma pausa) Me lembro de alguem perguntando sobre o relato de que {lead_lower}.",
+            f"(O {role} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que {lead_lower}.",
         ])
 
         return https_fn.Response(
