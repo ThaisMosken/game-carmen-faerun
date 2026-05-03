@@ -267,7 +267,7 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
                 f"(O mestre de carga olha o horizonte) Alguém com essas características partiu após questionar sobre {lead_lower}.",
             ],
             "patio_treinamento": [
-                f"(O mestre d'armas golpeia o boneco) {criminal_clue}observou os treinos e perguntou sobre as táticas de combate de {lead_lower}.",
+                f"(O mestre d'armas golpeia o boneco) {criminal_clue}observou os treinos e perguntou sobre {lead_lower}.",
                 f"(O mestre d'armas limpa o suor) Alguem perguntou se nossas lâminas seriam eficazes contra {lead_lower}.",
             ],
             "santuario": [

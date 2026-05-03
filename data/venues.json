@@ -1,14 +1,14 @@
 [
-  {"id":"biblioteca", "name":"Biblioteca", "icon":"📚", "topics":["Politics","Geography","History","Magic","Infrastructure"], "role": "Bibliotecário"},
+  {"id":"biblioteca", "name":"Biblioteca", "icon":"📚", "topics":["Culture","Geography","History","Infrastructure"], "role": "Bibliotecário"},
   {"id":"cartografo", "name":"Cartógrafo", "icon":"📜", "topics":["Geographical Aspects","Settlement Type"], "role": "Guia Local"},
-  {"id":"centro_cultural", "name":"Centro Cultural", "icon":"🎭", "topics":["Culture","History"], "role": "Guia Local"},
-  {"id":"estalagem", "name":"Estalagem", "icon":"🛌", "topics":["Politics"], "role": "Estalajadeiro"},
+  {"id":"centro_cultural", "name":"Centro Cultural", "icon":"🎭", "topics":["Culture","Geography","History"], "role": "Guia Local"},
+  {"id":"estalagem", "name":"Estalagem", "icon":"🛌", "topics":["Culture","Infrastructure","Politics"], "role": "Estalajadeiro"},
   {"id":"estaleiro", "name":"Estaleiro", "icon":"🏗️", "topics":["Trade"], "role": "Mestre do Cais"},
-  {"id":"museu", "name":"Museu", "icon":"🏛️", "topics":["History","Magic","Geography"], "role": "Curador"},
-  {"id":"oficina_gemas", "name":"Oficina de Gemas", "icon":"💎", "topics":["Settlement Type"], "role": "Mestre Joalheiro"},
-  {"id":"patio_carrocas", "name":"Pátio de Carroças", "icon":"🐪", "topics":["History","Geography"], "role": "Mestre de Carga"},
+  {"id":"museu", "name":"Museu", "icon":"🏛️", "topics":["Culture","Geography","History"], "role": "Curador"},
+  {"id":"oficina_gemas", "name":"Oficina de Gemas", "icon":"💎", "topics":["Geographical Aspects","Settlement Type"], "role": "Mestre Joalheiro"},
+  {"id":"patio_carrocas", "name":"Pátio de Carroças", "icon":"🐪", "topics":["Culture","Geography","History"], "role": "Mestre de Carga"},
   {"id":"patio_treinamento", "name":"Pátio de Treinamento", "icon":"⚔️", "topics":["Defense","Races"], "role": "Mestre d\"Armas"},
   {"id":"santuario", "name":"Santuário dos Deuses Antigos", "icon":"🕯️", "topics":["Religion"], "role": "Sacerdote"},
-  {"id":"taverna", "name":"Taverna", "icon":"🍺", "topics":["Politics"], "role": "Taverneiro"},
-  {"id":"torre_alta_magia", "name":"Torre de Alta Magia", "icon":"🔮", "topics":["Magic","History"], "role": "Arcanista"}
+  {"id":"taverna", "name":"Taverna", "icon":"🍺", "topics":["Culture","Geography","Politics"], "role": "Taverneiro"},
+  {"id":"torre_alta_magia", "name":"Torre de Alta Magia", "icon":"🔮", "topics":["Magic"], "role": "Arcanista"}
 ]
