@@ -92,26 +92,32 @@ def start_game(req: https_fn.Request) -> https_fn.Response:
 def _build_travel_options(trail_ids, current_step, current_location, history, distractors):
     """
     Monta as opções de viagem seguindo estas regras:
-    - Próxima cidade correta da trilha: SOMENTE se o jogador estiver exatamente
-      na cidade do current_step (ou seja, na trilha certa). Se estiver em qualquer
-      outra cidade — distratora ou posição retroativa — não aparece.
-    - Cidade de retorno: sempre history[-2], independente de estar na trilha ou não.
-    - Distratoras fixas: preenchem os slots restantes, nunca incluem cidades da trilha.
+    - Se o jogador está na cidade correta do step atual (trilha certa):
+        exibe a próxima cidade da trilha + distratoras fixas (nunca cidades da trilha).
+    - Se o jogador está fora da trilha (errou uma cidade):
+        exibe APENAS a cidade de retorno (history[-2]), forçando o retorno antes
+        de qualquer nova escolha. Isso evita erros duplos consecutivos.
+    - A cidade de retorno é sempre incluída quando existe, em ambos os casos.
     """
+    on_trail = current_location == trail_ids[current_step]
+
+    if not on_trail:
+        # Fora da trilha: apenas opção de voltar
+        if len(history) > 1:
+            return [history[-2]]
+        return []
+
+    # Na trilha: próxima cidade correta + retorno (se existir) + distratoras
     options = []
 
-    # Próxima cidade correta: só aparece se o jogador está no step correto da trilha
-    if current_location == trail_ids[current_step]:
-        if current_step < len(trail_ids) - 1:
-            options.append(trail_ids[current_step + 1])
+    if current_step < len(trail_ids) - 1:
+        options.append(trail_ids[current_step + 1])
 
-    # Cidade de retorno: de onde o jogador veio (history[-2])
     if len(history) > 1:
         back_city = history[-2]
         if back_city not in options:
             options.append(back_city)
 
-    # Distratoras: nunca incluem nenhuma cidade da trilha para evitar atalhos acidentais
     safe_distractors = [d for d in distractors if d not in trail_ids and d not in options]
     slots_left = 5 - len(options)
     options = options + safe_distractors[:slots_left]
@@ -336,7 +342,9 @@ def travel(req: https_fn.Request) -> https_fn.Response:
             all_venues = [d.to_dict()["id"] for d in db.collection("venues").stream()]
             venues_per_city[target_city_id] = random.sample(all_venues, min(3, len(all_venues)))
 
-        if target_city_id not in distractors_per_city:
+        player_on_trail = (target_city_id == trail[current_step])
+
+        if player_on_trail and target_city_id not in distractors_per_city:
             non_trail_cities = [
                 c.to_dict()["id"]
                 for c in db.collection("cities").stream()
@@ -346,19 +354,22 @@ def travel(req: https_fn.Request) -> https_fn.Response:
                 non_trail_cities, min(4, len(non_trail_cities))
             )
 
-        session_ref.update({
+        update_payload = {
             "current_location": target_city_id,
             "current_step": current_step,
             "venues_per_city": venues_per_city,
-            "distractors_per_city": distractors_per_city,
-        })
+        }
+        if player_on_trail:
+            update_payload["distractors_per_city"] = distractors_per_city
+
+        session_ref.update(update_payload)
 
         travel_options = _build_travel_options(
             trail_ids=trail,
             current_step=current_step,
             current_location=target_city_id,
             history=history,
-            distractors=distractors_per_city[target_city_id],
+            distractors=distractors_per_city.get(target_city_id, []),
         )
 
         return https_fn.Response(
