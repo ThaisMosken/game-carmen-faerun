@@ -6,17 +6,17 @@ import json
 initialize_app()
 
 VENUES_DATA = {
-    "biblioteca":        {"role": "Bibliotecário",   "topics": ["Politics", "Geography", "History", "Magic", "Infrastructure"]},
+    "biblioteca":        {"role": "Bibliotecário",   "topics": ["Culture","Geography","History","Infrastructure"]},
     "cartografo":        {"role": "Guia Local",       "topics": ["Geographical Aspects", "Settlement Type"]},
-    "centro_cultural":   {"role": "Guia Local",       "topics": ["Culture", "History"]},
-    "estalagem":         {"role": "Estalajadeiro",    "topics": ["Politics"]},
+    "centro_cultural":   {"role": "Guia Local",       "topics": ["Culture","Geography","History"]},
+    "estalagem":         {"role": "Estalajadeiro",    "topics": ["Culture","Infrastructure","Politics"]},
     "estaleiro":         {"role": "Mestre do Cais",   "topics": ["Trade"]},
-    "museu":             {"role": "Curador",          "topics": ["History", "Magic", "Geography"]},
-    "oficina_gemas":     {"role": "Mestre Joalheiro", "topics": ["Settlement Type"]},
-    "patio_carrocas":    {"role": "Mestre de Carga",  "topics": ["History", "Geography"]},
+    "museu":             {"role": "Curador",          "topics": ["Culture","Geography","History"]},
+    "oficina_gemas":     {"role": "Mestre Joalheiro", "topics": ["Geographical Aspects","Settlement Type"]},
+    "patio_carrocas":    {"role": "Mestre de Carga",  "topics": ["Culture","Geography","History"]},
     "patio_treinamento": {"role": "Mestre d'Armas",   "topics": ["Defense", "Races"]},
     "santuario":         {"role": "Sacerdote",        "topics": ["Religion"]},
-    "taverna":           {"role": "Taverneiro",       "topics": ["Politics"]},
+    "taverna":           {"role": "Taverneiro",       "topics": ["Culture","Geography","Politics"]},
     "torre_alta_magia":  {"role": "Arcanista",        "topics": ["Magic", "History"]},
 }
 
