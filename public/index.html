@@ -114,6 +114,13 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 </div>
 
 <script>
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-venue]');
+  if (!btn) return;
+  var vid = btn.getAttribute('data-venue');
+  if (vid) investigateVenue(vid);
+});
+
 const URLS = {
   start:       'https://start-game-hmod4ptaqq-uc.a.run.app',
   investigate: 'https://investigate-hmod4ptaqq-uc.a.run.app',
@@ -322,38 +329,27 @@ function renderGameScreen() {
 }
 
 function renderVenues() {
-  const cityId    = G.currentCityId;
-  const container = document.getElementById('venues-list');
-
-  container.innerHTML = G.venuesInCity.map(vid => {
-    const v       = VENUES_CATALOG[vid] || {name: vid, icon: '🏠'};
-    const key     = `${cityId}_${vid}`;
-    const answer  = G.visitedVenues[key];
-    const busy    = answer && answer.includes('loading-pulse');
-    const visited = answer && !busy;
-
-    return `<div class="clue-item">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="venue-btn" data-venue="${vid}"
-             style="cursor:${visited ? 'default' : 'pointer'};opacity:${busy ? '0.5' : '1'}">
-          ${v.icon} <strong>${v.name}</strong>
-        </div>
-        ${visited ? '✅' : ''}
-      </div>
-      ${answer ? `<div class="npc-bubble">${answer}</div>` : ''}
-    </div>`;
-  }).join('');
-
-  // Escopo restrito ao container para evitar conflitos com outros elementos da página
-  container.querySelectorAll('.venue-btn').forEach(el => {
-    const vid    = el.dataset.venue;
-    const key    = `${cityId}_${vid}`;
-    const answer = G.visitedVenues[key];
-    const busy   = answer && answer.includes('loading-pulse');
-    if (!answer || busy) {
-      el.addEventListener('click', () => investigateVenue(vid));
-    }
-  });
+  var cityId    = G.currentCityId;
+  var container = document.getElementById('venues-list');
+  var html = '';
+  for (var i = 0; i < G.venuesInCity.length; i++) {
+    var vid     = G.venuesInCity[i];
+    var v       = VENUES_CATALOG[vid] || {name: vid, icon: '?'};
+    var key     = cityId + '_' + vid;
+    var answer  = G.visitedVenues[key];
+    var busy    = answer && answer.indexOf('loading-pulse') !== -1;
+    var visited = answer && !busy;
+    html += '<div class="clue-item">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center">';
+    html += '<div class="venue-btn" data-venue="' + vid + '" style="cursor:' + (visited ? 'default' : 'pointer') + ';opacity:' + (busy ? '0.5' : '1') + '">';
+    html += v.icon + ' <strong>' + v.name + '</strong>';
+    html += '</div>';
+    if (visited) html += ' ✅';
+    html += '</div>';
+    if (answer) html += '<div class="npc-bubble">' + answer + '</div>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
 }
 
 function renderTravel() {
