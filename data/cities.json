@@ -16,7 +16,7 @@
       "Races": "uma população composta por humanos, elfos e uma grande comunidade de meio-elfos",
       "Religion": "o Templo da Estrela da Manhã, um centro de conhecimento dedicado a Oghma e Milil",
       "Settlement Type": "uma cidade elegante e refinada apelidada de a Joia do Vale",
-      "Trade": "a lã fina, os vinhos artesanais e a fabricação de instrumentos musicais"
+      "Trade": "lã fina, vinhos artesanais e instrumentos musicais"
     }
   },
   {
@@ -48,7 +48,7 @@
       "Factions": "os laços históricos com a antiga Aliança dos Lordes",
       "Geographical Aspects": "uma rede de túneis sob as Montanhas de Gelo",
       "Geography": "uma fortaleza nas Montanhas de Gelo com apenas duas torres de granito maciço na superfície e quilômetros de minas e túneis profundos",
-      "Government Type": "uma monarquia hereditária sob a linhagem da Casa Adbar",
+      "Government Type": "uma monarquia hereditária sob a linhagem de uma famosa casa anã",
       "History": "a linhagem contínua de reis que governa este remanescente do império de Delzoun há milênios",
       "Infrastructure": "os extensos canais de ventilação que levam ar fresco para os níveis mais profundos da montanha",
       "Magic": "a criação de runas de proteção feitas pelos clérigos de Moradin",
@@ -87,7 +87,7 @@
       "Defense": "uma milícia onde os cidadãos treinam periodicamente para defender as muralhas",
       "Factions": "a participação ativa da vila na Aliança dos Lordes",
       "Geographical Aspects": "as planícies férteis situadas às margens do Rio Delimbiyr",
-      "Geography": "o papel da cidade como parada vital na Estrada do Trade entre Waterdeep e Baldur's Gate",
+      "Geography": "o papel da cidade como parada vital na Estrada do Comércio entre Waterdeep e Baldur's Gate",
       "Government Type": "um ducado regido por uma monarquia local",
       "History": "a lenda de um garoto que defendeu o vau do rio contra homens-lagarto usando apenas uma adaga",
       "Infrastructure": "os rumores de que o Castelo do Duque foi erguido sobre ruínas de um antigo império élfico",
@@ -112,7 +112,7 @@
       "History": "o surgimento milagroso de uma segunda esfera solar para salvar a cidade de uma praga de vampiros",
       "Infrastructure": "o High Hall, um palácio fortificado e templo que serve como o coração administrativo",
       "Magic": "a luz eterna e divina que emana do Companheiro durante o dia e a noite",
-      "Politics": "o Código de Elturel que impõe leis morais e civis estritas a todos os residentes",
+      "Politics": "o Credo Resoluto que compele todo cidadão a proteger sua cidade",
       "Races": "uma população majoritariamente humana com minorias de anões e elfos solares",
       "Religion": "a adoração fervorosa a Torm, Helm e Lathander em seus grandes templos de pedra",
       "Settlement Type": "uma cidade sagrada que serve como capital de Elturgard",
@@ -149,7 +149,7 @@
       "Geographical Aspects": "as profundezas abaixo das montanhas próximas ao Monte Hotenow",
       "Geography": "uma conexão entre o Plano Material e o Plano Elemental do Fogo",
       "Government Type": "uma monarquia liderada pelo Rei com o conselho de clãs anões que o assessora",
-      "History": "uma fortaleza perdida por séculos e considerada um mito até ser redescoberta, ocupada por drow, orcs e demônios em diferentes períodos de sua queda",
+      "History": "uma fortaleza perdida por séculos e considerada um mito até ser redescoberta, ocupada por drows, orcs e demônios em diferentes períodos de sua queda",
       "Infrastructure": "os canais de magma que fornecem luz e calor constante para a cidade",
       "Magic": "a Grande Forja que utiliza o poder de um Primordial para imbuir itens com magia potente",
       "Politics": "o foco na reconstrução e defesa contra incursões do Subterrâneo",
@@ -176,7 +176,7 @@
       "Races": "uma população humana convivendo com halflings e criaturas despertas",
       "Religion": "um templo vivo dedicado a Chauntea, a Grande Mãe",
       "Settlement Type": "uma imensa abadia fortificada e complexo agrícola",
-      "Trade": "a vasta produção agrícola de um vilarejo ser capaz de sustentar várias cidades vizinhas durante crises"
+      "Trade": "produção agrícola"
     }
   },
   {
@@ -184,19 +184,19 @@
     "name": "Iriaebor",
     "curiosities": {
       "Culture": "a arquitetura de prédios extremamente altos conectados por pontes suspensas de madeira e corda",
-      "Defense": "os Cavaleiros de Iriaebor que patrulham o cume e as trilhas de acesso",
+      "Defense": "os Cavaleiros que patrulham o cume e as trilhas de acesso",
       "Factions": "os membros da Aliança dos Lordes que garantem a segurança das rotas de comércio",
       "Geographical Aspects": "o vale do rio Chionthar",
       "Geography": "a névoa densa que cobre a base do cume ao amanhecer, deixando apenas as torres visíveis",
       "Government Type": "um conselho de mercadores presidido por um lorde eleito para mandatos curtos",
       "History": "a necessidade de expansão vertical devido à limitação de espaço físico no topo da rocha",
-      "Infrastructure": "as torres de pedra que desafiam a gravidade e as escadarias externas esculpidas no penhasco",
-      "Magic": "o uso de feitiçaria de reforço estrutural para manter as torres mais altas em pé",
+      "Infrastructure": "as torres de pedra que desafiam a gravidade com escadarias externas esculpidas num penhasco",
+      "Magic": "uma comunidade que usa feitiçaria de reforço estrutural para manter as torres mais altas em pé",
       "Politics": "a gestão das rotas de comércio vitais entre o Mar das Estrelas Cadentes e a Costa da Espada",
       "Races": "uma população humana com uma presença menor de outras raças",
       "Religion": "os templos de Eldath que mantêm jardins suspensos e fontes de água pura no topo das torres",
-      "Settlement Type": "uma cidade vertical construída em um cume rochoso, chamada de a Cidade das Mil Torres",
-      "Trade": "os cavalos de raça e o gerenciamento de caravanas que cruzam as Terras Centrais"
+      "Settlement Type": "uma cidade vertical construída em um cume rochoso, chamada de Cidade das Mil Torres",
+      "Trade": "cavalos de raça"
     }
   },
   {
@@ -264,12 +264,12 @@
     "name": "Menzoberranzan",
     "curiosities": {
       "Culture": "uma sociedade implacável baseada na lei da sobrevivência do mais forte e na crueldade",
-      "Defense": "exércitos de guerreiros drow e a temível magia das altas sacerdotisas",
+      "Defense": "exércitos de guerreiros drows e a temível magia das altas sacerdotisas",
       "Factions": "as lutas constantes por poder entre as Casas Nobres, como a poderosa Casa Baenre",
       "Geographical Aspects": "uma caverna colossal iluminada por fungos luminescentes no Subterrâneo",
       "Geography": "a localização profunda no Subterrâneo Superior, longe da luz do sol",
       "Government Type": "uma teocracia matriarcal governada pelo Conselho Regente das Oito Casas Maiores",
-      "History": "a fundação da cidade pela Matrona Menzoberra após sua fuga de cidades rivais",
+      "History": "a fundação da cidade por uma famosa matriarca após sua fuga de cidades rivais",
       "Infrastructure": "o Narbondel, um pilar de pedra gigantesco que serve como relógio mágico da cidade",
       "Magic": "a densa teia de energia arcana que permite a levitação e o uso de glifos de escuridão",
       "Politics": "o sistema político onde o assassinato silencioso é uma forma legítima de ascensão social",
@@ -284,7 +284,7 @@
     "name": "Mirabar",
     "curiosities": {
       "Culture": "a cooperação técnica e comercial sem precedentes entre humanos na superfície e anões no subterrâneo",
-      "Defense": "o Machado de Mirabar, uma força militar altamente equipada com armas e armaduras magistrais",
+      "Defense": "uma força militar altamente equipada com armas e armaduras magistrais forjadas por anões",
       "Factions": "a participação estratégica da cidade na Aliança dos Lordes",
       "Geographical Aspects": "as terras áridas e rochosas ao norte do Rio Mirar",
       "Geography": "uma cidade dividida entre os níveis de superfície para moradia e os níveis profundos para mineração",
@@ -296,7 +296,7 @@
       "Races": "uma sociedade integrada de humanos e anões do escudo",
       "Religion": "a forte devoção a Gond e Moradin, celebrando o trabalho manual e a engenharia",
       "Settlement Type": "uma metrópole industrial e cidade-estado fortificada",
-      "Trade": "o maior centro de exportação de metais brutos e pedras preciosas do Norte"
+      "Trade": "metais brutos e pedras preciosas"
     }
   },
   {
@@ -316,7 +316,7 @@
       "Races": "uma população de anões do escudo com pequenas comunidades de gnomos das profundezas e humanos",
       "Religion": "o Salão de Dumathoin, um templo magnífico dedicado ao Guardião dos Segredos Sob a Montanha",
       "Settlement Type": "uma lendária fortaleza anã esculpida no coração das montanhas",
-      "Trade": "o valioso mithral, prata e ferro de alta qualidade"
+      "Trade": "mithral, prata e ferro de alta qualidade"
     }
   },
   {
@@ -406,7 +406,7 @@
       "Culture": "a agitada vida noturna e as feiras de trocas que nunca param de funcionar",
       "Defense": "os grupos de mercenários contratados pelos consórcios para garantir a paz nas ruas",
       "Factions": "a presença discreta mas poderosa de agentes dos Zhentarim nas rotas mercantes",
-      "Geographical Aspects": "a planície estratégica onde a Estrada do Trade se encontra com o Rio Chionthar",
+      "Geographical Aspects": "a planície estratégica onde a Estrada do Comércio se encontra com o Rio Chionthar",
       "Geography": "os vastos e lamacentos pátios de carruagens que ocupam o centro da cidade",
       "Government Type": "um conselho informal composto por mercadores influentes e líderes de caravanas",
       "History": "a fundação da vila como um ponto de parada seguro para viajantes que cruzam o Vale",
@@ -416,7 +416,7 @@
       "Races": "uma mistura diversa de humanos, halflings e meio-orcs atraídos pelo comércio",
       "Religion": "os templos e santuários dedicados a Waukeen e Tymora para abençoar o lucro",
       "Settlement Type": "uma movimentada e cosmopolita metrópole comercial conhecida como a Cidade das Carruagens",
-      "Trade": "o aluguel de carruagens, cavalos e o fornecimento de suprimentos para viagens longas"
+      "Trade": "carruagens, cavalos e suprimentos para viagens longas"
     }
   },
   {
@@ -448,7 +448,7 @@
       "Factions": "a participação histórica como pilar central da Liga das Fronteiras Prateadas",
       "Geographical Aspects": "as colinas íngremes próximas à foz do Rio Rauvin",
       "Geography": "um sistema de muralhas concêntricas que protege tanto a superfície quanto os níveis inferiores",
-      "Government Type": "um Mestre de Sundabar que governa com autoridade marcial",
+      "Government Type": "um Mestre que governa com autoridade marcial",
       "History": "a reconstrução da cidade após a devastação sofrida durante a Guerra das Muitas Flechas",
       "Infrastructure": "as forjas centrais alimentadas por uma fonte de fogo eterno nas profundezas",
       "Magic": "as magias de proteção rúnica que cobrem os principais portões da fortaleza",
@@ -456,7 +456,7 @@
       "Races": "uma população de humanos e anões do escudo unidos por séculos de aliança",
       "Religion": "os templos dedicados a Helm e Tyr, focados na vigilância e na justiça",
       "Settlement Type": "uma fortaleza militar massiva e antiga metrópole",
-      "Trade": "armas de aço temperado e o refino de minérios raros"
+      "Trade": "armas de aço temperado e minérios raros"
     }
   },
   {
@@ -464,7 +464,7 @@
     "name": "Triboar",
     "curiosities": {
       "Culture": "o espírito hospitaleiro de uma cidade que recebe viajantes de todos os cantos de Faerûn",
-      "Defense": "a Milícia de Triboar, composta por cidadãos que patrulham as estradas vizinhas",
+      "Defense": "a Milícia, composta por cidadãos que patrulham as estradas vizinhas",
       "Factions": "o papel da vila como ponto de encontro discreto para os Harpistas",
       "Geographical Aspects": "as planícies abertas do Vale de Dessarin no cruzamento de trilhas vitais",
       "Geography": "a localização estratégica no encontro entre a Trilha Longa e o Caminho de Evermoor",
@@ -476,7 +476,7 @@
       "Races": "uma população majoritariamente humana com minorias de halflings, anões e elfos",
       "Religion": "o santuário dedicado a Gwaeron Windstrom, o padroeiro dos rastreadores e guardas",
       "Settlement Type": "uma vila de fronteira que serve como centro de caravanas",
-      "Trade": "o comércio de cavalos de montaria e o reabastecimento de caravanas mercantes"
+      "Trade": "cavalos de montaria"
     }
   },
   {
@@ -496,7 +496,7 @@
       "Races": "uma população imensa e cosmopolita de todas as raças de Faerûn",
       "Religion": "a Casa das Mãos Inspiradas, um templo-oficina monumental dedicado a Gond",
       "Settlement Type": "a maior metrópole da Costa da Espada",
-      "Trade": "um pouco de tudo"
+      "Trade": "um pouco de tudo o que se pode comercializar: artefatos, joias, armas, produtos agricolas e uma infinidade de outras coisas"
     }
   },
   {
@@ -504,7 +504,7 @@
     "name": "Yartar",
     "curiosities": {
       "Culture": "as festividades vibrantes do Festival de Escudos realizadas nas águas do rio",
-      "Defense": "as patrulhas fluviais da Guarda de Yartar que protegem o porto contra piratas",
+      "Defense": "as patrulhas fluviais da Guarda que protegem o porto contra piratas",
       "Factions": "as atividades ocultas da Mão de Ferro e a influência comercial dos Zhentarim",
       "Geographical Aspects": "as margens do Rio Dessarin em um ponto de bifurcação navegável",
       "Geography": "o papel da cidade como porto de entrada para o comércio que sobe o Rio Dessarin",
