@@ -185,13 +185,23 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
         next_city_id = trail[current_step + 1]
         next_city = db.collection("cities").document(next_city_id).get().to_dict()
         curiosities_map = next_city.get("curiosities", {})
-        all_curiosity_values = list(curiosities_map.values())
-
+        venue_doc = db.collection("venues").document(venue_id).get()
+        venue_data = venue_doc.to_dict() if venue_doc.exists else {}
+        role = venue_data.get("role", "encarregado")
+        venue_topics = venue_data.get("topics", [])
         used_curiosities = session.get("used_curiosities_per_city", {}).get(current_location, [])
-        available_curiosities = [c for c in all_curiosity_values if c not in used_curiosities]
+        venue_curiosities = [curiosities_map[t] for t in venue_topics if t in curiosities_map]
+        available_curiosities = [c for c in venue_curiosities if c not in used_curiosities]
 
         if not available_curiosities:
-            available_curiosities = all_curiosity_values
+            available_curiosities = venue_curiosities
+
+        if not available_curiosities:
+            all_curiosity_values = list(curiosities_map.values())
+            available_curiosities = [c for c in all_curiosity_values if c not in used_curiosities]
+
+        if not available_curiosities:
+            available_curiosities = list(curiosities_map.values())
 
         lead = random.choice(available_curiosities)
 
@@ -215,18 +225,14 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
         criminal_clue = random.choice(traits) + " " if add_clue else " Um viajante "
         lead_lower = lead[0].lower() + lead[1:]
 
-        venue_doc = db.collection("venues").document(venue_id).get()
-        venue_data = venue_doc.to_dict() if venue_doc.exists else {}
-        role = venue_data.get("role", "encarregado")
-
         dialogue_templates = {
             "biblioteca": [
                 f"(O bibliotecário ajeita os óculos) {criminal_clue}requisitou pergaminhos raros que descreviam {lead_lower}.",
                 f"(O bibliotecário consulta um registro) Tivemos um visitante interessado em histórias sobre {lead_lower}.",
             ],
             "cartografo": [
-                f"(O cartógrafo limpa a tinta dos dedos) {criminal_clue}queria um mapa de {lead_lower}.",
-                f"(O cartógrafo limpa a tinta dos dedos) Um curioso esteve aqui olhando mapas de {lead_lower}.",
+                f"(O cartógrafo limpa a tinta dos dedos) {criminal_clue}queria um mapa sobre {lead_lower}.",
+                f"(O cartógrafo limpa a tinta dos dedos) Um curioso esteve aqui olhando mapas sobre {lead_lower}.",
             ],
             "centro_cultural": [
                 f"(O guia local aponta para um mural) {criminal_clue}passou um longo tempo estudando a representação sobre {lead_lower}.",
