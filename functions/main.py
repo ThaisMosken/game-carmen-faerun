@@ -5,9 +5,40 @@ import json
 
 initialize_app()
 
+VENUES_DATA = {
+    "biblioteca":        {"role": "Bibliotecário",   "topics": ["Politics", "Geography", "History", "Magic", "Infrastructure"]},
+    "cartografo":        {"role": "Guia Local",       "topics": ["Geographical Aspects", "Settlement Type"]},
+    "centro_cultural":   {"role": "Guia Local",       "topics": ["Culture", "History"]},
+    "estalagem":         {"role": "Estalajadeiro",    "topics": ["Politics"]},
+    "estaleiro":         {"role": "Mestre do Cais",   "topics": ["Trade"]},
+    "museu":             {"role": "Curador",          "topics": ["History", "Magic", "Geography"]},
+    "oficina_gemas":     {"role": "Mestre Joalheiro", "topics": ["Settlement Type"]},
+    "patio_carrocas":    {"role": "Mestre de Carga",  "topics": ["History", "Geography"]},
+    "patio_treinamento": {"role": "Mestre d'Armas",   "topics": ["Defense", "Races"]},
+    "santuario":         {"role": "Sacerdote",        "topics": ["Religion"]},
+    "taverna":           {"role": "Taverneiro",       "topics": ["Politics"]},
+    "torre_alta_magia":  {"role": "Arcanista",        "topics": ["Magic", "History"]},
+}
+
+VENUE_IDS = list(VENUES_DATA.keys())
+
+CRIMINALS_DATA = {
+    "anniken_zonledre":        {"gender": "F", "hair": "loiro",    "feature": "uma tatuagem",           "hobby": "cartas", "vehicle": "em uma carruagem",               "cuisine": "frutos do mar"},
+    "chuck_brinn":             {"gender": "M", "hair": "preto",    "feature": "bigode",                 "hobby": "dados",  "vehicle": "dirigindo uma máquina infernal", "cuisine": "comida élfica"},
+    "coral_meery":             {"gender": "F", "hair": "castanho", "feature": "belas joias",            "hobby": "dados",  "vehicle": "em uma carruagem",               "cuisine": "comida apimentada"},
+    "deaf_tidbes":             {"gender": "M", "hair": "preto",    "feature": "um alfinete de gravata", "hobby": "xadrez", "vehicle": "em uma carruagem",               "cuisine": "comida élfica"},
+    "garlon_scryat":           {"gender": "M", "hair": "ruivo",    "feature": "um anel impressionante", "hobby": "xadrez", "vehicle": "em uma carruagem",               "cuisine": "comida tiferina"},
+    "hovio_richithor":         {"gender": "M", "hair": "loiro",    "feature": "uma tatuagem",           "hobby": "xadrez", "vehicle": "em uma carruagem",               "cuisine": "frutos do mar"},
+    "kelden_blur":             {"gender": "M", "hair": "ruivo",    "feature": "uma tatuagem",           "hobby": "dados",  "vehicle": "em uma carruagem",               "cuisine": "frutos do mar"},
+    "marcin_gesedano":         {"gender": "F", "hair": "castanho", "feature": "belas joias",            "hobby": "cartas", "vehicle": "em uma carruagem",               "cuisine": "comida tiferina"},
+    "romani_brookebeth_kadio": {"gender": "F", "hair": "castanho", "feature": "uma tatuagem",           "hobby": "dados",  "vehicle": "dirigindo uma máquina infernal", "cuisine": "frutos do mar"},
+    "taylana_gaddahyal":       {"gender": "F", "hair": "ruivo",    "feature": "um anel impressionante", "hobby": "cartas", "vehicle": "dirigindo uma biga",             "cuisine": "comida tiferina"},
+}
+
+CRIMINAL_IDS = list(CRIMINALS_DATA.keys())
 
 def handle_cors(req: https_fn.Request):
-    """Função utilitária para tratar o CORS de todas as rotas."""
+    """Trata preflight CORS para todas as rotas."""
     if req.method == "OPTIONS":
         headers = {
             "Access-Control-Allow-Origin": "*",
@@ -20,94 +51,29 @@ def handle_cors(req: https_fn.Request):
 
 
 def get_valid_session(db, session_id):
-    """Verifica se a sessão existe e retorna os dados."""
+    """Retorna (ref, dados) da sessão ou (None, None) se inválida."""
     if not session_id:
         return None, None
-
     session_ref = db.collection("sessions").document(session_id)
     session_doc = session_ref.get()
-
     if not session_doc.exists:
         return None, None
-
     return session_ref, session_doc.to_dict()
-
-
-@https_fn.on_request()
-def start_game(req: https_fn.Request) -> https_fn.Response:
-    cors_headers, is_options = handle_cors(req)
-    if is_options:
-        return cors_headers
-
-    db = firestore.client()
-    try:
-        criminals = [d.to_dict() for d in db.collection("criminals").stream()]
-        cities = [d.to_dict() for d in db.collection("cities").stream()]
-        venues = [d.to_dict() for d in db.collection("venues").stream()]
-
-        criminal = random.choice(criminals)
-        trail_cities = random.sample(cities, 6)
-        trail_ids = [c["id"] for c in trail_cities]
-        first_city_venues = [v["id"] for v in random.sample(venues, 3)]
-        non_trail_cities = [c["id"] for c in cities if c["id"] not in trail_ids]
-        initial_distractors = random.sample(non_trail_cities, min(4, len(non_trail_cities)))
-
-        session_ref = db.collection("sessions").document()
-        session_data = {
-            "criminal_id": criminal["id"],
-            "trail": trail_ids,
-            "current_step": 0,
-            "current_location": trail_ids[0],
-            "start_time": firestore.SERVER_TIMESTAMP,
-            "venues_per_city": {
-                trail_ids[0]: first_city_venues
-            },
-            "used_curiosities_per_city": {},
-            "distractors_per_city": {
-                trail_ids[0]: initial_distractors
-            },
-        }
-        session_ref.set(session_data)
-
-        return https_fn.Response(
-            json.dumps({
-                "sessionId": session_ref.id,
-                "firstCityId": trail_ids[0],
-                "venues": first_city_venues,
-                "travelOptions": _build_travel_options(
-                    trail_ids=trail_ids,
-                    current_step=0,
-                    current_location=trail_ids[0], # Adicionado aqui
-                    history=[trail_ids[0]],
-                    distractors=initial_distractors,
-                )
-            }),
-            mimetype="application/json",
-            headers=cors_headers
-        )
-    except Exception as e:
-        return https_fn.Response(json.dumps({"error": str(e)}), status=500, headers=cors_headers)
 
 
 def _build_travel_options(trail_ids, current_step, current_location, history, distractors):
     """
-    Monta as opções de viagem seguindo estas regras:
-    - Se o jogador está na cidade correta do step atual (trilha certa):
-        exibe a próxima cidade da trilha + distratoras fixas (nunca cidades da trilha).
-    - Se o jogador está fora da trilha (errou uma cidade):
-        exibe APENAS a cidade de retorno (history[-2]), forçando o retorno antes
-        de qualquer nova escolha. Isso evita erros duplos consecutivos.
-    - A cidade de retorno é sempre incluída quando existe, em ambos os casos.
+    Regras de opções de viagem:
+    - Fora da trilha: APENAS a cidade de retorno (history[-2]), forçando correção
+      antes de qualquer nova escolha.
+    - Na trilha: próxima cidade correta + retorno (se existir) + distratoras
+      (nunca cidades pertencentes a trilha).
     """
     on_trail = current_location == trail_ids[current_step]
 
     if not on_trail:
-        # Fora da trilha: apenas opção de voltar
-        if len(history) > 1:
-            return [history[-2]]
-        return []
+        return [history[-2]] if len(history) > 1 else []
 
-    # Na trilha: próxima cidade correta + retorno (se existir) + distratoras
     options = []
 
     if current_step < len(trail_ids) - 1:
@@ -119,11 +85,60 @@ def _build_travel_options(trail_ids, current_step, current_location, history, di
             options.append(back_city)
 
     safe_distractors = [d for d in distractors if d not in trail_ids and d not in options]
-    slots_left = 5 - len(options)
-    options = options + safe_distractors[:slots_left]
+    options = options + safe_distractors[:5 - len(options)]
 
     random.shuffle(options)
     return options
+
+@https_fn.on_request()
+def start_game(req: https_fn.Request) -> https_fn.Response:
+    cors_headers, is_options = handle_cors(req)
+    if is_options:
+        return cors_headers
+
+    db = firestore.client()
+    try:
+        all_city_ids = [d.to_dict()["id"] for d in db.collection("cities").select(["id"]).stream()]
+
+        criminal_id = random.choice(CRIMINAL_IDS)
+        trail_ids = random.sample(all_city_ids, 6)
+        non_trail_ids = [c for c in all_city_ids if c not in trail_ids]
+        venues_per_city = {}
+        distractors_per_city = {}
+        for city_id in trail_ids:
+            venues_per_city[city_id] = random.sample(VENUE_IDS, 3)
+            distractors_per_city[city_id] = random.sample(non_trail_ids, min(4, len(non_trail_ids)))
+
+        session_ref = db.collection("sessions").document()
+        session_ref.set({
+            "criminal_id": criminal_id,
+            "trail": trail_ids,
+            "current_step": 0,
+            "current_location": trail_ids[0],
+            "start_time": firestore.SERVER_TIMESTAMP,
+            "venues_per_city": venues_per_city,
+            "distractors_per_city": distractors_per_city,
+            "used_curiosities_per_city": {},
+        })
+
+        return https_fn.Response(
+            json.dumps({
+                "sessionId": session_ref.id,
+                "firstCityId": trail_ids[0],
+                "venues": venues_per_city[trail_ids[0]],
+                "travelOptions": _build_travel_options(
+                    trail_ids=trail_ids,
+                    current_step=0,
+                    current_location=trail_ids[0],
+                    history=[trail_ids[0]],
+                    distractors=distractors_per_city[trail_ids[0]],
+                ),
+            }),
+            mimetype="application/json",
+            headers=cors_headers
+        )
+    except Exception as e:
+        return https_fn.Response(json.dumps({"error": str(e)}), status=500, headers=cors_headers)
 
 
 @https_fn.on_request()
@@ -140,10 +155,8 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
 
         if not session:
             return https_fn.Response(
-                json.dumps({"error": "Sessão não encontrada ou expirada."}),
-                status=404,
-                mimetype="application/json",
-                headers=cors_headers
+                json.dumps({"error": "Sessao nao encontrada ou expirada."}),
+                status=404, mimetype="application/json", headers=cors_headers
             )
 
         venue_id = data.get("venueId")
@@ -160,69 +173,53 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
             ]
             return https_fn.Response(
                 json.dumps({"clue": random.choice(clues_wrong_track), "captured": False}),
-                mimetype="application/json",
-                headers=cors_headers
+                mimetype="application/json", headers=cors_headers
             )
 
-        criminal = db.collection("criminals").document(criminal_id).get().to_dict()
+        criminal = CRIMINALS_DATA[criminal_id]
 
         if current_step == len(trail) - 1:
             used_in_final = session.get("used_curiosities_per_city", {}).get(trail[current_step], [])
-            attempts_in_city = len(used_in_final)
+            attempts = len(used_in_final)
+            capture_probability = 0.8 if attempts == 0 else (0.6 if attempts == 1 else 1.0)
 
-            if attempts_in_city == 0:
-                capture_probability = 0.8
-            elif attempts_in_city == 1:
-                capture_probability = 0.6
-            else:
-                capture_probability = 1.0
-
-            used_in_final_updated = used_in_final + [venue_id]
             session_ref.update({
-                f"used_curiosities_per_city.{trail[current_step]}": used_in_final_updated
+                f"used_curiosities_per_city.{trail[current_step]}": used_in_final + [venue_id]
             })
-
-            captured = random.random() < capture_probability
 
             return https_fn.Response(
                 json.dumps({
                     "clue": "O suspeito foi visto por aqui há poucos minutos!",
-                    "captured": captured
+                    "captured": random.random() < capture_probability,
                 }),
-                mimetype="application/json",
-                headers=cors_headers
+                mimetype="application/json", headers=cors_headers
             )
 
         next_city_id = trail[current_step + 1]
         next_city = db.collection("cities").document(next_city_id).get().to_dict()
         curiosities_map = next_city.get("curiosities", {})
-        venue_doc = db.collection("venues").document(venue_id).get()
-        venue_data = venue_doc.to_dict() if venue_doc.exists else {}
+        venue_data = VENUES_DATA.get(venue_id, {})
         role = venue_data.get("role", "encarregado")
         venue_topics = venue_data.get("topics", [])
+
         used_curiosities = session.get("used_curiosities_per_city", {}).get(current_location, [])
         venue_curiosities = [curiosities_map[t] for t in venue_topics if t in curiosities_map]
-        available_curiosities = [c for c in venue_curiosities if c not in used_curiosities]
+        available = [c for c in venue_curiosities if c not in used_curiosities]
 
-        if not available_curiosities:
-            available_curiosities = venue_curiosities
+        if not available:
+            available = venue_curiosities
+        if not available:
+            available = [c for c in curiosities_map.values() if c not in used_curiosities]
+        if not available:
+            available = list(curiosities_map.values())
 
-        if not available_curiosities:
-            all_curiosity_values = list(curiosities_map.values())
-            available_curiosities = [c for c in all_curiosity_values if c not in used_curiosities]
+        lead = random.choice(available)
 
-        if not available_curiosities:
-            available_curiosities = list(curiosities_map.values())
-
-        lead = random.choice(available_curiosities)
-
-        updated_used = used_curiosities + [lead]
         session_ref.update({
-            f"used_curiosities_per_city.{current_location}": updated_used
+            f"used_curiosities_per_city.{current_location}": used_curiosities + [lead]
         })
 
         add_clue = random.random() < 0.5
-
         gender_prefix = "A mulher" if criminal.get("gender") == "F" else "O homem"
         traits = [
             f"{gender_prefix} que você procura esteve aqui e",
@@ -271,7 +268,7 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
             ],
             "patio_treinamento": [
                 f"(O mestre d'armas golpeia o boneco) {criminal_clue}observou os treinos e perguntou sobre as táticas de combate de {lead_lower}.",
-                f"(O mestre d'armas limpa o suor) Alguém perguntou se nossas lâminas seriam eficazes contra {lead_lower}.",
+                f"(O mestre d'armas limpa o suor) Alguem perguntou se nossas lâminas seriam eficazes contra {lead_lower}.",
             ],
             "santuario": [
                 f"(O sacerdote acende uma vela) {criminal_clue}fez uma oferta aos deuses pedindo proteção e perguntou sobre {lead_lower}.",
@@ -289,15 +286,12 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
 
         templates = dialogue_templates.get(venue_id, [
             f"(O {role} olha para você) {criminal_clue}demonstrou um interesse incomum sobre {lead_lower}.",
-            f"(O {role} faz uma pausa) Me lembro de alguém perguntando sobre o relato de que {lead_lower}.",
+            f"(O {role} faz uma pausa) Me lembro de alguem perguntando sobre o relato de que {lead_lower}.",
         ])
 
-        final_clue = random.choice(templates)
-
         return https_fn.Response(
-            json.dumps({"clue": final_clue, "captured": False}),
-            mimetype="application/json",
-            headers=cors_headers
+            json.dumps({"clue": random.choice(templates), "captured": False}),
+            mimetype="application/json", headers=cors_headers
         )
 
     except Exception as e:
@@ -321,10 +315,8 @@ def travel(req: https_fn.Request) -> https_fn.Response:
 
         if not session:
             return https_fn.Response(
-                json.dumps({"error": "Sessão não encontrada ou expirada."}),
-                status=404,
-                mimetype="application/json",
-                headers=cors_headers
+                json.dumps({"error": "Sessao nao encontrada ou expirada."}),
+                status=404, mimetype="application/json", headers=cors_headers
             )
 
         current_location_before = session.get("current_location")
@@ -333,26 +325,20 @@ def travel(req: https_fn.Request) -> https_fn.Response:
         venues_per_city = session.get("venues_per_city", {})
         distractors_per_city = session.get("distractors_per_city", {})
 
-        if (current_location_before == trail[current_step] and 
-            current_step + 1 < len(trail) and 
-            target_city_id == trail[current_step + 1]):
+        if (current_location_before == trail[current_step]
+                and current_step + 1 < len(trail)
+                and target_city_id == trail[current_step + 1]):
             current_step += 1
-
-        if target_city_id not in venues_per_city:
-            all_venues = [d.to_dict()["id"] for d in db.collection("venues").stream()]
-            venues_per_city[target_city_id] = random.sample(all_venues, min(3, len(all_venues)))
 
         player_on_trail = (target_city_id == trail[current_step])
 
+        if target_city_id not in venues_per_city:
+            venues_per_city[target_city_id] = random.sample(VENUE_IDS, 3)
+
         if player_on_trail and target_city_id not in distractors_per_city:
-            non_trail_cities = [
-                c.to_dict()["id"]
-                for c in db.collection("cities").stream()
-                if c.to_dict()["id"] not in trail
-            ]
-            distractors_per_city[target_city_id] = random.sample(
-                non_trail_cities, min(4, len(non_trail_cities))
-            )
+            all_city_ids = [d.to_dict()["id"] for d in db.collection("cities").select(["id"]).stream()]
+            non_trail_ids = [c for c in all_city_ids if c not in trail]
+            distractors_per_city[target_city_id] = random.sample(non_trail_ids, min(4, len(non_trail_ids)))
 
         update_payload = {
             "current_location": target_city_id,
@@ -378,8 +364,7 @@ def travel(req: https_fn.Request) -> https_fn.Response:
                 "venues": venues_per_city[target_city_id],
                 "travelOptions": travel_options,
             }),
-            mimetype="application/json",
-            headers=cors_headers
+            mimetype="application/json", headers=cors_headers
         )
 
     except Exception as e:
@@ -389,10 +374,9 @@ def travel(req: https_fn.Request) -> https_fn.Response:
 @https_fn.on_request()
 def arrest(req: https_fn.Request) -> https_fn.Response:
     """
-    Endpoint mantido para compatibilidade, mas na lógica correta a captura
-    acontece dentro do endpoint /investigate (quando captured=True é retornado).
-    Este endpoint valida apenas se o mandado emitido está correto,
-    e pode ser usado como fallback ou verificação final.
+    Valida o mandado emitido contra o criminoso real da sessao.
+    A captura em si e sinalizada pelo endpoint /investigate (captured=True);
+    este endpoint e chamado pelo frontend imediatamente apos essa sinalizacao.
     """
     cors_headers, is_options = handle_cors(req)
     if is_options:
@@ -406,10 +390,8 @@ def arrest(req: https_fn.Request) -> https_fn.Response:
 
         if not session:
             return https_fn.Response(
-                json.dumps({"error": "Sessão não encontrada ou expirada."}),
-                status=404,
-                mimetype="application/json",
-                headers=cors_headers
+                json.dumps({"error": "Sessao nao encontrada ou expirada."}),
+                status=404, mimetype="application/json", headers=cors_headers
             )
 
         warrant_id = data.get("warrantId")
@@ -417,8 +399,7 @@ def arrest(req: https_fn.Request) -> https_fn.Response:
 
         return https_fn.Response(
             json.dumps({"status": status}),
-            mimetype="application/json",
-            headers=cors_headers
+            mimetype="application/json", headers=cors_headers
         )
 
     except Exception as e:
