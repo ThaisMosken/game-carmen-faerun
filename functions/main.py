@@ -103,13 +103,13 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
             f"Uma pessoa assim estava comentando sobre gostar de {criminal.get('cuisine')} e"
         ]
         criminal_clue = random.choice(traits)
+        venue_doc = db.collection("venues").document(venue_id).get().to_dict() or {}
 
         if current_step + 1 < len(trail):
             next_city_id = trail[current_step + 1]
             next_city = db.collection("cities").document(next_city_id).get().to_dict()
             curiosities = list(next_city.get('curiosities', {}).values())
             lead = random.choice(curiosities) if curiosities else "um local desconhecido"
-            venue_doc = db.collection("venues").document(venue_id).get().to_dict() or {}
 
             dialogue_templates = {
                 "biblioteca": [
