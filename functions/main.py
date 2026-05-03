@@ -320,6 +320,20 @@ def travel(req: https_fn.Request) -> https_fn.Response:
             target_city_id == trail[current_step + 1]):
             current_step += 1
 
+        if target_city_id not in venues_per_city:
+            all_venues = [d.to_dict()["id"] for d in db.collection("venues").stream()]
+            venues_per_city[target_city_id] = random.sample(all_venues, min(3, len(all_venues)))
+
+        if target_city_id not in distractors_per_city:
+            non_trail_cities = [
+                c.to_dict()["id"]
+                for c in db.collection("cities").stream()
+                if c.to_dict()["id"] not in trail
+            ]
+            distractors_per_city[target_city_id] = random.sample(
+                non_trail_cities, min(4, len(non_trail_cities))
+            )
+
         session_ref.update({
             "current_location": target_city_id,
             "current_step": current_step,
