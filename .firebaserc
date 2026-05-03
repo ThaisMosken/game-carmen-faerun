@@ -1,7 +1,7 @@
 {
   "projects": {
     "default": "singular-coil-451923-e9",
-    "ggame-pe-no-portal": "singular-coil-451923-e9"
+    "game-pe-no-portal": "singular-coil-451923-e9"
   },
   "targets": {},
   "etags": {}
