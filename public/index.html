@@ -328,18 +328,29 @@ function renderVenues() {
     const key    = `${cityId}_${vid}`;
     const answer = G.visitedVenues[key];
     const busy   = answer && answer.includes('loading-pulse');
+    const visited = answer && !busy;
 
     return `<div class="clue-item">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div onclick="${(answer && !busy) || G.isRequesting ? '' : `investigateVenue('${vid}')`}"
-             style="cursor:${(answer && !busy) || G.isRequesting ? 'default' : 'pointer'};${G.isRequesting && !answer ? 'opacity:0.5' : ''}">
+        <div class="venue-btn" data-venue="${vid}"
+             style="cursor:${visited ? 'default' : 'pointer'}">
           ${v.icon} <strong>${v.name}</strong>
         </div>
-        ${answer && !busy ? '✅' : ''}
+        ${visited ? '✅' : ''}
       </div>
       ${answer ? `<div class="npc-bubble">${answer}</div>` : ''}
     </div>`;
   }).join('');
+
+  document.querySelectorAll('.venue-btn').forEach(el => {
+    const vid    = el.dataset.venue;
+    const key    = `${cityId}_${vid}`;
+    const answer = G.visitedVenues[key];
+    const busy   = answer && answer.includes('loading-pulse');
+    if (!answer || busy) {
+      el.addEventListener('click', () => investigateVenue(vid));
+    }
+  });
 }
 
 function renderTravel() {
