@@ -60,6 +60,19 @@ def start_game(req: https_fn.Request) -> https_fn.Response:
     except Exception as e:
         return https_fn.Response(json.dumps({"error": str(e)}), status=500, headers=cors_headers)
 
+def get_valid_session(session_id):
+    """Verifica se a sessão existe e retorna os dados."""
+    if not session_id:
+        return None
+    
+    session_ref = db.collection("sessions").document(session_id)
+    session_doc = session_ref.get()
+    
+    if not session_doc.exists:
+        return None
+    
+    return session_doc.to_dict()
+
 @https_fn.on_request()
 def investigate(req: https_fn.Request) -> https_fn.Response:
     cors_headers, is_options = handle_cors(req)
@@ -69,8 +82,17 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
     try:
         data = req.get_json()
         session_id = data.get("sessionId")
+        session_data = get_valid_session(session_id)
+    
+        if not session_data:
+            return https_fn.Response(
+                json.dumps({"error": "Sessão não encontrada ou expirada."}),
+                status=404,
+                mimetype="application/json",
+                headers=cors_headers
+            )
+        
         venue_id = data.get("venueId")
-
         session_ref = db.collection("sessions").document(session_id)
         session = session_ref.get().to_dict()
 
@@ -188,8 +210,17 @@ def travel(req: https_fn.Request) -> https_fn.Response:
     try:
         data = req.get_json()
         session_id = data.get("sessionId")
-        target_city_id = data.get("targetCityId")
+        session_data = get_valid_session(session_id)
+    
+        if not session_data:
+            return https_fn.Response(
+                json.dumps({"error": "Sessão não encontrada ou expirada."}),
+                status=404,
+                mimetype="application/json",
+                headers=cors_headers
+            )
 
+        target_city_id = data.get("targetCityId")
         session_ref = db.collection("sessions").document(session_id)
         session = session_ref.get().to_dict()
 
@@ -233,8 +264,17 @@ def arrest(req: https_fn.Request) -> https_fn.Response:
     try:
         data = req.get_json()
         session_id = data.get("sessionId")
-        warrant_id = data.get("warrantId")
+        session_data = get_valid_session(session_id)
+    
+        if not session_data:
+            return https_fn.Response(
+                json.dumps({"error": "Sessão não encontrada ou expirada."}),
+                status=404,
+                mimetype="application/json",
+                headers=cors_headers
+            )
 
+        warrant_id = data.get("warrantId")
         session_ref = db.collection("sessions").document(session_id)
         session = session_ref.get().to_dict()
 
