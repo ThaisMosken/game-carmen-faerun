@@ -77,6 +77,7 @@ def start_game(req: https_fn.Request) -> https_fn.Response:
                 "travelOptions": _build_travel_options(
                     trail_ids=trail_ids,
                     current_step=0,
+                    current_location=trail_ids[0], # Adicionado aqui
                     history=[trail_ids[0]],
                     distractors=initial_distractors,
                 )
@@ -88,7 +89,7 @@ def start_game(req: https_fn.Request) -> https_fn.Response:
         return https_fn.Response(json.dumps({"error": str(e)}), status=500, headers=cors_headers)
 
 
-def _build_travel_options(trail_ids, current_step, history, distractors):
+def _build_travel_options(trail_ids, current_step, current_location, history, distractors):
     """
     Monta a lista de até 5 opções de viagem da mesma forma que o frontend original fazia:
     - Cidade anterior (para voltar), se existir no histórico
@@ -101,8 +102,9 @@ def _build_travel_options(trail_ids, current_step, history, distractors):
     if len(history) > 1:
         options.add(history[-2])
 
-    if current_step < len(trail_ids) - 1:
-        options.add(trail_ids[current_step + 1])
+    if current_location == trail_ids[current_step]:
+        if current_step < len(trail_ids) - 1:
+            options.add(trail_ids[current_step + 1])
 
     for d in distractors:
         options.add(d)
@@ -293,6 +295,9 @@ def travel(req: https_fn.Request) -> https_fn.Response:
     db = firestore.client()
     try:
         data = req.get_json()
+        target_city_id = data.get("targetCityId")
+        history = data.get("history", [target_city_id])
+
         session_id = data.get("sessionId")
         session_ref, session = get_valid_session(db, session_id)
 
@@ -304,30 +309,16 @@ def travel(req: https_fn.Request) -> https_fn.Response:
                 headers=cors_headers
             )
 
-        target_city_id = data.get("targetCityId")
-        history = data.get("history", [target_city_id])
-
+        current_location_before = session.get("current_location")
         current_step = session["current_step"]
         trail = session["trail"]
         venues_per_city = session.get("venues_per_city", {})
         distractors_per_city = session.get("distractors_per_city", {})
 
-        if current_step + 1 < len(trail) and target_city_id == trail[current_step + 1]:
+        if (current_location_before == trail[current_step] and 
+            current_step + 1 < len(trail) and 
+            target_city_id == trail[current_step + 1]):
             current_step += 1
-
-        if target_city_id not in venues_per_city:
-            all_venues = [d.to_dict()["id"] for d in db.collection("venues").stream()]
-            venues_per_city[target_city_id] = random.sample(all_venues, min(3, len(all_venues)))
-
-        if target_city_id not in distractors_per_city:
-            non_trail_cities = [
-                c.to_dict()["id"]
-                for c in db.collection("cities").stream()
-                if c.to_dict()["id"] not in trail
-            ]
-            distractors_per_city[target_city_id] = random.sample(
-                non_trail_cities, min(4, len(non_trail_cities))
-            )
 
         session_ref.update({
             "current_location": target_city_id,
@@ -339,6 +330,7 @@ def travel(req: https_fn.Request) -> https_fn.Response:
         travel_options = _build_travel_options(
             trail_ids=trail,
             current_step=current_step,
+            current_location=target_city_id,
             history=history,
             distractors=distractors_per_city[target_city_id],
         )
