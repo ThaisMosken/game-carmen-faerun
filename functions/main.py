@@ -97,19 +97,20 @@ def _build_travel_options(trail_ids, current_step, current_location, history, di
     - Cidades distratoras fixas (fora da trilha)
     Embaralha o resultado final.
     """
-    options = set()
-
-    if len(history) > 1:
-        options.add(history[-2])
+    mandatory = []
 
     if current_location == trail_ids[current_step]:
         if current_step < len(trail_ids) - 1:
-            options.add(trail_ids[current_step + 1])
+            mandatory.append(trail_ids[current_step + 1])
 
-    for d in distractors:
-        options.add(d)
+    if len(history) > 1:
+        back_city = history[-2]
+        if back_city not in mandatory:
+            mandatory.append(back_city)
 
-    result = list(options)[:5]
+    clean_distractors = [d for d in distractors if d not in mandatory]
+    slots_left = 5 - len(mandatory)
+    result = mandatory + clean_distractors[:slots_left]
     random.shuffle(result)
     return result
 
