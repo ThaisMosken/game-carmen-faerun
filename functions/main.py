@@ -17,22 +17,22 @@ VENUES_DATA = {
     "patio_treinamento": {"role": "Mestre d'Armas",   "topics": ["Defense", "Races"]},
     "santuario":         {"role": "Sacerdote",        "topics": ["Religion"]},
     "taverna":           {"role": "Taverneiro",       "topics": ["Culture","Geography","Politics"]},
-    "torre_alta_magia":  {"role": "Arcanista",        "topics": ["Magic", "History"]},
+    "torre_alta_magia":  {"role": "Arcanista",        "topics": ["Magic"]},
 }
 
 VENUE_IDS = list(VENUES_DATA.keys())
 
 CRIMINALS_DATA = {
-    "anniken_zonledre":        {"gender": "F", "hair": "loiro",    "feature": "uma tatuagem",           "hobby": "cartas", "vehicle": "em uma carruagem",               "cuisine": "frutos do mar"},
-    "chuck_brinn":             {"gender": "M", "hair": "preto",    "feature": "bigode",                 "hobby": "dados",  "vehicle": "dirigindo uma máquina infernal", "cuisine": "comida élfica"},
-    "coral_meery":             {"gender": "F", "hair": "castanho", "feature": "belas joias",            "hobby": "dados",  "vehicle": "em uma carruagem",               "cuisine": "comida apimentada"},
-    "deaf_tidbes":             {"gender": "M", "hair": "preto",    "feature": "um alfinete de gravata", "hobby": "xadrez", "vehicle": "em uma carruagem",               "cuisine": "comida élfica"},
-    "garlon_scryat":           {"gender": "M", "hair": "ruivo",    "feature": "um anel impressionante", "hobby": "xadrez", "vehicle": "em uma carruagem",               "cuisine": "comida tiferina"},
-    "hovio_richithor":         {"gender": "M", "hair": "loiro",    "feature": "uma tatuagem",           "hobby": "xadrez", "vehicle": "em uma carruagem",               "cuisine": "frutos do mar"},
-    "kelden_blur":             {"gender": "M", "hair": "ruivo",    "feature": "uma tatuagem",           "hobby": "dados",  "vehicle": "em uma carruagem",               "cuisine": "frutos do mar"},
-    "marcin_gesedano":         {"gender": "F", "hair": "castanho", "feature": "belas joias",            "hobby": "cartas", "vehicle": "em uma carruagem",               "cuisine": "comida tiferina"},
-    "romani_brookebeth_kadio": {"gender": "F", "hair": "castanho", "feature": "uma tatuagem",           "hobby": "dados",  "vehicle": "dirigindo uma máquina infernal", "cuisine": "frutos do mar"},
-    "taylana_gaddahyal":       {"gender": "F", "hair": "ruivo",    "feature": "um anel impressionante", "hobby": "cartas", "vehicle": "dirigindo uma biga",             "cuisine": "comida tiferina"},
+  "black_spider":           {"gender":"M", "hair":"claro",   "feature":"um cajado",    "hobby":"xadrez", "vehicle":"voando",                         "cuisine":"vegetais",          "species":"élfica"},
+  "glassstaff":             {"gender":"M", "hair":"escuro",  "feature":"um cajado",    "hobby":"xadrez", "vehicle":"voando",                         "cuisine":"vegetais",          "species":"humana"},
+  "halia_thornton":         {"gender":"F", "hair":"escuro",  "feature":"belas joias",  "hobby":"cartas", "vehicle":"em uma carruagem",               "cuisine":"comida apimentada", "species":"humana"},
+  "jarlaxe_baenre":         {"gender":"M", "hair":"raspado", "feature":"belas joias",  "hobby":"cartas", "vehicle":"dirigindo uma máquina infernal", "cuisine":"frutos do mar",     "species":"élfica"},
+  "lord_drylund":           {"gender":"M", "hair":"claro",   "feature":"uma tatuagem", "hobby":"dados",  "vehicle":"em uma carruagem",               "cuisine":"doces",             "species":"humana"},
+  "nass_lantomir":          {"gender":"F", "hair":"ruivo",   "feature":"um cajado",    "hobby":"cartas", "vehicle":"voando",                         "cuisine":"frutos do mar",     "species":"humana"},
+  "nine_fingers_keene":     {"gender":"F", "hair":"escuro",  "feature":"belas joias",  "hobby":"dados",  "vehicle":"em uma carruagem",               "cuisine":"doces",             "species":"humana"},
+  "prisioner_13":           {"gender":"F", "hair":"ruivo",   "feature":"uma tatuagem", "hobby":"dados",  "vehicle":"dirigindo uma máquina infernal", "cuisine":"comida apimentada", "species":"anã"},
+  "valindra_shadowmantle":  {"gender":"F", "hair":"claro",   "feature":"belas joias",  "hobby":"xadrez", "vehicle":"voando",                         "cuisine":"frutos do mar",     "species":"élfica"},
+  "xardorok_sunblight":     {"gender":"M", "hair":"claro",   "feature":"uma tatuagem", "hobby":"dados",  "vehicle":"em uma carruagem",               "cuisine":"comida apimentada", "species":"anã"}
 }
 
 CRIMINAL_IDS = list(CRIMINALS_DATA.keys())
@@ -228,6 +228,7 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
             f"Havia por aqui um viajante que costumava jogar {criminal.get('hobby')} e que",
             f"Alguém assim chegou {criminal.get('vehicle')} e",
             f"Uma pessoa assim estava comentando sobre gostar de {criminal.get('cuisine')} e",
+            f"Vi uma pessoa {criminal.get('species')} que"
         ]
 
         criminal_clue = random.choice(traits) + " " if add_clue else " Um viajante "
