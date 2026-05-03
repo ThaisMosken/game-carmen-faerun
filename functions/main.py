@@ -219,7 +219,7 @@ def investigate(req: https_fn.Request) -> https_fn.Response:
             f"used_curiosities_per_city.{current_location}": used_curiosities + [lead]
         })
 
-        add_clue = random.random() < 0.5
+        add_clue = random.random() < 0.6
         gender_prefix = "A mulher" if criminal.get("gender") == "F" else "O homem"
         traits = [
             f"{gender_prefix} que você procura esteve aqui e",
