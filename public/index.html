@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Onde em Faerûn está o Criminoso?</title>
+<title>Onde em Faerûn está Marcin Gesedano?</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:sans-serif;background:#121212;color:#e0e0e0;font-size:14px;line-height:1.5}
@@ -16,48 +16,40 @@ h1{font-size:22px;font-weight:600;color:#fff;text-align:center;margin-bottom:10p
 .npc-bubble{background:#252525;border:1px solid #333;border-radius:12px 12px 12px 2px;padding:12px;font-size:13px;font-style:italic;color:#ccc;margin-top:8px}
 .clue-item{padding:12px;border:1px solid #333;border-radius:8px;background:#1e1e1e;margin-bottom:8px}
 .tabs{display:flex;gap:8px;margin-bottom:12px;border-bottom:1px solid #333;padding-bottom:8px}
-.tab {
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 8px;
-  color: #888;
-  font-size: 14px;
-  font-weight: bold;
-  background: transparent;
-  border: 2px solid transparent; 
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.tab.active {
-  background: #252525;
-  color: #fbbf24;
-  border: 2px solid #fbbf24;
-}
-
-.tab:not(.active):hover {
-  color: #fbbf24;
-  background: #1e1e1e;
-}
+.tab{padding:8px 16px;cursor:pointer;border-radius:8px;color:#888;font-size:14px;font-weight:bold;background:transparent;border:2px solid transparent;transition:all 0.2s ease;display:flex;align-items:center;gap:6px}
+.tab.active{background:#252525;color:#fbbf24;border:2px solid #fbbf24}
+.tab:not(.active):hover{color:#fbbf24;background:#1e1e1e}
 input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-radius:8px;width:100%}
-.loading-pulse{animation:pulse 1.5s infinite; color: #777;}
-@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+.loading-pulse{animation:pulse 1.5s infinite;color:#777}
+@keyframes pulse{0%{opacity:0.5}50%{opacity:1}100%{opacity:0.5}}
 </style>
 </head>
 <body>
 
 <div id="setup-screen" class="screen active">
-  <h1>🗺️ Caçada em Faerûn</h1>
-  <button class="btn primary" style="width:100%; font-weight: bold; font-size: 14px;" onclick="startGame()">
+  <h1>🗺️ Onde em Faerûn está Marcin Gesedano?</h1>
+
+  <div class="card" style="line-height:1.5;color:#ccc;margin-bottom:20px;border-left:4px solid #fbbf24">
+    <p style="color:#fbbf24;font-size:11px;text-transform:uppercase;font-weight:bold;margin-bottom:10px;letter-spacing:1px">📜 Briefing da Missão</p>
+    <p style="margin-bottom:16px;font-size:14px">Um grupo criminoso está roubando artefatos por Faerûn. Você foi contratado para capturar o suspeito deste novo crime.</p>
+    <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;font-size:13px">
+      <li style="display:flex;gap:10px;align-items:flex-start"><span>⚖️</span><span>Emita um <strong>mandado de prisão</strong> antes de confrontar o suspeito.</span></li>
+      <li style="display:flex;gap:10px;align-items:flex-start"><span>🧭</span><span>Investigue locais para coletar pistas sobre o próximo destino do alvo.</span></li>
+      <li style="display:flex;gap:10px;align-items:flex-start"><span>⌛</span><span>Você tem <strong>7 dias</strong> antes que o rastro esfrie e o suspeito escape.</span></li>
+    </ul>
+  </div>
+
+  <button class="btn" id="start-btn" style="width:100%;background:#252525;color:#fbbf24;border:2px solid #fbbf24;font-weight:bold;font-size:14px" onclick="startGame()">
     ▶ Iniciar Missão
   </button>
 </div>
 
 <div id="game-screen" class="screen">
   <div style="display:flex;justify-content:space-between;align-items:center">
-    <div><h2 id="current-city-name">—</h2></div>
+    <div>
+      <h2 id="current-city-name">—</h2>
+      <div id="city-tags"></div>
+    </div>
     <div style="text-align:right">
       <div id="time-display" style="font-size:12px;color:#aaa"></div>
       <div style="background:#333;border-radius:6px;height:8px;width:100px;overflow:hidden"><div id="time-fill" style="height:100%;background:#16a34a"></div></div>
@@ -72,22 +64,49 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
   <div class="tabs">
     <div class="tab active" id="tab-investigate" onclick="switchTab('investigate', this)">🔍 Investigar</div>
     <div class="tab" id="tab-travel" onclick="switchTab('travel', this)">🌀 Teleportar</div>
-    <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📜 Pistas</div>
+    <div class="tab" id="tab-notes" onclick="switchTab('notes', this)">📜 Compêndio da Busca</div>
   </div>
 
-  <div id="panel-investigate"><div id="venues-list"></div></div>
-  <div id="panel-travel" style="display:none"><div id="travel-list"></div></div>
-  <div id="panel-notes" style="display:none"><div class="card" id="clues-collected"></div></div>
+  <div id="panel-investigate">
+    <div class="card" style="font-size:13px;color:#aaa;margin-bottom:16px;border-left:4px solid #fbbf24">
+      <p style="margin-bottom:10px;color:#fbbf24;font-weight:bold;text-transform:uppercase;font-size:11px;letter-spacing:1px">🕵️ Guia de Campo</p>
+      <p style="margin-bottom:12px;line-height:1.4">Você precisa obter pistas sobre o criminoso e seu paradeiro rapidamente. O tempo é escasso, acompanhe o relógio no topo da tela.</p>
+      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px;line-height:1.4">
+        <li style="display:flex;gap:10px;align-items:flex-start"><span>🔍</span><span>Interrogar testemunhas em estabelecimentos consome <strong>2h</strong>.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start"><span>🌀</span><span>Solicitar teleporte para outra cidade consome <strong>8h</strong>.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start"><span>⚖️</span><span>Emitir um mandado é <strong>instantâneo</strong>, mas apenas um pode estar ativo por vez.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start"><span>⚠️</span><span>O mandado deve ser preciso: se encontrar o suspeito sem o nome correto, ele fugirá.</span></li>
+      </ul>
+    </div>
+    <div id="venues-list"></div>
+  </div>
+
+  <div id="panel-travel" style="display:none">
+    <div class="card" style="font-size:13px;color:#aaa;margin-bottom:16px;border-left:4px solid #fbbf24;text-align:left">
+      <p style="margin-bottom:10px;color:#fbbf24;font-weight:bold;text-transform:uppercase;font-size:11px;letter-spacing:1px">🌀 Logística de Viagem</p>
+      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px;line-height:1.4">
+        <li style="display:flex;gap:10px;align-items:flex-start"><span>⌛</span><span>A viagem de teleporte demora <strong>8 horas</strong>.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start"><span>↩️</span><span>Se for para o caminho errado, você poderá se teleportar de volta à cidade de origem e retomar os rastros.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start"><span>🏙️</span><span>Escolha a cidade de destino abaixo para se teleportar.</span></li>
+      </ul>
+    </div>
+    <div id="travel-list"></div>
+  </div>
+
+  <div id="panel-notes" style="display:none">
+    <div class="card" id="clues-collected"></div>
+  </div>
 </div>
 
 <div id="result-screen" class="screen" style="text-align:center">
+  <div id="result-icon" style="font-size:64px"></div>
   <h1 id="result-title"></h1>
   <div class="card" id="result-details" style="margin:20px 0;text-align:center"></div>
   <button class="btn primary" style="width:100%" onclick="location.reload()">Nova Partida</button>
 </div>
 
-<div id="warrant-modal" class="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:100; align-items:center; justify-content:center;">
-  <div class="modal" style="background:#1e1e1e; padding:20px; border-radius:16px; width:90%; max-width:400px;">
+<div id="warrant-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:center;justify-content:center">
+  <div style="background:#1e1e1e;padding:20px;border-radius:16px;width:90%;max-width:400px">
     <h3>Emitir Mandado</h3>
     <div id="warrant-options" style="margin:15px 0;max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:8px"></div>
     <button class="btn" style="width:100%" onclick="closeWarrantModal()">Fechar</button>
@@ -96,179 +115,354 @@ input{background:#252525;border:1px solid #444;color:#fff;padding:10px;border-ra
 
 <script>
 const URLS = {
-  start: 'https://start-game-hmod4ptaqq-uc.a.run.app',
+  start:       'https://start-game-hmod4ptaqq-uc.a.run.app',
   investigate: 'https://investigate-hmod4ptaqq-uc.a.run.app',
-  travel: 'https://travel-hmod4ptaqq-uc.a.run.app',
-  arrest: 'https://arrest-hmod4ptaqq-uc.a.run.app'
+  travel:      'https://travel-hmod4ptaqq-uc.a.run.app',
+  arrest:      'https://arrest-hmod4ptaqq-uc.a.run.app'
 };
 
 const HOURS_COST_INVESTIGATING = 2;
 const HOURS_COST_TRAVELLING = 8;
 
-const CITIES_CATALOG = {"berdusk": "Berdusk", "bryn_shander": "Bryn Shander", "citadel_adbar": "Citadel Adbar", "citadel_felbarr": "Citadel Felbarr", "daggerford": "Daggerford", "elturel": "Elturel", "everlund": "Everlund", "gauntlgrym": "Gauntlgrym", "goldenfields": "Goldenfields", "iriaebor": "Iriaebor", "longsaddle": "Longsaddle", "loudwater": "Loudwater", "luskan": "Luskan", "menzoberranzan": "Menzoberranzan", "mirabar": "Mirabar", "mithral_hall": "Mithral Hall", "neverwinter": "Neverwinter", "newfort": "Newfort", "phandalin": "Phandalin", "porto_nyanzaru": "Porto Nyanzaru", "scornubel": "Scornubel", "silverymoon": "Silverymoon", "sundabar": "Sundabar", "triboar": "Triboar", "waterdeep": "Waterdeep", "yartar": "Yartar"};
-const VENUES_CATALOG = {"biblioteca": {name: "Biblioteca", icon: "📚"}, "cartografo": {name: "Cartógrafo", icon: "📜"}, "centro_cultural": {name: "Centro Cultural", icon: "🎭"}, "estalagem": {name: "Estalagem", icon: "🛌"}, "estaleiro": {name: "Estaleiro", icon: "🏗️"}, "museu": {name: "Museu", icon: "🏛️"}, "oficina_gemas": {name: "Oficina de Gemas", icon: "💎"}, "patio_carrocas": {name: "Pátio de Carroças", icon: "🐪"}, "patio_treinamento": {name: "Pátio de Treinamento", icon: "⚔️"}, "santuario": {name: "Santuário", icon: "🕯️"}, "taverna": {name: "Taverna", icon: "🍺"}, "torre_alta_magia": {name: "Torre de Alta Magia", icon: "🔮"}};
-const CRIMINALS_CATALOG = [{id:'anniken_zonledre', name:'Anniken Zonledre'}, {id:'chuck_brinn', name:'Chuck Brinn'}, {id:'coral_meery', name:'Coral Meery'}, {id:'deaf_tidbes', name:'Deaf Tidbes'}, {id:'garlon_scryat', name:'Garlon Scryat'}, {id:'hovio_richithor', name:'Hovio Richithor'}, {id:'kelden_blur', name:'Kelden Blur'}, {id:'marcin_gesedano', name:'Marcin Gesedano'}, {id:'romani_brookebeth_kadio', name:'Romani Brookebeth Kadio'}, {id:'taylana_gaddahyal', name:'Taylana Gaddahyal'}];
+const CITIES_CATALOG = {
+  "berdusk":"Berdusk","bryn_shander":"Bryn Shander","citadel_adbar":"Citadel Adbar",
+  "citadel_felbarr":"Citadel Felbarr","daggerford":"Daggerford","elturel":"Elturel",
+  "everlund":"Everlund","gauntlgrym":"Gauntlgrym","goldenfields":"Goldenfields",
+  "iriaebor":"Iriaebor","longsaddle":"Longsaddle","loudwater":"Loudwater",
+  "luskan":"Luskan","menzoberranzan":"Menzoberranzan","mirabar":"Mirabar",
+  "mithral_hall":"Mithral Hall","neverwinter":"Neverwinter","newfort":"Newfort",
+  "phandalin":"Phandalin","porto_nyanzaru":"Porto Nyanzaru","scornubel":"Scornubel",
+  "silverymoon":"Silverymoon","sundabar":"Sundabar","triboar":"Triboar",
+  "waterdeep":"Waterdeep","yartar":"Yartar"
+};
+
+const VENUES_CATALOG = {
+  "biblioteca":       {name:"Biblioteca",          icon:"📚"},
+  "cartografo":       {name:"Cartógrafo",           icon:"📜"},
+  "centro_cultural":  {name:"Centro Cultural",      icon:"🎭"},
+  "estalagem":        {name:"Estalagem",            icon:"🛌"},
+  "estaleiro":        {name:"Estaleiro",            icon:"🏗️"},
+  "museu":            {name:"Museu",                icon:"🏛️"},
+  "oficina_gemas":    {name:"Oficina de Gemas",     icon:"💎"},
+  "patio_carrocas":   {name:"Pátio de Carroças",   icon:"🐪"},
+  "patio_treinamento":{name:"Pátio de Treinamento", icon:"⚔️"},
+  "santuario":        {name:"Santuário dos Deuses Antigos", icon:"🕯️"},
+  "taverna":          {name:"Taverna",              icon:"🍺"},
+  "torre_alta_magia": {name:"Torre de Alta Magia",  icon:"🔮"}
+};
+
+const CRIMINALS_CATALOG = [
+  {id:'anniken_zonledre',        name:'Anniken Zonledre'},
+  {id:'chuck_brinn',             name:'Chuck Brinn'},
+  {id:'coral_meery',             name:'Coral Meery'},
+  {id:'deaf_tidbes',             name:'Deaf Tidbes'},
+  {id:'garlon_scryat',           name:'Garlon Scryat'},
+  {id:'hovio_richithor',         name:'Hovio Richithor'},
+  {id:'kelden_blur',             name:'Kelden Blur'},
+  {id:'marcin_gesedano',         name:'Marcin Gesedano'},
+  {id:'romani_brookebeth_kadio', name:'Romani Brookebeth Kadio'},
+  {id:'taylana_gaddahyal',       name:'Taylana Gaddahyal'}
+];
 
 let G = {
-  sessionId: null, currentCityId: '', currentDay: 1, maxDays: 7, currentMinutes: 8*60,
-  venuesInCity: [], visitedVenues: {}, warrant: null, clues: [], history: [], isRequesting: false
+  sessionId: null,
+  currentCityId: '',
+  currentDay: 1,
+  maxDays: 7,
+  currentMinutes: 8 * 60,
+  venuesInCity: [],
+  visitedVenues: {},
+  warrant: null,
+  clues: [],
+  history: [],
+  travelOptions: [],
+  isRequesting: false
 };
 
 async function startGame() {
-  if (G.isRequesting) return; G.isRequesting = true;
+  if (G.isRequesting) return;
+  G.isRequesting = true;
+  const btn = document.getElementById('start-btn');
+  btn.textContent = 'Conectando...';
+  btn.disabled = true;
+
   try {
     const res = await fetch(URLS.start);
     if (!res.ok) {
-            const errorData = await res.json();
-            const message = errorData.error || "Erro desconhecido no servidor.";            
-            console.error("Erro detalhado:", message);
-            alert(`Falha ao iniciar: ${message}`);
-            return;
-        }
-        const data = await res.json();
-    if (data.error) throw new Error(data.error);
+      const err = await res.json();
+      alert(`Falha ao iniciar: ${err.error || 'Erro desconhecido'}`);
+      return;
+    }
+    const data = await res.json();
 
-    G.sessionId = data.sessionId;
-    G.currentCityId = data.firstCityId;
-    G.venuesInCity = data.venues;
-    G.history = [data.firstCityId];
-    
+    G.sessionId      = data.sessionId;
+    G.currentCityId  = data.firstCityId;
+    G.venuesInCity   = data.venues;
+    G.travelOptions  = data.travelOptions || [];
+    G.history        = [data.firstCityId];
+
     document.getElementById('setup-screen').classList.remove('active');
     document.getElementById('game-screen').classList.add('active');
     renderGameScreen();
-  } catch (e) { alert("Falha ao conectar."); } finally { G.isRequesting = false; }
+  } catch (e) {
+    alert('Falha ao conectar com o servidor.');
+  } finally {
+    G.isRequesting = false;
+    btn.textContent = '▶ Iniciar Missão';
+    btn.disabled = false;
+  }
 }
 
 async function investigateVenue(venueId) {
-  if (G.isRequesting) return; 
+  if (G.isRequesting) return;
+  const key = `${G.currentCityId}_${venueId}`;
+  if (G.visitedVenues[key]) return;
   if (!advanceTime(HOURS_COST_INVESTIGATING * 60)) return;
+
   G.isRequesting = true;
+  G.visitedVenues[key] = "<span class='loading-pulse'>Consultando testemunhas...</span>";
+  renderVenues();
 
   try {
     const res = await fetch(URLS.investigate, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: G.sessionId, venueId: venueId })
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({sessionId: G.sessionId, venueId})
     });
+
     if (!res.ok) {
-            const errorData = await res.json();
-            const message = errorData.error || "Erro desconhecido no servidor.";            
-            console.error("Erro detalhado:", message);
-            alert(`Falha ao iniciar: ${message}`);
-            return;
-        }
+      const err = await res.json();
+      alert(`Erro na investigação: ${err.error || 'Erro desconhecido'}`);
+      delete G.visitedVenues[key];
+      return;
+    }
+
     const data = await res.json();
-    
-    G.visitedVenues[`${G.currentCityId}_${venueId}`] = data.clue;
-    G.clues.push(`<strong>[Investigação]</strong> ${CITIES_CATALOG[G.currentCityId]}: ${data.clue}`);
+    const venueName = VENUES_CATALOG[venueId]?.name || venueId;
+
+    G.visitedVenues[key] = data.clue;
+    G.clues.push(`<strong>[${venueName}]</strong> ${data.clue}`);
+
+    if (data.captured === true) {
+      foundCriminal();
+      return;
+    }
+
     renderGameScreen();
-  } catch (e) { alert("Erro na investigação."); } finally { G.isRequesting = false; }
+  } catch (e) {
+    alert('Erro na investigação.');
+    delete G.visitedVenues[key];
+  } finally {
+    G.isRequesting = false;
+  }
 }
 
 async function travelTo(targetCityId) {
   if (G.isRequesting) return;
   if (!advanceTime(HOURS_COST_TRAVELLING * 60)) return;
+
   G.isRequesting = true;
 
+  const fromCity = CITIES_CATALOG[G.currentCityId] || G.currentCityId;
+  const toCity   = CITIES_CATALOG[targetCityId]    || targetCityId;
+
   try {
+    let updatedHistory = [...G.history];
+    if (updatedHistory.length > 1 && targetCityId === updatedHistory[updatedHistory.length - 2]) {
+      updatedHistory.pop();
+    } else {
+      updatedHistory.push(targetCityId);
+    }
+
     const res = await fetch(URLS.travel, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: G.sessionId, targetCityId: targetCityId })
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        sessionId: G.sessionId,
+        targetCityId,
+        history: updatedHistory
+      })
     });
+
     if (!res.ok) {
-            const errorData = await res.json();
-            const message = errorData.error || "Erro desconhecido no servidor.";            
-            console.error("Erro detalhado:", message);
-            alert(`Falha ao iniciar: ${message}`);
-            return;
-        }
+      const err = await res.json();
+      alert(`Erro no teleporte: ${err.error || 'Erro desconhecido'}`);
+      return;
+    }
+
     const data = await res.json();
 
-    G.history.push(targetCityId);
+    G.history       = updatedHistory;
     G.currentCityId = data.cityId;
-    G.venuesInCity = data.venues;
-    
-    G.clues.push(`<strong>[Teleporte]</strong> Chegada em ${CITIES_CATALOG[targetCityId]} (Dia ${G.currentDay})`);
+    G.venuesInCity  = data.venues;
+    G.travelOptions = data.travelOptions || [];
+
+    G.clues.push(`<strong>[Teleporte]</strong> De ${fromCity} para ${toCity} (Dia ${G.currentDay})`);
+
     renderGameScreen();
     switchTab('investigate', document.getElementById('tab-investigate'));
-  } catch (e) { alert("Erro no teleporte."); } finally { G.isRequesting = false; }
-}
-
-async function issueArrest() {
-  if (!G.warrant || G.isRequesting) return;
-  G.isRequesting = true;
-  try {
-    const res = await fetch(URLS.arrest, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: G.sessionId, warrantId: G.warrant })
-    });
-    if (!res.ok) {
-            const errorData = await res.json();
-            const message = errorData.error || "Erro desconhecido no servidor.";            
-            console.error("Erro detalhado:", message);
-            alert(`Falha ao iniciar: ${message}`);
-            return;
-        }
-    const data = await res.json();
-    endGame(data.status);
-  } catch (e) { alert("Erro ao contatar guarnição."); } finally { G.isRequesting = false; }
+  } catch (e) {
+    alert('Erro no teleporte.');
+  } finally {
+    G.isRequesting = false;
+  }
 }
 
 function renderGameScreen() {
-  document.getElementById('current-city-name').innerHTML = `Você está em <span style="color: #fbbf24;">${CITIES_CATALOG[G.currentCityId]}</span>`;
-  document.getElementById('time-display').textContent = `Dia ${G.currentDay} - ${Math.floor(G.currentMinutes/60)}:00`;
-  document.getElementById('time-fill').style.width = `${(1 - (G.currentDay/G.maxDays)) * 100}%`;
-  
-  const vList = document.getElementById('venues-list');
-  vList.innerHTML = G.venuesInCity.map(vid => {
-    const v = VENUES_CATALOG[vid];
-    const answer = G.visitedVenues[`${G.currentCityId}_${vid}`];
+  const cityName = CITIES_CATALOG[G.currentCityId] || G.currentCityId;
+  document.getElementById('current-city-name').innerHTML =
+    `Você está em <span style="color:#fbbf24;font-weight:bold">${cityName}</span>`;
+  document.getElementById('time-display').textContent =
+    `Dia ${G.currentDay} - ${Math.floor(G.currentMinutes / 60)}:00`;
+  document.getElementById('time-fill').style.width =
+    `${(1 - (G.currentDay / G.maxDays)) * 100}%`;
+
+  renderVenues();
+  renderTravel();
+}
+
+function renderVenues() {
+  const cityId = G.currentCityId;
+  document.getElementById('venues-list').innerHTML = G.venuesInCity.map(vid => {
+    const v      = VENUES_CATALOG[vid] || {name: vid, icon: '🏠'};
+    const key    = `${cityId}_${vid}`;
+    const answer = G.visitedVenues[key];
+    const busy   = answer && answer.includes('loading-pulse');
+
     return `<div class="clue-item">
-      <div onclick="${answer ? '' : `investigateVenue('${vid}')`}" style="cursor:pointer;">
-        ${v.icon} <strong>${v.name}</strong> ${answer ? '✅' : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div onclick="${(answer && !busy) || G.isRequesting ? '' : `investigateVenue('${vid}')`}"
+             style="cursor:${(answer && !busy) || G.isRequesting ? 'default' : 'pointer'};${G.isRequesting && !answer ? 'opacity:0.5' : ''}">
+          ${v.icon} <strong>${v.name}</strong>
+        </div>
+        ${answer && !busy ? '✅' : ''}
       </div>
       ${answer ? `<div class="npc-bubble">${answer}</div>` : ''}
     </div>`;
   }).join('');
-
-  const allIds = Object.keys(CITIES_CATALOG).filter(id => id !== G.currentCityId);
-  const options = allIds.sort(() => Math.random() - 0.5).slice(0, 5);
-  document.getElementById('travel-list').innerHTML = options.map(id => 
-    `<div style="background:#1e1e1e; border: 1px solid #333; padding:12px; margin-bottom:8px; cursor:pointer;" onclick="travelTo('${id}')">🏙️ ${CITIES_CATALOG[id]}</div>`
-  ).join('');
 }
 
-function advanceTime(m) { 
-  G.currentMinutes += m; 
-  while (G.currentMinutes > 23 * 60) { G.currentDay++; G.currentMinutes = (8 * 60) + (G.currentMinutes - 23 * 60); }
-  if (G.currentDay > G.maxDays) { endGame('timeout'); return false; }
+function renderTravel() {
+  document.getElementById('travel-list').innerHTML = G.travelOptions.map(id => {
+    const name = CITIES_CATALOG[id] || id;
+    return `<div style="background:#1e1e1e;border:1px solid #333;border-left:3px solid #fbbf24;padding:12px;border-radius:8px;margin-bottom:8px;cursor:pointer" onclick="travelTo('${id}')">
+      🏙️ ${name}
+    </div>`;
+  }).join('') || '<p style="color:#666;font-size:13px">Nenhuma rota disponível.</p>';
+}
+
+function advanceTime(minutes) {
+  G.currentMinutes += minutes;
+
+  while (G.currentMinutes > 23 * 60) {
+    const overflow   = G.currentMinutes - (23 * 60);
+    G.currentDay++;
+    G.currentMinutes = (8 * 60) + overflow;
+  }
+
+  if (G.currentDay > G.maxDays) {
+    endGame('timeout');
+    return false;
+  }
+
   return true;
 }
 
 function switchTab(t, el) {
-  ['investigate','travel','notes'].forEach(p => document.getElementById('panel-'+p).style.display = p === t ? 'block' : 'none');
+  ['investigate', 'travel', 'notes'].forEach(p => {
+    document.getElementById('panel-' + p).style.display = p === t ? 'block' : 'none';
+  });
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
   if (el) el.classList.add('active');
-  if (t === 'notes') document.getElementById('clues-collected').innerHTML = G.clues.join('<br><br>') || "Sem pistas.";
+  if (t === 'notes') {
+    document.getElementById('clues-collected').innerHTML =
+      G.clues.join('<br><br>') || 'Sem pistas por enquanto.';
+  }
 }
 
 function openWarrantModal() {
-  document.getElementById('warrant-options').innerHTML = CRIMINALS_CATALOG.map(c => 
-    `<div style="padding:8px; background:#333; cursor:pointer" onclick="issueWarrant('${c.id}', '${c.name}')">👤 ${c.name}</div>`
+  document.getElementById('warrant-options').innerHTML = CRIMINALS_CATALOG.map(c =>
+    `<div class="city-option" style="padding:8px;background:#333;border-radius:4px;cursor:pointer" onclick="issueWarrant('${c.id}')">
+      👤 ${c.name}
+    </div>`
   ).join('');
   document.getElementById('warrant-modal').style.display = 'flex';
 }
-function closeWarrantModal() { document.getElementById('warrant-modal').style.display = 'none'; }
-function issueWarrant(id, name) { 
-  G.warrant = id; 
-  document.getElementById('warrant-display').innerHTML = `<span style="color: #fbbf24;">${name}</span> <button onclick="issueArrest()" class="btn primary" style="padding:4px 8px; margin-left:8px;">Prender Agora</button>`; 
-  closeWarrantModal(); 
+
+function closeWarrantModal() {
+  document.getElementById('warrant-modal').style.display = 'none';
+}
+
+function issueWarrant(id) {
+  G.warrant = id;
+  const criminal = CRIMINALS_CATALOG.find(c => c.id === id);
+  document.getElementById('warrant-display').innerHTML =
+    `<span style="color:#fff;font-weight:normal">Mandado ativo:</span> <span style="color:#fbbf24">${criminal.name}</span>`;
+  closeWarrantModal();
+}
+
+function foundCriminal() {
+  if (G.warrant === G.criminal_id_cache) {
+    endGame('won');
+  } else {
+    endGame('wrong_warrant');
+  }
+}
+
+async function foundCriminalAsync() {
+  if (!G.warrant) {
+    endGame('wrong_warrant');
+    return;
+  }
+
+  try {
+    const res = await fetch(URLS.arrest, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({sessionId: G.sessionId, warrantId: G.warrant})
+    });
+    const data = await res.json();
+    endGame(data.status);
+  } catch (e) {
+    endGame('wrong_warrant');
+  }
+}
+
+function foundCriminal() {
+  G.isRequesting = false;
+  foundCriminalAsync();
 }
 
 function endGame(r) {
   document.getElementById('game-screen').classList.remove('active');
   document.getElementById('result-screen').classList.add('active');
-  document.getElementById('result-title').textContent = r === 'won' ? "Capturado!" : "Escapou!";
-  document.getElementById('result-details').innerHTML = r === 'won' ? "Missão cumprida." : (r === 'timeout' ? "Tempo esgotado." : "Suspeito errado.");
+
+  document.getElementById('result-icon').textContent  = r === 'won' ? '🏆' : '💀';
+  document.getElementById('result-title').textContent = r === 'won' ? 'Capturado!' : 'Escapou!';
+
+  let criminalStatus;
+  if (r === 'won') {
+    criminalStatus = `O suspeito permanecerá atrás das grades por um bom tempo.<br>Bom trabalho!`;
+  } else {
+    const reason = r === 'timeout'
+      ? 'O tempo acabou e os rastros esfriaram.'
+      : 'O mandado estava incorreto.';
+    criminalStatus = `O suspeito escapou por entre seus dedos...<br>${reason}`;
+  }
+
+  const routeNames = G.history
+    .map(id => CITIES_CATALOG[id] || id)
+    .join(' → ');
+
+  document.getElementById('result-details').innerHTML = `
+    <div style="padding:16px;line-height:1.6;text-align:center">
+      <p style="margin-bottom:12px;font-size:15px;color:#fff">${criminalStatus}</p>
+      <div style="border-top:1px solid #333;padding-top:12px;font-size:13px;color:#aaa">
+        <p><strong>📅 Encerramento:</strong> Dia ${G.currentDay} às ${Math.floor(G.currentMinutes / 60)}:00</p>
+        <p style="margin-top:10px;color:#888;font-weight:bold">📍 Rota percorrida:</p>
+        <p style="font-size:12px;font-style:italic;line-height:1.4">${routeNames}</p>
+      </div>
+    </div>`;
 }
 </script>
 </body>
