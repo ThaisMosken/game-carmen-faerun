@@ -91,28 +91,33 @@ def start_game(req: https_fn.Request) -> https_fn.Response:
 
 def _build_travel_options(trail_ids, current_step, current_location, history, distractors):
     """
-    Monta a lista de até 5 opções de viagem da mesma forma que o frontend original fazia:
-    - Cidade anterior (para voltar), se existir no histórico
-    - Próxima cidade correta da trilha, se existir
-    - Cidades distratoras fixas (fora da trilha)
-    Embaralha o resultado final.
+    Monta as opções de viagem seguindo estas regras:
+    - Próxima cidade correta da trilha: SOMENTE se o jogador estiver exatamente
+      na cidade do current_step (ou seja, na trilha certa). Se estiver em qualquer
+      outra cidade — distratora ou posição retroativa — não aparece.
+    - Cidade de retorno: sempre history[-2], independente de estar na trilha ou não.
+    - Distratoras fixas: preenchem os slots restantes, nunca incluem cidades da trilha.
     """
-    mandatory = []
+    options = []
 
+    # Próxima cidade correta: só aparece se o jogador está no step correto da trilha
     if current_location == trail_ids[current_step]:
         if current_step < len(trail_ids) - 1:
-            mandatory.append(trail_ids[current_step + 1])
+            options.append(trail_ids[current_step + 1])
 
+    # Cidade de retorno: de onde o jogador veio (history[-2])
     if len(history) > 1:
         back_city = history[-2]
-        if back_city not in mandatory:
-            mandatory.append(back_city)
+        if back_city not in options:
+            options.append(back_city)
 
-    clean_distractors = [d for d in distractors if d not in mandatory]
-    slots_left = 5 - len(mandatory)
-    result = mandatory + clean_distractors[:slots_left]
-    random.shuffle(result)
-    return result
+    # Distratoras: nunca incluem nenhuma cidade da trilha para evitar atalhos acidentais
+    safe_distractors = [d for d in distractors if d not in trail_ids and d not in options]
+    slots_left = 5 - len(options)
+    options = options + safe_distractors[:slots_left]
+
+    random.shuffle(options)
+    return options
 
 
 @https_fn.on_request()
