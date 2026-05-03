@@ -322,18 +322,20 @@ function renderGameScreen() {
 }
 
 function renderVenues() {
-  const cityId = G.currentCityId;
-  document.getElementById('venues-list').innerHTML = G.venuesInCity.map(vid => {
-    const v      = VENUES_CATALOG[vid] || {name: vid, icon: '🏠'};
-    const key    = `${cityId}_${vid}`;
-    const answer = G.visitedVenues[key];
-    const busy   = answer && answer.includes('loading-pulse');
+  const cityId    = G.currentCityId;
+  const container = document.getElementById('venues-list');
+
+  container.innerHTML = G.venuesInCity.map(vid => {
+    const v       = VENUES_CATALOG[vid] || {name: vid, icon: '🏠'};
+    const key     = `${cityId}_${vid}`;
+    const answer  = G.visitedVenues[key];
+    const busy    = answer && answer.includes('loading-pulse');
     const visited = answer && !busy;
 
     return `<div class="clue-item">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div class="venue-btn" data-venue="${vid}"
-             style="cursor:${visited ? 'default' : 'pointer'}">
+             style="cursor:${visited ? 'default' : 'pointer'};opacity:${busy ? '0.5' : '1'}">
           ${v.icon} <strong>${v.name}</strong>
         </div>
         ${visited ? '✅' : ''}
@@ -342,7 +344,8 @@ function renderVenues() {
     </div>`;
   }).join('');
 
-  document.querySelectorAll('.venue-btn').forEach(el => {
+  // Escopo restrito ao container para evitar conflitos com outros elementos da página
+  container.querySelectorAll('.venue-btn').forEach(el => {
     const vid    = el.dataset.venue;
     const key    = `${cityId}_${vid}`;
     const answer = G.visitedVenues[key];
@@ -412,20 +415,12 @@ function issueWarrant(id) {
   closeWarrantModal();
 }
 
-function foundCriminal() {
-  if (G.warrant === G.criminal_id_cache) {
-    endGame('won');
-  } else {
-    endGame('wrong_warrant');
-  }
-}
-
-async function foundCriminalAsync() {
+async function foundCriminal() {
+  G.isRequesting = false;
   if (!G.warrant) {
     endGame('wrong_warrant');
     return;
   }
-
   try {
     const res = await fetch(URLS.arrest, {
       method: 'POST',
@@ -437,11 +432,6 @@ async function foundCriminalAsync() {
   } catch (e) {
     endGame('wrong_warrant');
   }
-}
-
-function foundCriminal() {
-  G.isRequesting = false;
-  foundCriminalAsync();
 }
 
 function endGame(r) {
